@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import chickenImage from './Images/chickenImage.jpg';
 import Box from '@mui/material/Box';
-
+import  {getFarms} from './firestore';
 const theme = createTheme({
   palette: {
     primary: {
@@ -21,6 +21,7 @@ const theme = createTheme({
 });
 
 function App() {
+  let farms = getFarms();
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="static">
