@@ -4,7 +4,7 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import chickenImage from './Images/chickenImage.jpg';
 import Container from '@mui/material/Container';
-export function Landingpage(){
+export const Landingpage = ({sendDataToPage})=> {
     const styles = {
         twoButtons: {
             display: 'flex',
@@ -35,7 +35,9 @@ export function Landingpage(){
                     </Typography>
                     <Typography variant="h6" component='p' style={{marginBottom:'48px'}} >Browse the profiles of cage-free sellers, or create a profile yourself and get discovered!</Typography>
                     <div style={styles.twoButtons}>
-                        <Button variant="contained" style={styles.marginButton}>Sign up as a seller</Button>
+                        <Button variant="contained" style={styles.marginButton} onClick={() => {
+                            sendDataToPage('formpart1');
+                            }}>Sign up as a seller</Button>
                         <Paper elevation={3}><Button variant="outlined" style={styles.height}>Sign up as a buyer</Button></Paper>
                     </div>
                 </Grid>

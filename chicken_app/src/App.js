@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import AppBar from '@mui/material/AppBar';
@@ -6,6 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import  {getFarms} from './firestore';
 import { Landingpage } from './Landingpage';
+import { FormPart1 } from './FormPart1';
 const theme = createTheme({
   palette: {
     primary: {
@@ -20,6 +21,10 @@ const theme = createTheme({
 
 function App() {
   let farms = getFarms();
+  const [page, setPage] = useState('landingpage');
+  const sendDataToPage = (newPage)=>{
+    setPage(newPage);
+  }
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="static">
@@ -30,7 +35,11 @@ function App() {
           <Button>Login</Button>
         </Toolbar>
       </AppBar>
-      <Landingpage />
+      {
+        page==='landingpage' && <Landingpage sendDataToPage={sendDataToPage} />
+      }
+      { page==='formpart1' && <FormPart1 sendDataToPage={sendDataToPage} />}
+      
     </ThemeProvider>
   );
 }
