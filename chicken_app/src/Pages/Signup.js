@@ -1,10 +1,12 @@
 import React from 'react'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 
-function Signup() {
+function Signup(props) {
   return (
-    <Box display="flex" justifyContent="center" alignItems="center">
-        hi
+    <Box display="flex" justifyContent="center" alignItems="center" style={{maxWidth:480}}>
+        <Typography className='signupText'>
+          Sign up to list your cage-free profile
+        </Typography>
     </Box>
   )
 }
