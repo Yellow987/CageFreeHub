@@ -2,11 +2,12 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
-import chickenImage from './Images/chickenImage.jpg';
+import chickenImage from './../Images/chickenImage.jpg';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
+import { Link } from "react-router-dom"
 
-export const Landingpage = ({sendDataToPage})=> {
+const Home = ()=> {
     const styles = {
         twoButtons: {
             display: 'flex',
@@ -37,9 +38,9 @@ export const Landingpage = ({sendDataToPage})=> {
                     </Typography>
                     <Typography variant="h6" component='p' style={{marginBottom:'48px'}} >Browse the profiles of cage-free sellers, or create a profile yourself and get discovered!</Typography>
                     <Box style={styles.twoButtons}>
-                        <Button variant="contained" style={styles.marginButton} onClick={() => {
-                            sendDataToPage('formpart1');
-                            }}>Sign up as a seller</Button>
+                        <Button component={Link} to="/Signup" variant="contained" style={styles.marginButton}> 
+                        Sign up as a seller
+                        </Button>
                         <Paper elevation={3}><Button variant="outlined" style={styles.height}>Sign up as a buyer</Button></Paper>
                     </Box>
                 </Grid>
@@ -51,3 +52,5 @@ export const Landingpage = ({sendDataToPage})=> {
       </Container>
     )
 }
+
+export default Home

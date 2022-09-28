@@ -1,12 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import Button from '@mui/material/Button';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import  {getFarms} from './firestore';
-import { Landingpage } from './Landingpage';
-import { FormPart1 } from './FormPart1';
+//import  {getFarms} from './firestore';
+import { Route, Routes } from "react-router-dom"
+import GlobalNavBar from './Components/GlobalNavBar';
+import Home from './Pages/Home';
+import Signup from './Pages/Signup';
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -20,26 +19,14 @@ const theme = createTheme({
 });
 
 function App() {
-  let farms = getFarms();
-  const [page, setPage] = useState('landingpage');
-  const sendDataToPage = (newPage)=>{
-    setPage(newPage);
-  }
+  // let farms = getFarms();
   return (
     <ThemeProvider theme={theme}>
-      <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Cage Free Hub
-          </Typography>
-          <Button>Login</Button>
-        </Toolbar>
-      </AppBar>
-      {
-        page==='landingpage' && <Landingpage sendDataToPage={sendDataToPage} />
-      }
-      { page==='formpart1' && <FormPart1 sendDataToPage={sendDataToPage} />}
-      
+      <GlobalNavBar />
+      <Routes>
+        <Route path="/" element={<Home/>} />
+        <Route path="/Signup" element={<Signup/>} />
+      </Routes>
     </ThemeProvider>
   );
 }
