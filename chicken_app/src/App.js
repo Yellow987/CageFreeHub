@@ -6,6 +6,8 @@ import GlobalNavBar from './Components/GlobalNavBar';
 import Home from './Pages/Home';
 import Signup from './Pages/Signup';
 import Login from './Pages/Login';
+import FormPart1 from './Pages/FormPart1';
+
 import CssBaseline from '@mui/material/CssBaseline';
 
 const theme = createTheme({
@@ -32,6 +34,8 @@ function App() {
         <Route path="/" element={<Home/>} />
         <Route path="/Signup" element={<Signup/>} />
         <Route path="/Login" element={<Login/>} />
+        <Route path="/FormPart1" element={<FormPart1/>} />
+
       </Routes>
     </ThemeProvider>
   );

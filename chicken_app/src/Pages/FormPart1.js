@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-export const FormPart1 = ({sendDataToPage})=>{
+const FormPart1 = ({sendDataToPage})=>{
     const styles = {
         twoButtons: {
             display: 'flex',
@@ -46,3 +46,5 @@ export const FormPart1 = ({sendDataToPage})=>{
         </Container>
     )
 }
+
+export default FormPart1

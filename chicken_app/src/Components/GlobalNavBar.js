@@ -5,7 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
 import { grey } from '@mui/material/colors';
-
+import { mdiCommentOutline } from '@mui/icons-material';
 const styles = {
   betaBox : {
     m:'8px', 
@@ -27,6 +27,7 @@ function GlobalNavBar() {
           </Typography>
         </Box>
         <Box sx={{ flexGrow: 1 }}/>
+        <Button variant="outlined" style={{backgroundColor:'#EFFAF9', color:'#3FAB94', marginRight:'40px', border:'0'}}><mdiCommentOutline style={{color:'#3FAB94'}}/>Support</Button>
         <Button variant="outlined">Login</Button>
       </Toolbar>
     </AppBar> 

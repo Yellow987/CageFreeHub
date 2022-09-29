@@ -48,7 +48,10 @@ const Home = ()=> {
                     <Box component="img" src={chickenImage} alt="chickenImage" sx={{ width:1 }}/>
                 </Grid>
             </Grid>
-            <Typography variant="h6" component='p' >Always free</Typography>
+            <div style={{display:'flex', justifyContent:'center', alignContent:'center', gap:'10px', margin:"80px 0 157px 0"}}>
+                <Typography variant="h6" component='p' style={{backgroundColor:' #EFFAF9', color:'#3FAB94', padding:'8px', paddingTop:'0px', paddingBottom:'0px'}}>Always free</Typography>
+                <Typography variant="h6" component='p' >A project by Global Food Partners</Typography>
+            </div>
       </Container>
     )
 }
