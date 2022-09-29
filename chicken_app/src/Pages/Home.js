@@ -6,6 +6,7 @@ import chickenImage from './../Images/chickenImage.jpg';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import { Link } from "react-router-dom"
+import Font32Text from '../Components/Text/Font32Text';
 
 const Home = ()=> {
     const styles = {
@@ -33,9 +34,7 @@ const Home = ()=> {
         <Container maxWidth="lg" sx={styles.toNavMenuMargin}>
             <Grid container spacing={2} alignItems='center'>
                 <Grid item xs={12} sm={6}>
-                    <Typography variant="h4" component="h1" sx={{ flexGrow: 1 }} fontWeight='bold' style={{marginBottom:'16px'}}>
-                    Asia’s trusted directory of cage-free egg sellers
-                    </Typography>
+                    <Font32Text style={{marginBottom:'16px'}} text="Asia’s trusted directory of cage-free egg sellers"/>
                     <Typography variant="h6" component='p' style={{marginBottom:'48px'}} >Browse the profiles of cage-free sellers, or create a profile yourself and get discovered!</Typography>
                     <Box style={styles.twoButtons}>
                         <Button component={Link} to="/Signup" variant="contained" style={styles.marginButton}> 
