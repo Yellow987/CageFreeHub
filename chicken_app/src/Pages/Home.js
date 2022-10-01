@@ -6,7 +6,6 @@ import chickenImage from './../Images/chickenImage.jpg';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import { Link } from "react-router-dom"
-import Font32Text from '../Components/Text/Font32Text';
 
 const Home = ()=> {
     const styles = {
@@ -34,8 +33,15 @@ const Home = ()=> {
         <Container maxWidth="lg" sx={styles.toNavMenuMargin}>
             <Grid container spacing={2} alignItems='center'>
                 <Grid item xs={12} sm={6}>
-                    <Font32Text style={{marginBottom:'16px'}} text="Asia’s trusted directory of cage-free egg sellers"/>
-                    <Typography variant="h6" component='p' style={{marginBottom:'48px'}} >Browse the profiles of cage-free sellers, or create a profile yourself and get discovered!</Typography>
+                    <Typography variant="title" sx={{marginBottom:'24px'}} >
+                        Asia’s trusted directory of cage-free egg sellers
+                    </Typography>
+                    <Typography variant="p_large">
+                        <Box fontWeight='Bold' display="inline">Do you sell cage-free eggs?</Box> Sign up to create a profile of your company, and get discovered by purchasers
+                    </Typography>
+                    <Typography variant="p_large" style={{marginBottom:'48px'}} >
+                        <Box fontWeight='Bold' display="inline">Are you looking to buy cage-free eggs?</Box> Sign up to view a list of cage-free egg sellers near you
+                    </Typography>
                     <Box style={styles.twoButtons}>
                         <Button component={Link} to="/Signup" variant="contained" style={styles.marginButton}> 
                         Sign up as a seller
@@ -47,10 +53,10 @@ const Home = ()=> {
                     <Box component="img" src={chickenImage} alt="chickenImage" sx={{ width:1 }}/>
                 </Grid>
             </Grid>
-            <div style={{display:'flex', justifyContent:'center', alignContent:'center', gap:'10px', margin:"80px 0 157px 0"}}>
+            <Box style={{display:'flex', justifyContent:'center', alignContent:'center', gap:'10px', margin:"80px 0 157px 0"}}>
                 <Typography variant="h6" component='p' style={{backgroundColor:' #EFFAF9', color:'#3FAB94', padding:'8px', paddingTop:'0px', paddingBottom:'0px'}}>Always free</Typography>
                 <Typography variant="h6" component='p' >A project by Global Food Partners</Typography>
-            </div>
+            </Box>
       </Container>
     )
 }

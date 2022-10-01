@@ -9,6 +9,7 @@ import Login from './Pages/Login';
 import FormPart1 from './Pages/FormPart1';
 
 import CssBaseline from '@mui/material/CssBaseline';
+import { Typography } from '@mui/material';
 
 const theme = createTheme({
   palette: {
@@ -19,6 +20,31 @@ const theme = createTheme({
     },
     secondary: {
       main: '#FFFFFF',
+    },
+  },
+  typography: {
+    title: {
+      fontWeight: 700,
+      fontSize: 32,
+      lineHeight: "150%",
+      letterSpacing: "-0.01rem",
+      color: "#1B2B3E",
+      display: 'block',
+    },
+    h1: {
+      fontWeight: 700,
+      fontSize: 24,
+      lineHeight: "150%",
+      letterSpacing: "-0.01rem",
+      color: "#1B2B3E",
+      display: 'block',
+    },
+    p_large: {
+      fontWeight: 400,
+      fontSize: 16,
+      lineHeight: "150%",
+      color: "#596676",
+      display: 'block',
     },
   },
 });
