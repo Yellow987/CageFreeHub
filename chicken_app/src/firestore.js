@@ -4,7 +4,7 @@ import {
     getFirestore, collection, getDocs
 } from 'firebase/firestore'
 import { firebaseConfig } from "./FirestoreCreds";
-
+import {getAuth} from 'firebase/auth'
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
@@ -30,4 +30,5 @@ export function getFarms(){
     return farms;
 }
 
+export const auth = getAuth(app);
 
