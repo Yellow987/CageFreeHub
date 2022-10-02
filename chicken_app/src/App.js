@@ -46,6 +46,13 @@ const theme = createTheme({
       color: "#596676",
       display: 'block',
     },
+    p_default: {
+      fontWeight: 400,
+      fontSize: 14,
+      lineHeight: "150%",
+      color: "#596676",
+      display: 'block',
+    },
   },
 });
 
