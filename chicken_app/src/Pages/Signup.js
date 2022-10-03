@@ -2,15 +2,16 @@ import { React, useState } from 'react'
 import { Box, Typography, TextField } from '@mui/material'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import {auth} from './../firestore';
+import { Button } from '@mui/material';
+
+
 function Signup(props) {
-  const [registerEmail, setRegisterEmail]= useState("");
-  const [registerPassword, setRegisterPassword]= useState("");
-  const [loginEmail, setLoginEmail]= useState("");
-  const [loginPassword, setLoginPassword]= useState("");
+  const [email, setEmail]= useState("");
+  const [password, setPassword]= useState("");
 
   const register = async () => {
     try{
-      const user = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword);
+      const user = await createUserWithEmailAndPassword(auth, email, password);
       console.log(user)
     }catch (error){
       console.log(error.message);
@@ -18,7 +19,7 @@ function Signup(props) {
   }
   const login = async () => {
     try{
-      const user = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
+      const user = await signInWithEmailAndPassword(auth, email, password);
       console.log(user)
     }catch (error){
       console.log(error.message);
@@ -27,34 +28,20 @@ function Signup(props) {
   const logout = async () => {
     await signOut();
   }
+
   return (
-    <div>
-    <Box display="flex" justifyContent="center" alignItems="center" style={{maxWidth:480}}>
-        <Typography className='signupText'>
-          Sign up to list your cage-free profile
-        </Typography>
-      <TextField id="outlined-basic" label="Email" variant="outlined" onChange={(event)=>{
-        setRegisterEmail(event.target.value)
+    <Box m="auto" sx={{ maxWidth:'400px', mt:'116px' }}>
+      <Typography variant='h1'>
+        Sign up to list your cage-free profile
+      </Typography>
+      <TextField label="Email" variant="outlined" style={{ marginTop:32 }} onChange={(event)=>{
+        setEmail(event.target.value)
       }} />
-      <TextField id="outlined-basic" label="Password" variant="outlined"  onChange={(event)=>{
-        setRegisterPassword(event.target.value)
+      <TextField label="Password" variant="outlined" style={{ marginTop:32 }} onChange={(event)=>{
+        setPassword(event.target.value)
       }} />
-      <button onClick={register}>Sign up</button>
+      <Button variant='contained' sx={{ display:'block', marginTop:4 }}>Sign upfaefa</Button>
     </Box>
-    <Box display="flex" justifyContent="center" alignItems="center" style={{maxWidth:480}}>
-        <Typography className='signupText'>
-          Sign in
-        </Typography>
-      <TextField id="outlined-basic" label="Email" variant="outlined"  onChange={(event)=>{
-        setLoginEmail(event.target.value)
-      }}/>
-      <TextField id="outlined-basic" label="Password" variant="outlined"  onChange={(event)=>{
-        setLoginPassword(event.target.value)
-      }}/>
-      <button onClick={login}>Login</button>
-    </Box>
-    <button>Log Out</button>
-    </div>
   )
 }
 

@@ -5,7 +5,11 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { mdiCommentOutline } from '@mui/icons-material';
+import Menu from '@mui/material/Menu';
+import Popover from '@mui/material/Popover';
+import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
+import SupportPopup from './SupportPopup';
+
 const styles = {
   betaBox : {
     m:'8px', 
@@ -15,6 +19,13 @@ const styles = {
 }
 
 function GlobalNavBar() {
+  const [isNavSmall, setIsNavSmall] = React.useState(null)
+
+  const handleOpenNavMenu = (event) => {
+    setIsNavSmall(event.currentTarget);
+  }
+
+
   return (
     <AppBar color="secondary" elevation={0} position="static">
       <Toolbar>
@@ -27,7 +38,34 @@ function GlobalNavBar() {
           </Typography>
         </Box>
         <Box sx={{ flexGrow: 1 }}/>
-        <Button variant="outlined" style={{backgroundColor:'#EFFAF9', color:'#3FAB94', marginRight:'40px', border:'0'}}><mdiCommentOutline style={{color:'#3FAB94'}}/>Support</Button>
+        <PopupState variant="popover" popupId="demo-popup-popover">
+          {(popupState) => (
+            <div>
+              <Button variant="outlined" 
+              style={{
+                backgroundColor:'#EFFAF9', 
+                color:'#3FAB94', 
+                marginRight:'40px', 
+                border:'0'
+              }} {...bindTrigger(popupState)}>
+                Support
+              </Button>
+              <Popover
+                {...bindPopover(popupState)}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'center',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'center',
+                }}
+              >
+                <SupportPopup/>
+              </Popover>
+            </div>
+          )}
+        </PopupState>
         <Button variant="outlined">Login</Button>
       </Toolbar>
     </AppBar> 
