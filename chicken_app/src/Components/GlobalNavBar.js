@@ -9,6 +9,7 @@ import Menu from '@mui/material/Menu';
 import Popover from '@mui/material/Popover';
 import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import SupportPopup from './SupportPopup';
+import { Link } from 'react-router-dom';
 
 const styles = {
   betaBox : {
@@ -66,7 +67,7 @@ function GlobalNavBar() {
             </div>
           )}
         </PopupState>
-        <Button variant="outlined">Login</Button>
+        <Button variant="outlined" component={Link} to="/Login" >Login</Button>
       </Toolbar>
     </AppBar> 
   )

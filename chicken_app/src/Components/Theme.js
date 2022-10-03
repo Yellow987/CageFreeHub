@@ -41,6 +41,13 @@ const Theme = {
       color: "#596676",
       display: 'block',
     },
+    p_small: {
+      fontWeight: 400,
+      fontSize: 12,
+      lineHeight: "150%",
+      color: "#596676",
+      display: 'block',
+    },
   },
 };
 

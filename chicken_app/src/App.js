@@ -20,8 +20,9 @@ function App() {
       <GlobalNavBar />
       <Routes>
         <Route path="/" element={<Home/>} />
-        <Route path="/Signup" element={<Signup/>} />
-        <Route path="/Login" element={<Login/>} />
+        <Route path="/BuyerSignup" element={<Signup props={{ hereTo: 'BuyerSignup' }}/>} />
+        <Route path="/SellerSignup" element={<Signup props={{ hereTo: 'SellerSignup' }}/>} />
+        <Route path="/Login" element={<Signup props={{ hereTo: 'Login' }}/> }/>
         <Route path="/FormPart1" element={<FormPart1/>} />
 
       </Routes>

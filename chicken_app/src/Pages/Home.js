@@ -36,11 +36,12 @@ const Home = ()=> {
                             <Box fontWeight='Bold' display="inline">Are you looking to buy cage-free eggs?</Box> Sign up to view a list of cage-free egg sellers near you
                         </Typography>
                         <Box sx={styles.twoButtons}>
-                            <Button component={Link} to="/Signup" 
+                            <Button component={Link} to="/SellerSignup" 
                                 variant="contained" sx={styles.marginButton}> 
                                 Sign up as a seller
                             </Button>
-                            <Button variant="outlined" sx={{ boxShadow: 3, mt: {xs: 1, sm: 0} }} mt="200px">
+                            <Button component={Link} to="/BuyerSignup"  
+                                variant="outlined" sx={{ boxShadow: 3, mt: {xs: 1, sm: 0} }} mt="200px">
                                 Sign up as a buyer
                             </Button>
                         </Box>
