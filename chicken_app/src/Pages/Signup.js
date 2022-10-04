@@ -21,20 +21,46 @@ function Signup(props) {
   const [email, setEmail]= useState("");
   const [password, setPassword]= useState("");
   const [isCheckBoxClicked, setIsCheckBoxClicked] = useState(false)
-  const [errors, setErrors] = useState({ emailErrorText:"" })
+  const [errors, setErrors] = useState(
+    { 
+      emailErrorText:"", isEmailValid: true, 
+      passwordErrorText:"", isPasswordValid: true,
+     })
 
-  function validate() {
-    console.log("validating")
+  function areValidationErrors() {
     let temp = {}
+    let errors = false
     // temp.emailErrorText = (/$^|.+@+..+/).test(email) ? "" : "Email is not valid."
-    temp.emailErrorText = (email == '') ? "Email is not valid." : ""
+    if (email == '') {
+      temp.emailErrorText = "Email is not valid." 
+      temp.isEmailValid = false 
+      errors = true
+    } else {
+      temp.emailErrorText = "" 
+      temp.isEmailValid = true
+    }
+
+    if (password == '') {
+      temp.passwordErrorText = "password is not valid." 
+      temp.isPasswordValid = false 
+      errors = true
+    } else {
+      temp.passwordErrorText = "" 
+      temp.isPasswordValid = true
+    }
+    // if (isCheckBoxClicked) {} #TODO
 
     setErrors(temp)
+    return errors ? true : false
   }
 
   const handleSubmit = (event) => {
-    console.log('hello handeling submit')
-    validate()
+    if (areValidationErrors()) {return}
+    if (hereTo == "Login") {
+      // login()
+    } else {
+      // register()
+    }
   }
 
   const register = async () => {
@@ -73,10 +99,10 @@ function Signup(props) {
       <Typography variant='h1'>
         {getTitle(hereTo)}
       </Typography>
-      <TextField fullWidth label="Email" variant="outlined" sx={{ ...format }} onChange={(event)=>{
+      <TextField error={!errors.isEmailValid} helperText={errors.emailErrorText} fullWidth label="Email" variant="outlined" sx={{ ...format }} onChange={(event)=>{
         setEmail(event.target.value)
       }} />
-      <TextField error={errors.emailHelperText !== ""} helperText={errors.emailErrorText} fullWidth label="Password" type="password" variant="outlined" sx={{ ...format }} onChange={(event)=>{
+      <TextField error={!errors.isPasswordValid} helperText={errors.passwordErrorText} fullWidth label="Password" type="password" variant="outlined" sx={{ ...format }} onChange={(event)=>{
         setPassword(event.target.value)
       }} />
       <FormControlLabel sx={{ ...format, display: hereTo === 'Login' ? 'none' : 'show' }}
