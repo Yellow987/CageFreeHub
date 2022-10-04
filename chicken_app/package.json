@@ -12,6 +12,8 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "firebase": "^9.10.0",
+    "i18next-browser-languagedetector": "^6.1.5",
+    "i18next-http-backend": "^1.4.4",
     "material-ui-popup-state": "^4.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

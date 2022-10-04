@@ -3,6 +3,7 @@ import { Box, Typography, TextField, Checkbox, FormControlLabel } from '@mui/mat
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import {auth} from './../firestore';
 import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 
 function Signup(props) {
@@ -13,14 +14,27 @@ function Signup(props) {
   const hyperlink = {
     fontWeight:'Bold',
     display:"inline",
-    color:'primary.main'
+    color:'primary.main',
+    textDecoration: "none",
   }
 
   const [email, setEmail]= useState("");
   const [password, setPassword]= useState("");
+  const [isCheckBoxClicked, setIsCheckBoxClicked] = useState(false)
+  const [errors, setErrors] = useState({ emailErrorText:"" })
 
-  const handleCheckboxChange = (event) => {
+  function validate() {
+    console.log("validating")
+    let temp = {}
+    // temp.emailErrorText = (/$^|.+@+..+/).test(email) ? "" : "Email is not valid."
+    temp.emailErrorText = (email == '') ? "Email is not valid." : ""
 
+    setErrors(temp)
+  }
+
+  const handleSubmit = (event) => {
+    console.log('hello handeling submit')
+    validate()
   }
 
   const register = async () => {
@@ -43,15 +57,26 @@ function Signup(props) {
     await signOut();
   }
 
+  function getTitle(hereTo) {
+    switch(hereTo) {
+      case 'Login':
+        return 'Log in to your account';
+      case 'SellerSignup':
+        return 'Sign up to discover cage-free sellers';
+      case 'BuyerSignup':
+        return 'Sign up to list your cage-free profile';
+    }
+  }
+
   return (
-    <Box mx={{ sm:'auto', xs:'24px' }} sx={{ maxWidth:'400px', mt:'116px' }}>
+    <Box align='center' mx={{ sm:'auto', xs:'24px' }} sx={{ maxWidth:'430px', mt:{ sm:'116px', xs:'24px'} }}>
       <Typography variant='h1'>
-        Sign up to list your cage-free profile
+        {getTitle(hereTo)}
       </Typography>
       <TextField fullWidth label="Email" variant="outlined" sx={{ ...format }} onChange={(event)=>{
         setEmail(event.target.value)
       }} />
-      <TextField fullWidth label="Password" variant="outlined" sx={{ ...format }} onChange={(event)=>{
+      <TextField error={errors.emailHelperText !== ""} helperText={errors.emailErrorText} fullWidth label="Password" type="password" variant="outlined" sx={{ ...format }} onChange={(event)=>{
         setPassword(event.target.value)
       }} />
       <FormControlLabel sx={{ ...format, display: hereTo === 'Login' ? 'none' : 'show' }}
@@ -60,12 +85,26 @@ function Signup(props) {
           Yes, I understand and agree to the <Box sx={{...hyperlink}}>Cage Free Hub Terms of Service</Box>
         </Typography>
       } control={
-        <Checkbox onChange={handleCheckboxChange}></Checkbox>
+        <Checkbox onChange={(event) => {setIsCheckBoxClicked(isCheckBoxClicked => !isCheckBoxClicked)}}></Checkbox>
       }/>
-      <Button fullWidth variant='contained' sx={{ ...format }}>Sign upfaefa</Button>
-      <Typography align='center' variant='p_default' sx={{marginTop: 6, display: hereTo === 'Login' ? 'none' : 'show' }}>
-        Already have an account? <Box sx={{...hyperlink}} >hereto: {hereTo}</Box>
+      <Button fullWidth onClick={handleSubmit} variant='contained' sx={{ ...format, fontWeight:700 }}>
+        {hereTo === 'Login' ? "Log in" : "Create Account"}
+      </Button>
+      <Typography align='center' variant='p_default' sx={{marginTop: 5, display: hereTo === 'Login' ? 'none' : 'show' }}>
+        Already have an account? <Box sx={{...hyperlink}} component={Link} to="/Login" >Login</Box>
       </Typography>
+      <Box  sx={{ display: hereTo === 'Login' ? 'show' : 'none' }}>
+        <Typography variant='p_default' sx={{marginTop: 5, marginBottom: 1}}>
+          Don’t have an account?
+        </Typography>
+        <Typography variant='p_default' component={Link} to="/SellerSignup" sx={{ ...hyperlink, marginTop:1 }}>
+          Sign up as a cage-free seller 
+        </Typography>
+        <Typography variant='p_default' sx={{ ...hyperlink }}> · </Typography>
+        <Typography variant='p_default' component={Link} to="/BuyerSignup" sx={{ ...hyperlink }}>
+          Sign up as an egg buyer
+        </Typography>
+      </Box>
     </Box>
   )
 }

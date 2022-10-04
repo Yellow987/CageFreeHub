@@ -30,7 +30,8 @@ function GlobalNavBar() {
   return (
     <AppBar color="secondary" elevation={0} position="static">
       <Toolbar>
-        <Typography color={grey[400]} sx={{ fontWeight: 'bold' }} variant="h6" component="div">
+        <Typography component={Link} to="/" 
+        color={grey[400]} sx={{ fontWeight: 'bold', textDecoration: "none" }} variant="h6">
           Cage Free Hub
         </Typography>
         <Box bgcolor='primary.main' sx={{ ...styles.betaBox }}>
