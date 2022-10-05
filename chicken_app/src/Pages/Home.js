@@ -5,8 +5,11 @@ import chickenImage from './../Images/chickenImage.jpg';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import { Link } from "react-router-dom"
+import { useTranslation } from 'react-i18next';
 
 const Home = ()=> {
+    const { t, i18n } = useTranslation(['home']);
+
     const styles = {
         twoButtons: {
             display: 'flex',
@@ -27,22 +30,22 @@ const Home = ()=> {
                 <Grid item xs={12} sm={6}>
                     <Box maxWidth="440px" >
                         <Typography variant="title" sx={{marginBottom:'24px'}} >
-                            Asia’s trusted directory of cage-free egg sellers
+                            {t('title')}
                         </Typography>
                         <Typography variant="p_large" style={{marginBottom:'10px'}} >
-                            <Box fontWeight='Bold' display="inline">Do you sell cage-free eggs?</Box> Sign up to create a profile of your company, and get discovered by purchasers
+                            <Box fontWeight='Bold' display="inline">{t('isSeller')}</Box>{t('sellerTask')}
                         </Typography>
                         <Typography variant="p_large" style={{marginBottom:'48px'}} >
-                            <Box fontWeight='Bold' display="inline">Are you looking to buy cage-free eggs?</Box> Sign up to view a list of cage-free egg sellers near you
+                            <Box fontWeight='Bold' display="inline">{t('isBuyer')}</Box>{t('buyerTask')}
                         </Typography>
                         <Box sx={styles.twoButtons}>
                             <Button component={Link} to="/SellerSignup" 
                                 variant="contained" sx={styles.marginButton}> 
-                                Sign up as a seller
+                                {t('sellerSignup')}
                             </Button>
                             <Button component={Link} to="/BuyerSignup"  
                                 variant="outlined" sx={{ boxShadow: 3, mt: {xs: 1, sm: 0} }} mt="200px">
-                                Sign up as a buyer
+                                {t('buyerSignup')}
                             </Button>
                         </Box>
                     </Box>
@@ -55,8 +58,8 @@ const Home = ()=> {
                 marginTop={{ sm:"80px", xs:"60px" }} 
                 marginBottom='157px' 
                 style={{display:'flex', justifyContent:'center', alignContent:'center', gap:'10px' }}>
-                <Typography variant="p_default" color='primary.main' style={{backgroundColor:' #EFFAF9', padding:'8px', paddingTop:'0px', paddingBottom:'0px'}}>Always free</Typography>
-                <Typography variant="p_default">A project by Global Food Partners</Typography>
+                <Typography variant="p_default" color='primary.main' style={{backgroundColor:' #EFFAF9', padding:'8px', paddingTop:'0px', paddingBottom:'0px'}}>{t('free')}</Typography>
+                <Typography variant="p_default">{t('by')}</Typography>
             </Box>
       </Container>
     )

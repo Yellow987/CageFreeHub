@@ -31,7 +31,7 @@ function Signup(props) {
     let temp = {}
     let errors = false
     // temp.emailErrorText = (/$^|.+@+..+/).test(email) ? "" : "Email is not valid."
-    if (email == '') {
+    if (email === '') {
       temp.emailErrorText = "Email is not valid." 
       temp.isEmailValid = false 
       errors = true
@@ -40,7 +40,7 @@ function Signup(props) {
       temp.isEmailValid = true
     }
 
-    if (password == '') {
+    if (password === '') {
       temp.passwordErrorText = "password is not valid." 
       temp.isPasswordValid = false 
       errors = true
@@ -56,7 +56,7 @@ function Signup(props) {
 
   const handleSubmit = (event) => {
     if (areValidationErrors()) {return}
-    if (hereTo == "Login") {
+    if (hereTo === "Login") {
       // login()
     } else {
       // register()
@@ -91,6 +91,8 @@ function Signup(props) {
         return 'Sign up to discover cage-free sellers';
       case 'BuyerSignup':
         return 'Sign up to list your cage-free profile';
+      default: 
+        return 'Error'
     }
   }
 
@@ -105,21 +107,21 @@ function Signup(props) {
       <TextField error={!errors.isPasswordValid} helperText={errors.passwordErrorText} fullWidth label="Password" type="password" variant="outlined" sx={{ ...format }} onChange={(event)=>{
         setPassword(event.target.value)
       }} />
-      <FormControlLabel sx={{ ...format, display: hereTo === 'Login' ? 'none' : 'show' }}
+      <FormControlLabel sx={{ ...format, display: hereTo === 'Login' ? 'none' : 'block', lineHeight:0 }}
       label={
-        <Typography variant='p_small'>
+        <Typography variant='p_small' display="inline" sx={{ lineHeight: 0 }}>
           Yes, I understand and agree to the <Box sx={{...hyperlink}}>Cage Free Hub Terms of Service</Box>
         </Typography>
       } control={
-        <Checkbox onChange={(event) => {setIsCheckBoxClicked(isCheckBoxClicked => !isCheckBoxClicked)}}></Checkbox>
+        <Checkbox onChange={(event) => {setIsCheckBoxClicked(isCheckBoxClicked => !isCheckBoxClicked)}}/>
       }/>
       <Button fullWidth onClick={handleSubmit} variant='contained' sx={{ ...format, fontWeight:700 }}>
         {hereTo === 'Login' ? "Log in" : "Create Account"}
       </Button>
-      <Typography align='center' variant='p_default' sx={{marginTop: 5, display: hereTo === 'Login' ? 'none' : 'show' }}>
+      <Typography variant='p_default' sx={{marginTop: 5, display: hereTo === 'Login' ? 'none' : 'block' }}>
         Already have an account? <Box sx={{...hyperlink}} component={Link} to="/Login" >Login</Box>
       </Typography>
-      <Box  sx={{ display: hereTo === 'Login' ? 'show' : 'none' }}>
+      <Box  sx={{ display: hereTo === 'Login' ? 'block' : 'none' }}>
         <Typography variant='p_default' sx={{marginTop: 5, marginBottom: 1}}>
           Don’t have an account?
         </Typography>
@@ -131,6 +133,12 @@ function Signup(props) {
           Sign up as an egg buyer
         </Typography>
       </Box>
+      <Typography variant='p_default' sx={{marginTop: 2, display: hereTo === 'SellerSignup' ? { xs:'block', sm:'none'} : 'none' }}>
+        Here to buy eggs instead? <Box sx={{...hyperlink}} component={Link} to="/BuyerSignup" >Sign up as a buyer</Box>
+      </Typography>
+      <Typography variant='p_default' sx={{marginTop: 2, display: hereTo === 'BuyerSignup' ? { xs:'block', sm:'none'}  : 'none' }}>
+        Here to sell instead? <Box sx={{...hyperlink}} component={Link} to="/SellerSignup" >Sign up as an egg seller</Box>
+      </Typography>
     </Box>
   )
 }
