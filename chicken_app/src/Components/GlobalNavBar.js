@@ -27,7 +27,11 @@ function GlobalNavBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElLanguage, setAnchorElLanguage] = React.useState(null);
   const [currentLanguage, setCurrentLanguage] = React.useState("")
-  const languages = [{lang:"English", symbol:"en"}, {lang:"Spanish", symbol:"esp"}, {lang:"Indonesian", symbol:"indo"}]
+  const [languages, setLanguages] = React.useState([
+    {name:"English", symbol:"en"}, 
+    {name:"Spanish", symbol:"esp"}, 
+    {name:"Indonesian", symbol:"indo"}
+  ])
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -45,9 +49,9 @@ function GlobalNavBar() {
     setAnchorElLanguage(null);
   };
 
-  const changeLanguage = lng => {          
-    i18n.changeLanguage(lng);
-  };
+  const handleChangeLanguage = (language) => {
+    i18n.changeLanguage(language.symbol);
+  }
 
   return (
     <AppBar color="secondary" elevation={0} position="static">
@@ -116,9 +120,11 @@ function GlobalNavBar() {
             }}
             open={Boolean(anchorElLanguage)}
             onClose={handleCloseLanguageMenu}>
-            <MenuItem  onClick={handleCloseLanguageMenu}>
-              Spanish
-            </MenuItem>
+              {languages.map((language) => (
+                <MenuItem key={language.name} onClick={() => handleChangeLanguage(language)}>
+                  {language.name}
+                </MenuItem>
+              ))}
           </Menu>
         </Box>
         {/* <Button sx={{ display:{xs:'none', sm:'block'}, marginRight:2}} onClick={() => changeLanguage('en')}>{t('english')}</Button> */}

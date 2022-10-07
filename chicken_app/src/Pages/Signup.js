@@ -1,6 +1,6 @@
 import { React, useState } from 'react'
 import { Box, Typography, TextField, Checkbox, FormControlLabel } from '@mui/material'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
+import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import {auth} from './../firestore';
 import { Button } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -18,6 +18,7 @@ function Signup(props) {
     textDecoration: "none",
   }
 
+  const [user, setUser] = useState({})
   const [email, setEmail]= useState("");
   const [password, setPassword]= useState("");
   const [isCheckBoxClicked, setIsCheckBoxClicked] = useState(false)
@@ -26,12 +27,21 @@ function Signup(props) {
       emailErrorText:"", isEmailValid: true, 
       passwordErrorText:"", isPasswordValid: true,
      })
+  
+  onAuthStateChanged(auth, (currentUser) => {
+    setUser(currentUser)
+  })
+
+  const isEmailInvalid = (email) => {
+    const isInvalid = !(/^[\w-.]+@([\w-]+\.)+[\w-]{2,6}$/).test(email)
+    console.log(isInvalid)
+    return isInvalid;
+  };
 
   function areValidationErrors() {
     let temp = {}
     let errors = false
-    // temp.emailErrorText = (/$^|.+@+..+/).test(email) ? "" : "Email is not valid."
-    if (email === '') {
+    if (isEmailInvalid(email)) {
       temp.emailErrorText = "Email is not valid." 
       temp.isEmailValid = false 
       errors = true
@@ -40,26 +50,31 @@ function Signup(props) {
       temp.isEmailValid = true
     }
 
-    if (password === '') {
-      temp.passwordErrorText = "password is not valid." 
+    if (password.length < 6) {
+      temp.passwordErrorText = "password must be at least 6 characters." 
       temp.isPasswordValid = false 
       errors = true
     } else {
       temp.passwordErrorText = "" 
       temp.isPasswordValid = true
     }
-    // if (isCheckBoxClicked) {} #TODO
+    if (!isCheckBoxClicked && hereTo !== "Login") {
+      errors = true
+      //TODO WARN
+    }
+
 
     setErrors(temp)
     return errors ? true : false
   }
 
   const handleSubmit = (event) => {
+    console.log("handle")
     if (areValidationErrors()) {return}
     if (hereTo === "Login") {
-      // login()
+      login()
     } else {
-      // register()
+      register()
     }
   }
 
@@ -71,6 +86,7 @@ function Signup(props) {
       console.log(error.message);
     }
   }
+
   const login = async () => {
     try{
       const user = await signInWithEmailAndPassword(auth, email, password);
@@ -79,8 +95,9 @@ function Signup(props) {
       console.log(error.message);
     }
   }
+
   const logout = async () => {
-    await signOut();
+    await signOut(auth);
   }
 
   function getTitle(hereTo) {
@@ -139,6 +156,7 @@ function Signup(props) {
       <Typography variant='p_default' sx={{marginTop: 2, display: hereTo === 'BuyerSignup' ? { xs:'block', sm:'none'}  : 'none' }}>
         Here to sell instead? <Box sx={{...hyperlink}} component={Link} to="/SellerSignup" >Sign up as an egg seller</Box>
       </Typography>
+      {user.email}
     </Box>
   )
 }

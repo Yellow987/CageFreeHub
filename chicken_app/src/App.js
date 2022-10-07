@@ -24,6 +24,7 @@ function App() {
         <Route path="/SellerSignup" element={<Signup props={{ hereTo: 'SellerSignup' }}/>} />
         <Route path="/Login" element={<Signup props={{ hereTo: 'Login' }}/> }/>
         <Route path="/FormPart1" element={<FormPart1/>} />
+        <Route path="*" element={<>404</>} />
 
       </Routes>
     </ThemeProvider>
