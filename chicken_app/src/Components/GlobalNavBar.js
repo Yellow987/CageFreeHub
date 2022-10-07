@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Button from '@mui/material/Button';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -26,12 +26,27 @@ function GlobalNavBar() {
   const { t, i18n } = useTranslation(['navbar']);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElLanguage, setAnchorElLanguage] = React.useState(null);
-  const [currentLanguage, setCurrentLanguage] = React.useState("")
-  const [languages, setLanguages] = React.useState([
+  const languages = [
     {name:"English", symbol:"en"}, 
-    {name:"Spanish", symbol:"esp"}, 
+    {name:"Spanish", symbol:"ESP"}, 
     {name:"Indonesian", symbol:"indo"}
-  ])
+  ]
+  const [currentLanguage, setCurrentLanguage] = React.useState("")
+
+  useEffect(() => { //Sets currentLanguage and removes that language from languages
+    // const lang = i18n.language
+    // let langName = "err"
+    // for(var i = 0; i<languages.length; i++){
+    //   if (languages[i].symbol === lang) {
+    //     langName = languages[i].name
+    //     const arr = languages
+    //     languages.splice(i, 1)
+    //     break
+    //   }
+    // }
+    //setCurrentLanguage(langName)
+    setCurrentLanguage("English")
+  }, [])
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -51,6 +66,7 @@ function GlobalNavBar() {
 
   const handleChangeLanguage = (language) => {
     i18n.changeLanguage(language.symbol);
+    setCurrentLanguage(language.name)
   }
 
   return (
@@ -104,7 +120,7 @@ function GlobalNavBar() {
             onClick={handleOpenLanguageMenu} 
             color="inherit"
           >
-            english
+            <Typography variant='p_default' color='#788492' marginRight={2}>{currentLanguage}</Typography>
           </Button>
           <Menu 
             id="menu-language"
@@ -120,7 +136,7 @@ function GlobalNavBar() {
             }}
             open={Boolean(anchorElLanguage)}
             onClose={handleCloseLanguageMenu}>
-              {languages.map((language) => (
+              {(languages.filter((language) => language.name !== currentLanguage)).map((language) => (
                 <MenuItem key={language.name} onClick={() => handleChangeLanguage(language)}>
                   {language.name}
                 </MenuItem>

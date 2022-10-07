@@ -3,7 +3,7 @@ import { Box, Typography, TextField, Checkbox, FormControlLabel } from '@mui/mat
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import {auth} from './../firestore';
 import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 function Signup(props) {
@@ -18,6 +18,7 @@ function Signup(props) {
     textDecoration: "none",
   }
 
+  const navigate = useNavigate()
   const [user, setUser] = useState({})
   const [email, setEmail]= useState("");
   const [password, setPassword]= useState("");
@@ -69,6 +70,7 @@ function Signup(props) {
   }
 
   const handleSubmit = (event) => {
+    navigate('/')
     console.log("handle")
     if (areValidationErrors()) {return}
     if (hereTo === "Login") {
@@ -80,7 +82,10 @@ function Signup(props) {
 
   const register = async () => {
     try{
-      const user = await createUserWithEmailAndPassword(auth, email, password);
+      const user = await createUserWithEmailAndPassword(auth, email, password)
+        .then((response) => {
+          sessionStorage.setItem('AuthToken', response._tokenResponse.refreshToken)
+        })
       console.log(user)
     }catch (error){
       console.log(error.message);

@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-const FormPart1 = ({sendDataToPage})=>{
+const SellerBasics = ({sendDataToPage})=>{
     const styles = {
         twoButtons: {
             display: 'flex',
@@ -38,13 +38,11 @@ const FormPart1 = ({sendDataToPage})=>{
                 <Grid container xs={12} sm={4}  justifyContent="flex-start" direction='column' >
                 <TextField id="outlined-basic" label="Company Name" variant="outlined" />
                 <TextField id="outlined-basic" label="Website" variant="outlined" />
-                <Button variant="contained" style={{alignSelf:'flex-end'}} onClick={() => {
-                            sendDataToPage('formpart2');
-                            }}>Next</Button>
+                <Button variant="contained" style={{alignSelf:'flex-end'}} >Next</Button>
                 </Grid>
             </Grid>
         </Container>
     )
 }
 
-export default FormPart1
+export default SellerBasics
