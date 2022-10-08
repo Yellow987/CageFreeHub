@@ -8,7 +8,7 @@ import { Link } from "react-router-dom"
 import { useTranslation } from 'react-i18next';
 
 const Home = ()=> {
-    const { t, i18n } = useTranslation(['home']);
+    const { t } = useTranslation(['home']);
 
     const styles = {
         twoButtons: {

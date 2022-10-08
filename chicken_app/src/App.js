@@ -5,9 +5,9 @@ import { Route, Routes } from "react-router-dom"
 import GlobalNavBar from './Components/GlobalNavBar';
 import Home from './Pages/Home';
 import Signup from './Pages/Signup';
-import Login from './Pages/Login';
-import FormPart1 from './Pages/FormPart1';
+import SellerBasics from './Pages/SellerBasics';
 import CssBaseline from '@mui/material/CssBaseline';
+import ConfirmEmail from './Pages/ConfirmEmail';
 import Theme from './Components/Theme';
 
 function App() {
@@ -23,7 +23,8 @@ function App() {
         <Route path="/BuyerSignup" element={<Signup props={{ hereTo: 'BuyerSignup' }}/>} />
         <Route path="/SellerSignup" element={<Signup props={{ hereTo: 'SellerSignup' }}/>} />
         <Route path="/Login" element={<Signup props={{ hereTo: 'Login' }}/> }/>
-        <Route path="/FormPart1" element={<FormPart1/>} />
+        <Route path="/SellerBasics" element={<SellerBasics/>} />
+        <Route path="/ConfirmEmail" element={<ConfirmEmail/>} />
         <Route path="*" element={<>404</>} />
 
       </Routes>
