@@ -1,3 +1,5 @@
+import { Button } from "@mui/material"
+
 function Imagery() {
     return (
         <section>
@@ -5,11 +7,11 @@ function Imagery() {
             <p>Tip: To attract buyers, we recommend you upload at least 4 photos, including photos of eggs, of production system, and lorem ipsum.</p>
             <div>
                 <label>Photos of farm</label>
-                <button>Upload photos</button>
+                <Button>Upload photos</Button>
             </div>
             <div>
                 <label>Logo (optional)</label>
-                <button>Upload logo</button>
+                <Button>Upload logo</Button>
             </div>
             {/* <button type='submit'>Submit for approval</button> */}
         </section>

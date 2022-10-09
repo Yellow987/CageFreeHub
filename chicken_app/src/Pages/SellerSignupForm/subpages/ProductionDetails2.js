@@ -1,4 +1,5 @@
 import { Field } from "react-final-form"
+import { Button } from "@mui/material"
 import { renderDropdown, renderTextInput } from "../components"
 
 function ProductionDetails2() {
@@ -34,7 +35,7 @@ function ProductionDetails2() {
                 name='certifying organzation'
                 component={renderTextInput}
             />
-            <button>Upload certificate</button>
+            <Button>Upload certificate</Button>
         </section>
     )
 }

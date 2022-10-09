@@ -19,7 +19,7 @@ function App() {
       {/* //CssBaseline is important idk why */}
       <CssBaseline/>
 
-      <AuthProvider>
+      <AuthProvider> 
       <GlobalNavBar />
         <Routes>
           <Route path="/" element={<Home/>} />

@@ -1,4 +1,5 @@
-import { Form, Field } from 'react-final-form'
+import { Form } from 'react-final-form'
+import Button from '@mui/material/Button';
 
 import Basics from './subpages/Basics'
 import Location from './subpages/Location'
@@ -26,7 +27,7 @@ function SellerSignupForm() {
                     <ProductionDetails1 />
                     <ProductionDetails2 />
                     <Imagery />
-                    <button type='submit'>Submit</button>
+                    <Button type='submit'>Submit</Button>
                 </form>
             )}
             />

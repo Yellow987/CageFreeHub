@@ -1,4 +1,5 @@
 import { Field } from 'react-final-form'
+import { Button } from '@mui/material'
 import { renderTextInput, renderDropdown, countries } from "../components"
 
 function Location() {
@@ -22,12 +23,12 @@ function Location() {
                 >
                 </Field>
             </div>
-            <button>+ I have an additional farm location.</button>
+            <Button>+ I have an additional farm location.</Button>
             <Field 
                 name='distributionCountries'
                 label='Distribution country (countries)'
                 placeholder='Select countries to which you distribute'
-                multiple
+                // multiple
                 options={countries}
                 component={renderDropdown}
             />
