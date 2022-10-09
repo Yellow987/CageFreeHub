@@ -47,8 +47,7 @@ function ProductionDetails1() {
                     />
                 </div>
                 )
-            })}
-                
+            })} 
         </>
     )
 }

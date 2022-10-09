@@ -1,6 +1,5 @@
 import { Form } from 'react-final-form'
-import { useState } from 'react';
-import Button from '@mui/material/Button';
+import { useState } from 'react'
 
 import Basics from './subpages/Basics'
 import Location from './subpages/Location'
@@ -9,7 +8,7 @@ import ProductDetails from './subpages/ProductDetails'
 import ProductionDetails1 from './subpages/ProductionDetails1'
 import ProductionDetails2 from './subpages/ProductionDetails2'
 import Imagery from './subpages/Imagery'
-import { PageWrapper } from './components/PageWrapper';
+import { PageWrapper } from './components/PageWrapper'
 
 function SellerSignupForm() {
     const [page, setPage] = useState(0)
@@ -28,7 +27,8 @@ function SellerSignupForm() {
             <PageWrapper
                 element={pageIndex[page]}
                 page={page}
-                changePage={change => change === 'next' ? setPage(page + 1) : setPage(page - 1)}/>
+                changePage={change => change === 'next' ? setPage(page + 1) : setPage(page - 1)}
+            />
         )
     }
 
