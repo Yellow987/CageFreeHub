@@ -1,4 +1,4 @@
-import { Form } from 'react-final-form'
+import { Form, Field } from 'react-final-form'
 
 import Basics from './subpages/Basics'
 import Location from './subpages/Location'
@@ -9,7 +9,6 @@ import ProductionDetails2 from './subpages/ProductionDetails2'
 import Imagery from './subpages/Imagery'
 
 function SellerSignupForm() {
-
     function onSubmit(formValues) {
         console.log(formValues)
     }
@@ -27,6 +26,7 @@ function SellerSignupForm() {
                     <ProductionDetails1 />
                     <ProductionDetails2 />
                     <Imagery />
+                    <button type='submit'>Submit</button>
                 </form>
             )}
             />

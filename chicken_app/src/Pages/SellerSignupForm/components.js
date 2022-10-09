@@ -6,7 +6,7 @@ export function renderTextInput(props) {
     return (
         <div>
             <label>{props.label}</label>
-            <input type='text' name={props.input.name} placeholder={props.placeholder} />
+            <input {...props.input} placeholder={props.placeholder} />
         </div>
     )
 }
@@ -15,7 +15,7 @@ export function renderDropdown(props) {
     return (
         <div>
             <label>{props.label}</label>
-            <select name={props.input.name} placeholder={props.placeholder}>
+            <select {...props.input} placeholder={props.placeholder}>
             {props.options.map(option => (
                 <option key={option} name={option}>{option}</option>
             ))}
@@ -27,7 +27,7 @@ export function renderDropdown(props) {
 export function renderCheckbox(props) {
     return(
         <div>
-            <input type='checkbox' name={props.input.name} />
+            <input type='checkbox' {...props.input} />
             <label htmlFor={props.input.name}>{props.label}</label>
         </div>
     )
@@ -37,10 +37,10 @@ export function renderCheckboxes(props) {
     return (
         <div>
             <label>{props.label}</label>
-            {props.options.map(option => (
+            {props.options.map((option, idx) => (
                 <>
-                <div key={option}>
-                <input type='checkbox' name={option} key={option} />
+                <div key={idx}>
+                <input type='checkbox' name={option} />
                 <label htmlFor={option}>{option}</label>
                 </div>
                 </>

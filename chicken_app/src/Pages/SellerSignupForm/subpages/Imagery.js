@@ -11,7 +11,7 @@ function Imagery() {
                 <label>Logo (optional)</label>
                 <button>Upload logo</button>
             </div>
-            <button type='submit'>Submit for approval</button>
+            {/* <button type='submit'>Submit for approval</button> */}
         </section>
     )
 }
