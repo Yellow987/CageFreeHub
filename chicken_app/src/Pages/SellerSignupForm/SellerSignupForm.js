@@ -1,27 +1,34 @@
 import { Form } from 'react-final-form'
 
 import Basics from './subpages/Basics'
-import Location from './Location'
-import Contact from './Contact'
+import Location from './subpages/Location'
+import Contact from './subpages/Contact'
 import ProductDetails from './subpages/ProductDetails'
-import ProductionDetails1 from './ProductionDetails1'
-import ProductionDetails2 from './ProductionDetails2'
+import ProductionDetails1 from './subpages/ProductionDetails1'
+import ProductionDetails2 from './subpages/ProductionDetails2'
+import Imagery from './subpages/Imagery'
 
 function SellerSignupForm() {
+
+    function onSubmit(formValues) {
+        console.log(formValues)
+    }
+
     return(
         <>
         <Form
-            render={({ handleSubmit }) => {
-                <>
-                <Basics />
-                <Location />
-                <Contact />
-                <ProductDetails />
-                <ProductionDetails1 />
-                <ProductionDetails2 />
-                <Imagery />
-                </>
-            }}
+            onSubmit={onSubmit}
+            render={({ handleSubmit }) => (
+                <form onSubmit={handleSubmit}>
+                    <Basics />
+                    <Location />
+                    <Contact />
+                    <ProductDetails />
+                    <ProductionDetails1 />
+                    <ProductionDetails2 />
+                    <Imagery />
+                </form>
+            )}
             />
         </>
     )

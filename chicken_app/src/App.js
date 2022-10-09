@@ -31,6 +31,7 @@ function App() {
 
         </Routes>
       </AuthProvider>
+      
     </ThemeProvider>
   );
 }

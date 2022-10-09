@@ -1,5 +1,5 @@
 import { Field } from 'react-final-form'
-import { securityMessage } from "../../Components/formComponents"
+import { securityMessage, renderCheckboxes } from "../components"
 
 function ProductDetails() {
     return (

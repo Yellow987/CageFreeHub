@@ -1,5 +1,5 @@
 import { Field } from "react-final-form"
-import { renderDropdown, renderTextInput } from "../../Components/formComponents"
+import { renderDropdown, renderTextInput } from "../components"
 
 function ProductionDetails2() {
     return (

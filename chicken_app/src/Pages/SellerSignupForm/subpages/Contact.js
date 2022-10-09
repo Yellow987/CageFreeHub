@@ -1,5 +1,5 @@
 import { Field } from 'react-final-form'
-import { renderTextInput, renderCheckboxes, securityMessage } from '../../Components/formComponents'
+import { renderTextInput, renderCheckboxes, securityMessage } from '../components'
 
 function Contact() {
     return (

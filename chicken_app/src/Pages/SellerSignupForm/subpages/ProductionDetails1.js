@@ -1,5 +1,5 @@
 import { Field } from 'react-final-form'
-import { securityMessage, renderTextInput } from "../../Components/formComponents"
+import { securityMessage, renderTextInput, renderCheckbox, renderDropdown } from "../components"
 
 function ProductionDetails1() {
     return (
@@ -10,7 +10,11 @@ function ProductionDetails1() {
             {['shell', 'frozen','liquid','powder','other'].map(eggType => {
             return (
                 <div key={eggType}>
-                    <Field type='checkbox' name={eggType} />{eggType[0].toUpperCase() + eggType.slice(1)}
+                    <Field
+                        name={eggType}
+                        label={eggType[0].toUpperCase() + eggType.slice(1)}
+                        component={renderCheckbox}
+                    />
 
                     <Field 
                         label='Total production capacity (per year)'
@@ -18,13 +22,14 @@ function ProductionDetails1() {
                         placeholder={eggType === 'shell'? 'E.g. 10,000' : 'E.g. 3'}
                         component={renderTextInput}
                     />
-
-                    <Field name={`${eggType} total production capacity unit`} type='select'>
-                        <option value='eggs'>Eggs</option>
-                        <option value='tons' selected>Tons</option>
-                        <option value='kilograms'>Kilograms</option>
-                    </Field>
-
+                    
+                    <Field
+                        name={`${eggType} total production capacity unit`}
+                        type='select'
+                        options={['eggs','tons','kilograms']}
+                        render={renderDropdown}
+                    />
+                    
                     <Field 
                         label='Price per ton'
                         name={`${eggType} price per ton`}
@@ -32,9 +37,11 @@ function ProductionDetails1() {
                         component={renderTextInput}
                     />
 
-                    <Field name={`${eggType} price per ton currency`} type='select'>
-                        <option>USD</option>
-                    </Field>
+                    <Field
+                        name={`${eggType} price per ton currency`}
+                        options={['$']}
+                        component={renderDropdown}
+                    />
                 </div>
                 )
             })}

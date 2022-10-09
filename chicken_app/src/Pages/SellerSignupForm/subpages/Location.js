@@ -1,5 +1,5 @@
 import { Field } from 'react-final-form'
-import { renderTextInput, renderDropdown, countries } from "../../Components/formComponents"
+import { renderTextInput, renderDropdown, countries } from "../components"
 
 function Location() {
     return(
@@ -29,6 +29,7 @@ function Location() {
                 placeholder='Select countries to which you distribute'
                 multiple
                 options={countries}
+                component={renderDropdown}
             />
         </section>
     )
