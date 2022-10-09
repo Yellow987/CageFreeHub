@@ -76,9 +76,10 @@ function Signup(props) {
     try {
       setLoading(true)
       if (hereTo === "Login") {
-        await login(emailRef.current.value, passwordRef.current.value)
+        login(emailRef.current.value, passwordRef.current.value)
+        navigate('/SellerProfileWizard')
       } else {
-        await signup(emailRef.current.value, passwordRef.current.value)
+        signup(emailRef.current.value, passwordRef.current.value)
         navigate("/ConfirmEmail")
       }
     } catch(err) {

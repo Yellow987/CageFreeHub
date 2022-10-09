@@ -1,6 +1,5 @@
 import React from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-//import  {getFarms} from './firestore';
 import { Route, Routes } from "react-router-dom"
 import GlobalNavBar from './Components/GlobalNavBar';
 import Home from './Pages/Home';
@@ -10,14 +9,14 @@ import CssBaseline from '@mui/material/CssBaseline';
 import ConfirmEmail from './Pages/ConfirmEmail';
 import Theme from './Components/Theme';
 import { AuthProvider } from './AuthContext'
-import SellerSignupForm from './Pages/SellerSignupForm/SellerSignupForm';
+import SellerProfileWizard from './Pages/SellerProfileWizard/SellerProfileWizard';
+import PrivateRoute from './Components/PrivateRoute';
 
 function App() {
-  // let farms = getFarms();
   return (
     <ThemeProvider theme={createTheme(Theme)}>
-      {/* //CssBaseline is important idk why */}
       <CssBaseline/>
+
 
       <AuthProvider> 
       <GlobalNavBar />
@@ -28,7 +27,7 @@ function App() {
           <Route path="/Login" element={<Signup props={{ hereTo: 'Login' }}/> }/>
           <Route path="/SellerBasics" element={<SellerBasics/>} />
           <Route path="/ConfirmEmail" element={<ConfirmEmail/>} />
-          <Route path="/SellerSignupForm" element={<SellerSignupForm />} />
+          <Route path="/SellerProfileWizard" element={<PrivateRoute><SellerProfileWizard /></PrivateRoute>} />
           <Route path="*" element={<>404</>} />
 
         </Routes>

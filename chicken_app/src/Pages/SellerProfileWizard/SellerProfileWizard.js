@@ -10,7 +10,7 @@ import ProductionDetails2 from './subpages/ProductionDetails2'
 import Imagery from './subpages/Imagery'
 import { PageWrapper } from './components/PageWrapper'
 
-function SellerSignupForm() {
+function SellerProfileWizard() {
     const [page, setPage] = useState(0)
 
     function displayPage(page) {
@@ -51,4 +51,4 @@ function SellerSignupForm() {
     )
 }
 
-export default SellerSignupForm
+export default SellerProfileWizard
