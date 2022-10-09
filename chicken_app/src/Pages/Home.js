@@ -18,6 +18,7 @@ const Home = ()=> {
         },
         marginButton : {
             marginRight: { sm:2, xs:0 },
+            fontWeight:700
         },
         toNavMenuMargin : {
             marginTop: { sm:'143px', xs:'40px' }

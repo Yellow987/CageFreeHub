@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from '@mui/material/Button';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,6 +14,9 @@ import IconButton from '@mui/material/IconButton';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../AuthContext';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LanguageIcon from '@mui/icons-material/Language';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 
 const styles = {
   betaBox : {
@@ -26,8 +29,9 @@ const styles = {
 function GlobalNavBar() {
   const { currentUser, logout } = useAuth()
   const { t, i18n } = useTranslation(['navbar']);
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElLanguage, setAnchorElLanguage] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElLanguage, setAnchorElLanguage] = useState(null);
+  const [anchorElLoggedIn, setAnchorElLoggedIn] = useState(null)
   const languages = [
     {name:"English", symbol:"en"}, 
     {name:"Spanish", symbol:"ESP"}, 
@@ -60,6 +64,24 @@ function GlobalNavBar() {
     setCurrentLanguage(language.name)
   }
 
+  const handleLoggedInMenu = (event) => {
+    setAnchorElLoggedIn(event.currentTarget)
+  }
+
+  const handleCloseLoggedInMenu = (event) => {
+    setAnchorElLoggedIn(null)
+  }
+
+  const handleEditProfile = (event) => {
+    setAnchorElLoggedIn(null)
+    //TODO
+  }
+
+  const handleLogout = (event) => {
+    setAnchorElLoggedIn(null)
+    logout()
+  }
+
   return (
     <AppBar color="secondary" elevation={0} position="static">
       <Toolbar>
@@ -73,73 +95,91 @@ function GlobalNavBar() {
           </Typography>
         </Box>
         <Box sx={{ flexGrow: 1 }}/>
-        <Box sx={{ display:{xs:'none', sm:'block'}, marginRight:2}}>
-          <PopupState variant="popover" >
-            {(popupState) => (
-              <div>
-                <Button variant="outlined" 
-                style={{
-                  backgroundColor:'#EFFAF9', 
-                  color:'#3FAB94',  
-                  border:'0'
-                }} {...bindTrigger(popupState)}>
-                  Support
-                </Button>
-                <Popover
-                  {...bindPopover(popupState)}
-                  anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'center',
-                  }}
-                  transformOrigin={{
-                    vertical: 'top',
-                    horizontal: 'center',
-                  }}
-                >
-                  <SupportPopup/>
-                </Popover>
-              </div>
-            )}
-          </PopupState>
+        <Box sx={{ display:{xs:'none', sm:'flex'}}} >
+          <Box sx={{ marginRight:2}}>
+            <PopupState variant="popover" >
+              {(popupState) => (
+                <div>
+                  <Button variant="outlined" 
+                  style={{
+                    backgroundColor:'#EFFAF9', 
+                    color:'#3FAB94',  
+                    border:'0'
+                  }} {...bindTrigger(popupState)}>
+                    <HelpOutlineIcon fontSize='small' style={{ marginRight:6}}/>
+                    Support
+                  </Button>
+                  <Popover
+                    {...bindPopover(popupState)}
+                    anchorOrigin={{
+                      vertical: 'bottom',
+                      horizontal: 'center',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'center',
+                    }}
+                  >
+                    <SupportPopup/>
+                  </Popover>
+                </div>
+              )}
+            </PopupState>
+          </Box>
+          <Box >
+            <Button
+              size="large"
+              aria-controls="menu-language"
+              aria-haspopup="true"
+              onClick={handleOpenLanguageMenu} 
+              color="inherit"
+              sx={{ marginRight:2, color:'#788492' }}
+            >
+              <LanguageIcon fontSize='small' style={{ strokeWidth:'', marginRight:6 }}/>
+              <Typography variant='p_default'>{currentLanguage}</Typography>
+            </Button>
+            <Menu 
+              id="menu-language"
+              anchorEl={anchorElLanguage}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              keepMounted
+              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+              open={Boolean(anchorElLanguage)}
+              onClose={handleCloseLanguageMenu}>
+                {(languages.filter((language) => language.name !== currentLanguage)).map((language) => (
+                  <MenuItem key={language.name} onClick={() => handleChangeLanguage(language)}>
+                    {language.name}
+                  </MenuItem>
+                ))}
+            </Menu>
+          </Box>
+          <Button sx={{ display: currentUser ? 'none' : 'block' }} variant="outlined" component={Link} to="/Login" >{t('login')}</Button>
+          <Box sx={{ display: currentUser ? 'block' : 'none' }}>
+            <IconButton
+              aria-label="idk"
+              aria-controls="logged-in-appbar"
+              aria-haspopup="true"
+              onClick={handleLoggedInMenu}
+            >
+              <AccountCircleIcon/>
+            </IconButton>
+            <Menu
+              id="logged-in-appbar"
+              anchorEl={anchorElLoggedIn}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+              keepMounted
+              transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+              open={Boolean(anchorElLoggedIn)}
+              onClose={handleCloseLoggedInMenu}
+            >
+              <MenuItem onClick={handleEditProfile}>Edit Profile</MenuItem>
+              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            </Menu>
+          </Box>
         </Box>
-        <Box sx={{ display:{xs:'none', sm:'block'}}}>
-          <Button
-            size="large"
-            aria-label="account of current user"
-            aria-controls="menu-language"
-            aria-haspopup="true"
-            onClick={handleOpenLanguageMenu} 
-            color="inherit"
-          >
-            <Typography variant='p_default' color='#788492' marginRight={2}>{currentLanguage}</Typography>
-          </Button>
-          <Menu 
-            id="menu-language"
-            anchorEl={anchorElLanguage}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
-            }}
-            open={Boolean(anchorElLanguage)}
-            onClose={handleCloseLanguageMenu}>
-              {(languages.filter((language) => language.name !== currentLanguage)).map((language) => (
-                <MenuItem key={language.name} onClick={() => handleChangeLanguage(language)}>
-                  {language.name}
-                </MenuItem>
-              ))}
-          </Menu>
-        </Box>
-        {/* <Button sx={{ display:{xs:'none', sm:'block'}, marginRight:2}} onClick={() => changeLanguage('en')}>{t('english')}</Button> */}
-        <Button sx={{ display:{xs:'none', sm:'block'}}} variant="outlined" component={Link} to="/Login" >{t('login')}</Button>
         <Box sx={{ display:{xs:'block', sm:'none'}}}>
           <IconButton
             size="large"
-            aria-label="account of current user"
             aria-controls="menu-appbar"
             aria-haspopup="true"
             onClick={handleOpenNavMenu} 
@@ -150,15 +190,9 @@ function GlobalNavBar() {
           <Menu 
             id="menu-appbar"
             anchorEl={anchorElNav}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
             keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
-            }}
+            transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             open={Boolean(anchorElNav)}
             onClose={handleCloseNavMenu}>
             <MenuItem component={Link} to="/Login" onClick={handleCloseNavMenu}>
@@ -166,9 +200,6 @@ function GlobalNavBar() {
             </MenuItem>
           </Menu>
         </Box>
-        <Button sx={{ display: currentUser ? 'block' : 'none' }} onClick={() => {logout()}}>
-          {currentUser?.email}
-        </Button>
       </Toolbar>
     </AppBar> 
   )

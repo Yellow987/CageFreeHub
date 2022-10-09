@@ -1,4 +1,4 @@
-import { React, useState, useRef, useEffect } from 'react'
+import { React, useState, useRef } from 'react'
 import { Box, Typography, TextField, Checkbox, FormControlLabel } from '@mui/material'
 import { Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
@@ -28,17 +28,6 @@ function Signup(props) {
       passwordErrorText:"", isPasswordValid: true,
     }
   )
-
-  useEffect(() => {
-    const keyDownHandler = event => {
-      console.log('User pressed: ', event.key);
-
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        console.log('enter')
-      }
-    }
-})
 
   const isEmailInvalid = (email) => {
     const isInvalid = !(/^[\w-.]+@([\w-]+\.)+[\w-]{2,6}$/).test(email)
@@ -76,6 +65,7 @@ function Signup(props) {
   }
 
   async function handleSubmit(event) {
+    buttonRef.current.click()
     event.preventDefault()
     if (areValidationErrors()) {return}
     
@@ -88,12 +78,6 @@ function Signup(props) {
       }
     } catch(err) {
       console.log(err)
-    }
-  }
-
-  const handleKeypress = e => {
-    if (e.key === "Enter") {
-      console.log('enter')
     }
   }
 
@@ -115,19 +99,21 @@ function Signup(props) {
       <Typography variant='h1'>
         {getTitle(hereTo)}
       </Typography>
-      <TextField error={!errors.isEmailValid} helperText={errors.emailErrorText} fullWidth label="Email" variant="outlined" sx={{ ...format }} inputRef={emailRef}/>
-      <TextField error={!errors.isPasswordValid} helperText={errors.passwordErrorText} fullWidth label="Password" type="password" variant="outlined" sx={{ ...format }} inputRef={passwordRef}/>
-      <FormControlLabel sx={{ ...format, display: hereTo === 'Login' ? 'none' : 'block', lineHeight:0 }}
-      label={
-        <Typography variant='p_small' display="inline" sx={{ lineHeight: 0 }}>
-          Yes, I understand and agree to the <Box sx={{...hyperlink}}>Cage Free Hub Terms of Service</Box>
-        </Typography>
-      } control={
-        <Checkbox onChange={(event) => {setIsCheckBoxClicked(isCheckBoxClicked => !isCheckBoxClicked)}}/>
-      }/>
-      <Button type="submit" fullWidth onClick={handleSubmit} variant='contained' sx={{ ...format, fontWeight:700 }} ref={buttonRef} onKeyDown={(e) => {console.log(e)}}>
-        {hereTo === 'Login' ? "Log in" : "Create Account"}
-      </Button>
+      <form onSubmit={handleSubmit}>
+        <TextField error={!errors.isEmailValid} helperText={errors.emailErrorText} fullWidth label="Email" variant="outlined" sx={{ ...format }} inputRef={emailRef}/>
+        <TextField error={!errors.isPasswordValid} helperText={errors.passwordErrorText} fullWidth label="Password" type="password" variant="outlined" sx={{ ...format }} inputRef={passwordRef}/>
+        <FormControlLabel sx={{ ...format, display: hereTo === 'Login' ? 'none' : 'block', lineHeight:0 }}
+        label={
+          <Typography variant='p_small' display="inline" sx={{ lineHeight: 0 }}>
+            Yes, I understand and agree to the <Box sx={{...hyperlink}}>Cage Free Hub Terms of Service</Box>
+          </Typography>
+        } control={
+          <Checkbox onChange={(event) => {setIsCheckBoxClicked(isCheckBoxClicked => !isCheckBoxClicked)}}/>
+        }/>
+        <Button type="submit" fullWidth  variant='contained' sx={{ ...format, fontWeight:700 }} ref={buttonRef}>
+          {hereTo === 'Login' ? "Log in" : "Create Account"}
+        </Button>
+      </form>
       <Typography variant='p_default' sx={{marginTop: 5, display: hereTo === 'Login' ? 'none' : 'block' }}>
         Already have an account? <Box sx={{...hyperlink}} component={Link} to="/Login" >Login</Box>
       </Typography>

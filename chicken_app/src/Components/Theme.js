@@ -11,6 +11,9 @@ const Theme = {
     },
   },
   typography: {
+    button: {
+      textTransform: 'none'
+    },
     title: {
       fontWeight: 700,
       fontSize: 32,
