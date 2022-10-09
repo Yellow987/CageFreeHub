@@ -1,10 +1,8 @@
-import { React, useState } from 'react'
+import { React, useState, useRef, useEffect } from 'react'
 import { Box, Typography, TextField, Checkbox, FormControlLabel } from '@mui/material'
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth'
-import {auth} from './../firestore';
 import { Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-
+import { useAuth } from './../AuthContext';
 
 function Signup(props) {
   const { hereTo } = props.props
@@ -18,31 +16,39 @@ function Signup(props) {
     textDecoration: "none",
   }
 
+  const { signup, login } = useAuth()
   const navigate = useNavigate()
-  const [user, setUser] = useState({})
-  const [email, setEmail]= useState("");
-  const [password, setPassword]= useState("");
+  const emailRef = useRef("");
+  const passwordRef = useRef("")
+  const buttonRef = useRef(null)
   const [isCheckBoxClicked, setIsCheckBoxClicked] = useState(false)
   const [errors, setErrors] = useState(
     { 
       emailErrorText:"", isEmailValid: true, 
       passwordErrorText:"", isPasswordValid: true,
-     })
-  
-  onAuthStateChanged(auth, (currentUser) => {
-    setUser(currentUser)
-  })
+    }
+  )
+
+  useEffect(() => {
+    const keyDownHandler = event => {
+      console.log('User pressed: ', event.key);
+
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        console.log('enter')
+      }
+    }
+})
 
   const isEmailInvalid = (email) => {
     const isInvalid = !(/^[\w-.]+@([\w-]+\.)+[\w-]{2,6}$/).test(email)
-    console.log(isInvalid)
     return isInvalid;
   };
 
   function areValidationErrors() {
     let temp = {}
     let errors = false
-    if (isEmailInvalid(email)) {
+    if (isEmailInvalid(emailRef.current.value)) {
       temp.emailErrorText = "Email is not valid." 
       temp.isEmailValid = false 
       errors = true
@@ -51,7 +57,7 @@ function Signup(props) {
       temp.isEmailValid = true
     }
 
-    if (password.length < 6) {
+    if (passwordRef.current.value.length < 6) {
       temp.passwordErrorText = "password must be at least 6 characters." 
       temp.isPasswordValid = false 
       errors = true
@@ -69,40 +75,26 @@ function Signup(props) {
     return errors ? true : false
   }
 
-  const handleSubmit = (event) => {
-    navigate('/')
-    console.log("handle")
+  async function handleSubmit(event) {
+    event.preventDefault()
     if (areValidationErrors()) {return}
-    if (hereTo === "Login") {
-      login()
-    } else {
-      register()
+    
+    try {
+      if (hereTo === "Login") {
+        await login(emailRef.current.value, passwordRef.current.value)
+      } else {
+        await signup(emailRef.current.value, passwordRef.current.value)
+        navigate("/ConfirmEmail")
+      }
+    } catch(err) {
+      console.log(err)
     }
   }
 
-  const register = async () => {
-    try{
-      const user = await createUserWithEmailAndPassword(auth, email, password)
-        .then((response) => {
-          sessionStorage.setItem('AuthToken', response._tokenResponse.refreshToken)
-        })
-      console.log(user)
-    }catch (error){
-      console.log(error.message);
+  const handleKeypress = e => {
+    if (e.key === "Enter") {
+      console.log('enter')
     }
-  }
-
-  const login = async () => {
-    try{
-      const user = await signInWithEmailAndPassword(auth, email, password);
-      console.log(user)
-    }catch (error){
-      console.log(error.message);
-    }
-  }
-
-  const logout = async () => {
-    await signOut(auth);
   }
 
   function getTitle(hereTo) {
@@ -123,12 +115,8 @@ function Signup(props) {
       <Typography variant='h1'>
         {getTitle(hereTo)}
       </Typography>
-      <TextField error={!errors.isEmailValid} helperText={errors.emailErrorText} fullWidth label="Email" variant="outlined" sx={{ ...format }} onChange={(event)=>{
-        setEmail(event.target.value)
-      }} />
-      <TextField error={!errors.isPasswordValid} helperText={errors.passwordErrorText} fullWidth label="Password" type="password" variant="outlined" sx={{ ...format }} onChange={(event)=>{
-        setPassword(event.target.value)
-      }} />
+      <TextField error={!errors.isEmailValid} helperText={errors.emailErrorText} fullWidth label="Email" variant="outlined" sx={{ ...format }} inputRef={emailRef}/>
+      <TextField error={!errors.isPasswordValid} helperText={errors.passwordErrorText} fullWidth label="Password" type="password" variant="outlined" sx={{ ...format }} inputRef={passwordRef}/>
       <FormControlLabel sx={{ ...format, display: hereTo === 'Login' ? 'none' : 'block', lineHeight:0 }}
       label={
         <Typography variant='p_small' display="inline" sx={{ lineHeight: 0 }}>
@@ -137,7 +125,7 @@ function Signup(props) {
       } control={
         <Checkbox onChange={(event) => {setIsCheckBoxClicked(isCheckBoxClicked => !isCheckBoxClicked)}}/>
       }/>
-      <Button fullWidth onClick={handleSubmit} variant='contained' sx={{ ...format, fontWeight:700 }}>
+      <Button type="submit" fullWidth onClick={handleSubmit} variant='contained' sx={{ ...format, fontWeight:700 }} ref={buttonRef} onKeyDown={(e) => {console.log(e)}}>
         {hereTo === 'Login' ? "Log in" : "Create Account"}
       </Button>
       <Typography variant='p_default' sx={{marginTop: 5, display: hereTo === 'Login' ? 'none' : 'block' }}>
@@ -161,7 +149,7 @@ function Signup(props) {
       <Typography variant='p_default' sx={{marginTop: 2, display: hereTo === 'BuyerSignup' ? { xs:'block', sm:'none'}  : 'none' }}>
         Here to sell instead? <Box sx={{...hyperlink}} component={Link} to="/SellerSignup" >Sign up as an egg seller</Box>
       </Typography>
-      {user.email}
+      {/* {user.email} will cause site to fail when user not signed in */}
     </Box>
   )
 }

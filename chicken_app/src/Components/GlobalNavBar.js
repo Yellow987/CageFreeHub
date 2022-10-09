@@ -13,6 +13,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import IconButton from '@mui/material/IconButton';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../AuthContext';
 
 const styles = {
   betaBox : {
@@ -23,6 +24,7 @@ const styles = {
 }
 
 function GlobalNavBar() {
+  const { currentUser, logout } = useAuth()
   const { t, i18n } = useTranslation(['navbar']);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElLanguage, setAnchorElLanguage] = React.useState(null);
@@ -33,18 +35,7 @@ function GlobalNavBar() {
   ]
   const [currentLanguage, setCurrentLanguage] = React.useState("")
 
-  useEffect(() => { //Sets currentLanguage and removes that language from languages
-    // const lang = i18n.language
-    // let langName = "err"
-    // for(var i = 0; i<languages.length; i++){
-    //   if (languages[i].symbol === lang) {
-    //     langName = languages[i].name
-    //     const arr = languages
-    //     languages.splice(i, 1)
-    //     break
-    //   }
-    // }
-    //setCurrentLanguage(langName)
+  useEffect(() => { 
     setCurrentLanguage("English")
   }, [])
 
@@ -175,6 +166,9 @@ function GlobalNavBar() {
             </MenuItem>
           </Menu>
         </Box>
+        <Button sx={{ display: currentUser ? 'block' : 'none' }} onClick={() => {logout()}}>
+          {currentUser?.email}
+        </Button>
       </Toolbar>
     </AppBar> 
   )
