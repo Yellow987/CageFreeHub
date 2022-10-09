@@ -1,5 +1,5 @@
 import { Field } from 'react-final-form'
-import { renderTextInput } from '../components'
+import RenderTextInput from '../components/RenderTextInput'
 
 function Basics() {
     return (
@@ -9,13 +9,13 @@ function Basics() {
                 name='organization'
                 label='Organization name'
                 placeholder='E.g. Happy Hens'
-                component={renderTextInput}
+                component={RenderTextInput}
             />
             <Field
                 name='website'
                 label='Website (optional)'
                 placeholder='E.g. http://marriot.com'
-                component={renderTextInput}
+                component={RenderTextInput}
             />
         </>
     )

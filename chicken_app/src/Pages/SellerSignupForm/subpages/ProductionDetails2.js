@@ -1,6 +1,7 @@
 import { Field } from "react-final-form"
 import { Button } from "@mui/material"
-import { renderDropdown, renderTextInput } from "../components"
+import RenderDropdown from "../components/RenderDropdown"
+import RenderTextInput from "../components/RenderTextInput"
 
 function ProductionDetails2() {
     return (
@@ -16,7 +17,7 @@ function ProductionDetails2() {
                     'Free range: cage free system that provides outdoor access',
                     'Mobile unit: house or structure on wheels'
                 ]}
-                component={renderDropdown}
+                component={RenderDropdown}
             />
             <Field 
                 label='Do you have cage-free egg certification?'
@@ -27,13 +28,13 @@ function ProductionDetails2() {
                     'z',
                     `No, we don't ever plan on becoming certified`
                 ]}
-                component={renderDropdown}
+                component={RenderDropdown}
             />
             <Field 
                 label='Title of certifying organization'
                 placeholder='E.g. The Humane Society'
                 name='certifying organzation'
-                component={renderTextInput}
+                component={RenderTextInput}
             />
             <Button>Upload certificate</Button>
         </>

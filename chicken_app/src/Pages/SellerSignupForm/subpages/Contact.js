@@ -1,5 +1,7 @@
 import { Field } from 'react-final-form'
-import { renderTextInput, renderCheckboxes, securityMessage } from '../components'
+import { securityMessage } from '../components/other'
+import RenderTextInput from '../components/RenderTextInput'
+import RenderCheckboxes from '../components/RenderCheckboxes'
 
 function Contact() {
     return (
@@ -10,19 +12,19 @@ function Contact() {
                 label='Full name of contact'
                 placeholder='E.g. Chung Lui'
                 name='contact name'
-                component={renderTextInput}
+                component={RenderTextInput}
             />
             <Field 
                 label='Job title of contact'
                 placeholder='E.g. CEO'
                 name='contact job title'
-                component={renderTextInput}
+                component={RenderTextInput}
             />
             <Field 
                 label='Available contact channels'
                 name='contact channels'
                 options={['Phone','Whatsapp','WeChat']}
-                component={renderCheckboxes}
+                component={RenderCheckboxes}
             />
         </>
     )

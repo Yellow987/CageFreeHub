@@ -9,7 +9,7 @@ import ProductDetails from './subpages/ProductDetails'
 import ProductionDetails1 from './subpages/ProductionDetails1'
 import ProductionDetails2 from './subpages/ProductionDetails2'
 import Imagery from './subpages/Imagery'
-import { PageWrapper } from './components';
+import { PageWrapper } from './components/PageWrapper';
 
 function SellerSignupForm() {
     const [page, setPage] = useState(0)
@@ -21,7 +21,8 @@ function SellerSignupForm() {
             2: <Contact />,
             3: <ProductDetails />,
             4: <ProductionDetails1 />,
-            5: <Imagery />
+            5: <ProductionDetails2 />,
+            6: <Imagery />
         }
         return (
             <PageWrapper

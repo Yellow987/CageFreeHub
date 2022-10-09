@@ -1,5 +1,6 @@
 import { Field } from 'react-final-form'
-import { securityMessage, renderCheckboxes } from "../components"
+import { securityMessage } from '../components/other'
+import RenderCheckboxes from '../components/RenderCheckboxes'
 
 function ProductDetails() {
     return (
@@ -10,7 +11,7 @@ function ProductDetails() {
                 label='Cage-free egg types'
                 name='cage-free egg types'
                 options={['Shell','Frozen','Liquid','Powder','Other']}
-                component={renderCheckboxes}
+                component={RenderCheckboxes}
             />
         </>
     )

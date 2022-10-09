@@ -1,6 +1,8 @@
 import { Field } from 'react-final-form'
 import { Button } from '@mui/material'
-import { renderTextInput, renderDropdown, countries } from "../components"
+import { countries } from '../components/other'
+import RenderTextInput from '../components/RenderTextInput'
+import RenderDropdown from '../components/RenderDropdown'
 
 function Location() {
     return(
@@ -12,14 +14,14 @@ function Location() {
                     name='city'
                     label='City'
                     placeholder='E.g. Beijing'
-                    component={renderTextInput}
+                    component={RenderTextInput}
                 />
                 <Field 
                     name='country'
                     label='Country'
                     placeholder='Select country'
                     options={countries}
-                    component={renderDropdown}
+                    component={RenderDropdown}
                 >
                 </Field>
             </div>
@@ -30,7 +32,7 @@ function Location() {
                 placeholder='Select countries to which you distribute'
                 // multiple
                 options={countries}
-                component={renderDropdown}
+                component={RenderDropdown}
             />
         </>
     )
