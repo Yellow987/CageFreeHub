@@ -3,7 +3,7 @@ import { securityMessage, renderCheckboxes } from "../components"
 
 function ProductDetails() {
     return (
-        <section>
+        <>
             <h2>Product details</h2>
             {securityMessage}
             <Field
@@ -12,7 +12,7 @@ function ProductDetails() {
                 options={['Shell','Frozen','Liquid','Powder','Other']}
                 component={renderCheckboxes}
             />
-        </section>
+        </>
     )
 }
 

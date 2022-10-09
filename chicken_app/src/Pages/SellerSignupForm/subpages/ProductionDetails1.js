@@ -3,7 +3,7 @@ import { securityMessage, renderTextInput, renderCheckbox, renderDropdown } from
 
 function ProductionDetails1() {
     return (
-        <section>
+        <>
             <h2>Production details</h2>
             {securityMessage}
             <h3>Cage-free egg types</h3>
@@ -46,7 +46,7 @@ function ProductionDetails1() {
                 )
             })}
                 
-        </section>
+        </>
     )
 }
 

@@ -1,9 +1,10 @@
 import { Field } from "react-final-form"
+import { Button } from "@mui/material"
 import { renderDropdown, renderTextInput } from "../components"
 
 function ProductionDetails2() {
     return (
-        <section>
+        <>
             <h2>Production details</h2>
             <Field 
                 label='Production system of farm(s)'
@@ -34,8 +35,8 @@ function ProductionDetails2() {
                 name='certifying organzation'
                 component={renderTextInput}
             />
-            <button>Upload certificate</button>
-        </section>
+            <Button>Upload certificate</Button>
+        </>
     )
 }
 
