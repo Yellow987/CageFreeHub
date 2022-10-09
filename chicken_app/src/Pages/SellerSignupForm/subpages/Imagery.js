@@ -2,7 +2,7 @@ import { Button } from "@mui/material"
 
 function Imagery() {
     return (
-        <section>
+        <>
             <h2>Imagery</h2>
             <p>Tip: To attract buyers, we recommend you upload at least 4 photos, including photos of eggs, of production system, and lorem ipsum.</p>
             <div>
@@ -13,8 +13,7 @@ function Imagery() {
                 <label>Logo (optional)</label>
                 <Button>Upload logo</Button>
             </div>
-            {/* <button type='submit'>Submit for approval</button> */}
-        </section>
+        </>
     )
 }
 

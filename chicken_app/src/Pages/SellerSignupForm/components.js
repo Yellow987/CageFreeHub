@@ -1,4 +1,4 @@
-import { Typography, TextField, Checkbox, FormControl, Select, MenuItem, InputLabel } from '@mui/material'
+import { Typography, TextField, Checkbox, FormControl, Select, MenuItem, InputLabel, Button } from '@mui/material'
 
 export const countries = ['China','Indonesia','Japan','Malaysia','Thailand']
 export const securityMessage = <p>All information provided is completely confidential. We do not share information with third parties, and buyers must be confirmed by us to access profiles</p>
@@ -47,5 +47,18 @@ export function renderCheckboxes(props) {
                 </>
             ))}
         </div>
+    )
+}
+
+export function PageWrapper(props) {
+    return (
+        <section>
+        {props.element}
+        {props.page !== 0 ? <Button onClick={() => props.changePage('back')}>Back</Button> : <></>}
+        {props.page !== 5 ?
+            <Button onClick={() => props.changePage('next')}>Next</Button> : 
+            <Button type='submit'>Submit for approval</Button>
+        }
+        </section>
     )
 }

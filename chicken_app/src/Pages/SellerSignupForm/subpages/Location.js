@@ -4,7 +4,7 @@ import { renderTextInput, renderDropdown, countries } from "../components"
 
 function Location() {
     return(
-        <section>
+        <>
             <h2>Location(s)</h2>
             <div>
                 <h3>Farm location</h3>
@@ -32,7 +32,7 @@ function Location() {
                 options={countries}
                 component={renderDropdown}
             />
-        </section>
+        </>
     )
 }
 

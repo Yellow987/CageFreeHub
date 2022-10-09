@@ -3,7 +3,7 @@ import { renderTextInput } from '../components'
 
 function Basics() {
     return (
-        <section>
+        <>
             <h2>Basics</h2>
             <Field
                 name='organization'
@@ -17,7 +17,7 @@ function Basics() {
                 placeholder='E.g. http://marriot.com'
                 component={renderTextInput}
             />
-        </section>
+        </>
     )
 }
 

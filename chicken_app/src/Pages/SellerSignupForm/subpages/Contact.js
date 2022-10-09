@@ -3,7 +3,7 @@ import { renderTextInput, renderCheckboxes, securityMessage } from '../component
 
 function Contact() {
     return (
-        <section>
+        <>
             <h2>Contact person for purchase inquiries</h2>
             {securityMessage}
             <Field 
@@ -24,7 +24,7 @@ function Contact() {
                 options={['Phone','Whatsapp','WeChat']}
                 component={renderCheckboxes}
             />
-        </section>
+        </>
     )
 }
 

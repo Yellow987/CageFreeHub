@@ -4,7 +4,7 @@ import { renderDropdown, renderTextInput } from "../components"
 
 function ProductionDetails2() {
     return (
-        <section>
+        <>
             <h2>Production details</h2>
             <Field 
                 label='Production system of farm(s)'
@@ -36,7 +36,7 @@ function ProductionDetails2() {
                 component={renderTextInput}
             />
             <Button>Upload certificate</Button>
-        </section>
+        </>
     )
 }
 
