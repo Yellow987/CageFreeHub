@@ -10,6 +10,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import ConfirmEmail from './Pages/ConfirmEmail';
 import Theme from './Components/Theme';
 import { AuthProvider } from './AuthContext'
+import SellerSignupForm from './Pages/SellerSignupForm/SellerSignupForm';
 
 function App() {
   // let farms = getFarms();
@@ -27,10 +28,12 @@ function App() {
           <Route path="/Login" element={<Signup props={{ hereTo: 'Login' }}/> }/>
           <Route path="/SellerBasics" element={<SellerBasics/>} />
           <Route path="/ConfirmEmail" element={<ConfirmEmail/>} />
+          <Route path="/SellerSignupForm" element={<SellerSignupForm />} />
           <Route path="*" element={<>404</>} />
 
         </Routes>
       </AuthProvider>
+
     </ThemeProvider>
   );
 }
