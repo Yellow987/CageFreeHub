@@ -1,5 +1,8 @@
 import { Field } from 'react-final-form'
-import { securityMessage, renderTextInput, renderCheckbox, renderDropdown } from "../components"
+import { securityMessage } from '../components/other'
+import RenderCheckbox from '../components/RenderCheckbox'
+import RenderTextInput from '../components/RenderTextInput'
+import RenderDropdown from '../components/RenderDropdown'
 
 function ProductionDetails1() {
     return (
@@ -13,39 +16,38 @@ function ProductionDetails1() {
                     <Field
                         name={eggType}
                         label={eggType[0].toUpperCase() + eggType.slice(1)}
-                        component={renderCheckbox}
+                        component={RenderCheckbox}
                     />
 
                     <Field 
                         label='Total production capacity (per year)'
                         name={`${eggType} total production capacity`}
                         placeholder={eggType === 'shell'? 'E.g. 10,000' : 'E.g. 3'}
-                        component={renderTextInput}
+                        component={RenderTextInput}
                     />
                     
                     <Field
                         name={`${eggType} total production capacity unit`}
                         type='select'
                         options={['eggs','tons','kilograms']}
-                        render={renderDropdown}
+                        render={RenderDropdown}
                     />
                     
                     <Field 
                         label='Price per ton'
                         name={`${eggType} price per ton`}
                         placeholder='$'
-                        component={renderTextInput}
+                        component={RenderTextInput}
                     />
 
                     <Field
                         name={`${eggType} price per ton currency`}
                         options={['$']}
-                        component={renderDropdown}
+                        component={RenderDropdown}
                     />
                 </div>
                 )
-            })}
-                
+            })} 
         </>
     )
 }
