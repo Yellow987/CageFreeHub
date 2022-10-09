@@ -3,6 +3,7 @@ import { Box, Typography, TextField, Checkbox, FormControlLabel } from '@mui/mat
 import { Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './../AuthContext';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function Signup(props) {
   const { hereTo } = props.props
@@ -18,14 +19,16 @@ function Signup(props) {
 
   const { signup, login } = useAuth()
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(false)
   const emailRef = useRef("");
   const passwordRef = useRef("")
   const buttonRef = useRef(null)
-  const [isCheckBoxClicked, setIsCheckBoxClicked] = useState(false)
+  const checkboxRef = useRef(false)
   const [errors, setErrors] = useState(
     { 
       emailErrorText:"", isEmailValid: true, 
       passwordErrorText:"", isPasswordValid: true,
+      isCheckBoxValid: true
     }
   )
 
@@ -54,9 +57,11 @@ function Signup(props) {
       temp.passwordErrorText = "" 
       temp.isPasswordValid = true
     }
-    if (!isCheckBoxClicked && hereTo !== "Login") {
+    if (!checkboxRef.current.checked && hereTo !== "Login") {
       errors = true
-      //TODO WARN
+      temp.isCheckBoxValid = false
+    } else {
+      temp.isCheckBoxValid = true
     }
 
 
@@ -65,11 +70,11 @@ function Signup(props) {
   }
 
   async function handleSubmit(event) {
-    buttonRef.current.click()
     event.preventDefault()
     if (areValidationErrors()) {return}
     
     try {
+      setLoading(true)
       if (hereTo === "Login") {
         await login(emailRef.current.value, passwordRef.current.value)
       } else {
@@ -78,7 +83,9 @@ function Signup(props) {
       }
     } catch(err) {
       console.log(err)
+      setLoading(false)
     }
+    setLoading(false)
   }
 
   function getTitle(hereTo) {
@@ -108,10 +115,11 @@ function Signup(props) {
             Yes, I understand and agree to the <Box sx={{...hyperlink}}>Cage Free Hub Terms of Service</Box>
           </Typography>
         } control={
-          <Checkbox onChange={(event) => {setIsCheckBoxClicked(isCheckBoxClicked => !isCheckBoxClicked)}}/>
+          <Checkbox sx={{color: errors.isCheckBoxValid ? '' : '#FF0000'}} inputRef={checkboxRef}/>
         }/>
-        <Button type="submit" fullWidth  variant='contained' sx={{ ...format, fontWeight:700 }} ref={buttonRef}>
-          {hereTo === 'Login' ? "Log in" : "Create Account"}
+        <Button type="submit" disabled={loading} fullWidth  variant='contained' sx={{ ...format, fontWeight:700 }} ref={buttonRef}>
+          <CircularProgress size="1.5rem" sx={{ display: loading ? 'block' : 'none' }}/>
+          {!loading ? hereTo === 'Login' ? "Login" : "Create Account" : ""}
         </Button>
       </form>
       <Typography variant='p_default' sx={{marginTop: 5, display: hereTo === 'Login' ? 'none' : 'block' }}>
@@ -129,13 +137,12 @@ function Signup(props) {
           Sign up as an egg buyer
         </Typography>
       </Box>
-      <Typography variant='p_default' sx={{marginTop: 2, display: hereTo === 'SellerSignup' ? { xs:'block', sm:'none'} : 'none' }}>
+      <Typography variant='p_default' sx={{marginTop: 2, display: hereTo === 'SellerSignup' ? 'block' : 'none' }}>
         Here to buy eggs instead? <Box sx={{...hyperlink}} component={Link} to="/BuyerSignup" >Sign up as a buyer</Box>
       </Typography>
-      <Typography variant='p_default' sx={{marginTop: 2, display: hereTo === 'BuyerSignup' ? { xs:'block', sm:'none'}  : 'none' }}>
+      <Typography variant='p_default' sx={{marginTop: 2, display: hereTo === 'BuyerSignup' ? 'block' : 'none' }}>
         Here to sell instead? <Box sx={{...hyperlink}} component={Link} to="/SellerSignup" >Sign up as an egg seller</Box>
       </Typography>
-      {/* {user.email} will cause site to fail when user not signed in */}
     </Box>
   )
 }
