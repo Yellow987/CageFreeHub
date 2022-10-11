@@ -1,21 +1,26 @@
 import { Field } from 'react-final-form'
 import RenderTextInput from '../components/RenderTextInput'
 
-function Basics() {
+import TextField from '@mui/material/TextField';
+function Basics(props) {
+
+    console.log(props)
     return (
         <>
             <h2>Basics</h2>
-            <Field
-                name='organization'
-                label='Organization name'
+            <TextField
+                id="organization-name"
+                label="Organization name"
+                value={props.organizationName}
                 placeholder='E.g. Happy Hens'
-                component={RenderTextInput}
+                onChange={(event)=>props.setOrganizationName(event.target.value)}
             />
-            <Field
-                name='website'
-                label='Website (optional)'
+            <TextField
+                id="website"
+                label="Website (optional)"
+                value={props.website}
                 placeholder='E.g. http://marriot.com'
-                component={RenderTextInput}
+                onChange={(event)=>props.setWebsite(event.target.value)}
             />
         </>
     )
