@@ -4,6 +4,8 @@ import { Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './../AuthContext';
 import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 function Signup(props) {
   const { hereTo } = props.props
@@ -24,6 +26,7 @@ function Signup(props) {
   const passwordRef = useRef("")
   const buttonRef = useRef(null)
   const checkboxRef = useRef(false)
+  const [authError, setAuthError] = useState({ isAuthError:false, errorDetails:""})
   const [errors, setErrors] = useState(
     { 
       emailErrorText:"", isEmailValid: true, 
@@ -72,19 +75,22 @@ function Signup(props) {
   async function handleSubmit(event) {
     event.preventDefault()
     if (areValidationErrors()) {return}
-    
-    try {
-      setLoading(true)
-      if (hereTo === "Login") {
-        login(emailRef.current.value, passwordRef.current.value)
+
+    setLoading(true)
+    if (hereTo === "Login") {
+      try{
+        await login(emailRef.current.value, passwordRef.current.value)
         navigate('/SellerProfileWizard')
-      } else {
-        signup(emailRef.current.value, passwordRef.current.value)
-        navigate("/ConfirmEmail")
+      } catch {
+        setAuthError({ isAuthError:true, errorDetails:"Invalid Username/Email or Password"})
       }
-    } catch(err) {
-      console.log(err)
-      setLoading(false)
+    } else {
+      try {
+        await signup(emailRef.current.value, passwordRef.current.value)
+        navigate("/ConfirmEmail")
+      } catch {
+        setAuthError({ isAuthError:true, errorDetails:"creat acct error"})
+      }
     }
     setLoading(false)
   }
@@ -107,9 +113,12 @@ function Signup(props) {
       <Typography variant='h1'>
         {getTitle(hereTo)}
       </Typography>
+      <Alert severity='error' display={authError.isAuthError ? "block" : "none"}>
+        <AlertTitle>{authError.errorDetails}</AlertTitle>
+      </Alert>
       <form onSubmit={handleSubmit}>
         <TextField error={!errors.isEmailValid} helperText={errors.emailErrorText} fullWidth label="Email" variant="outlined" sx={{ ...format }} inputRef={emailRef}/>
-        <TextField error={!errors.isPasswordValid} helperText={errors.passwordErrorText} fullWidth label="Password" type="password" variant="outlined" sx={{ ...format }} inputRef={passwordRef}/>
+        <TextField error={!errors.isPasswordValid} helperText={errors.passwordErrorText} fullWidth label="Password" type="password" autoComplete="on" variant="outlined" sx={{ ...format }} inputRef={passwordRef}/>
         <FormControlLabel sx={{ ...format, display: hereTo === 'Login' ? 'none' : 'block', lineHeight:0 }}
         label={
           <Typography variant='p_small' display="inline" sx={{ lineHeight: 0 }}>
