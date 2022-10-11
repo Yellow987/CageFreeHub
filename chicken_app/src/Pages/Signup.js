@@ -31,7 +31,7 @@ function Signup(props) {
   const [authError, setAuthError] = useState({ isAuthError:false, errorDetails:""})
   const [errors, setErrors] = useState(
     { 
-      emailErrorText:"", isEmailValid: true, 
+      emailErrorText:"email needs to include @ symbol", isEmailValid: true, 
       passwordErrorText:"", isPasswordValid: true,
       isCheckBoxValid: true
     }
@@ -43,11 +43,11 @@ function Signup(props) {
   };
 
   function areValidationErrors() {
-    let temp = {}
-    let errors = false
+    let temp = {} //allowing code to set a temporary value for the email/password
+    let errors = false //if errors are true, this means one of the fields in invalid
     if (isEmailInvalid(emailRef.current.value)) {
-      temp.emailErrorText = t('errorEmail')
-      temp.isEmailValid = false 
+      temp.emailErrorText = t('errorEmail') //email is not valid
+      temp.isEmailValid = false //setting email to not be valid
       errors = true
     } else {
       temp.emailErrorText = "" 
@@ -73,10 +73,14 @@ function Signup(props) {
     setErrors(temp)
     return errors ? true : false
   }
-
+  console.log("AUTH ERROR", authError);
   async function handleSubmit(event) {
     event.preventDefault()
-    if (areValidationErrors()) {return}
+    if (areValidationErrors()) {
+      setAuthError({ isAuthError:true, errorDetails:"Invalid Username/Email or Password"})
+    } else {
+      setAuthError({ isAuthError:false, errorDetails:""})
+    }
 
     setLoading(true)
     if (hereTo === "Login") {
@@ -91,7 +95,7 @@ function Signup(props) {
         await signup(emailRef.current.value, passwordRef.current.value)
         navigate("/ConfirmEmail")
       } catch {
-        setAuthError({ isAuthError:true, errorDetails:"creat acct error"})
+        setAuthError({ isAuthError:true, errorDetails:"Email is already in use"})
       }
     }
     setLoading(false)
@@ -109,14 +113,17 @@ function Signup(props) {
         return 'Error'
     }
   }
-
+  //setAuthError({ isAuthError:true, errorDetails:"test"});
+  console.log("AUTH ERROR 2", authError);
+  console.log("error details", authError.errorDetails);
   return (
-    <Box align='center' mx={{ sm:'auto', xs:'24px' }} sx={{ maxWidth:'430px', mt:{ sm:'116px', xs:'24px'} }}>
+    <Box align='flex' mx={{ sm:'auto', xs:'24px' }} sx={{ maxWidth:'430px', mt:{ sm:'116px', xs:'24px'} }}>
       <Typography variant='h1'>
         {getTitle(hereTo)}
       </Typography>
-      <Alert severity='error' display={authError.isAuthError ? "block" : "none"}>
-        <AlertTitle>{authError.errorDetails}</AlertTitle>
+      <Alert severity='error' sx={{marginTop: "15px", marginBottom: "-5px", display: authError.isAuthError ? "flex-start" : "none"}}>
+        <AlertTitle variant="h5" sx={{fontWeight: 'bold' }}>Failed to Log In</AlertTitle>
+        <Typography>{authError.errorDetails}</Typography>
       </Alert>
       <form onSubmit={handleSubmit}>
         <TextField error={!errors.isEmailValid} helperText={errors.emailErrorText} fullWidth label={t('email')} variant="outlined" sx={{ ...format }} inputRef={emailRef}/>
