@@ -7,7 +7,10 @@ export function PageWrapper(props) {
         {props.element}
         {props.page !== 0 ? <Button onClick={() => props.changePage('back')}>Back</Button> : <></>}
         {props.page !== 6 ?
-            <Button onClick={() => props.changePage('next')}>Next hi</Button> : 
+            <Button onClick={() => {
+                props.dataUpdateFunction();
+                props.changePage('next')
+            }}>Next hi</Button> : 
             <Button type='submit'>Submit for approval</Button>
         }
         </section>

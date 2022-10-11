@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {
-    getFirestore, collection, getDocs, addDocs, addDoc
+    getFirestore, collection, getDocs
 } from 'firebase/firestore'
 import { firebaseConfig } from "./FirestoreCreds";
 import {getAuth} from 'firebase/auth'
@@ -31,25 +31,3 @@ export function getFarms(){
 }
 
 export const auth = getAuth(app);
-
-// const addFarm = document.querySelector('.add')
-// addFarm.addEventListener('submit', (e)=>{
-//     e.preventDefault();
-//     addDoc(colRef, {
-//         approved: false,
-//         certifyingbody: "",
-//         city: "",
-//         companyname: "",
-//         country: "",
-//         distributioncountry:"",
-//         eggform:"",
-//         eggtypes: "",
-//         email: "",
-//         fullname: "",
-//         jobtitle: "",
-//         phonenumber: "",
-//         productionsystem: "",
-//         website: ""
-//     })
-// })
-

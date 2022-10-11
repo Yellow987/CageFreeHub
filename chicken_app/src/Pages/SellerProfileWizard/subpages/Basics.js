@@ -1,10 +1,5 @@
-import { Field } from 'react-final-form'
-import RenderTextInput from '../components/RenderTextInput'
-
 import TextField from '@mui/material/TextField';
 function Basics(props) {
-
-    console.log(props)
     return (
         <>
             <h2>Basics</h2>
