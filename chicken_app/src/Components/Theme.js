@@ -52,6 +52,9 @@ const Theme = {
       display: 'block',
     },
   },
+  success: {
+    main: '#afd8d2',
+  },
 };
 
 export default Theme
