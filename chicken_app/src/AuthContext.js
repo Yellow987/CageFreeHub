@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { auth } from './firestore'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendSignInLinkToEmail } from 'firebase/auth'
+import { db } from './firestore'
 
 const AuthContext = React.createContext()
 
@@ -11,13 +12,35 @@ export function useAuth() {
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
+    const [userData, setUserData] = useState(null)
 
-    function signup(email, password) {
-        return createUserWithEmailAndPassword(auth, email, password);
+    async function signup(email, password) {
+        const actionCodeSettings = {
+            // URL you want to redirect back to. The domain (www.example.com) for this
+            // URL must be in the authorized domains list in the Firebase Console.
+            url: 'http://localhost:3000/profile',
+            // This must be true.
+            handleCodeInApp: true,
+            iOS: {
+              bundleId: 'com.example.ios'
+            },
+            android: {
+              packageName: 'com.example.android',
+              installApp: true,
+              minimumVersion: '12'
+            },
+            dynamicLinkDomain: 'example.page.link'
+        };
+        
+        await createUserWithEmailAndPassword(auth, email, password);
+        sendSignInLinkToEmail(auth, email, actionCodeSettings)
+        .then(() => {
+            window.localStorage.setItem('emailForSignIn', email);
+        })
     }
 
-    function login(email, password) {
-        return signInWithEmailAndPassword(auth, email, password)
+    async function login(email, password) {
+        return await signInWithEmailAndPassword(auth, email, password)
     }
 
     function logout(){

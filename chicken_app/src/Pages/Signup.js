@@ -89,7 +89,7 @@ function Signup(props) {
     } else {
       try {
         await signup(emailRef.current.value, passwordRef.current.value)
-        navigate("/ConfirmEmail")
+        navigate("/profile/confirm-email")
       } catch {
         setAuthError({ isAuthError:true, errorDetails:"creat acct error"})
       }
@@ -141,19 +141,19 @@ function Signup(props) {
         <Typography variant='p_default' sx={{marginTop: 5, marginBottom: 1}}>
           {t('noAccount')}
         </Typography>
-        <Typography variant='p_default' component={Link} to="/SellerSignup" sx={{ ...hyperlink, marginTop:1 }}>
+        <Typography variant='p_default' component={Link} to="/seller-signup" sx={{ ...hyperlink, marginTop:1 }}>
           {t('signupSeller')}
         </Typography>
         <Typography variant='p_default' sx={{ ...hyperlink }}> · </Typography>
-        <Typography variant='p_default' component={Link} to="/BuyerSignup" sx={{ ...hyperlink }}>
+        <Typography variant='p_default' component={Link} to="/buyer-signup" sx={{ ...hyperlink }}>
           {t('signupBuyer')}
         </Typography>
       </Box>
       <Typography variant='p_default' sx={{marginTop: 2, display: hereTo === 'SellerSignup' ? 'block' : 'none' }}>
-        <Trans i18nKey="hereToBuyInstead" t={t} components={[<Box sx={{...hyperlink}} component={Link} to="/BuyerSignup" />]} />
+        <Trans i18nKey="hereToBuyInstead" t={t} components={[<Box sx={{...hyperlink}} component={Link} to="/buyer-signup" />]} />
       </Typography>
       <Typography variant='p_default' sx={{marginTop: 2, display: hereTo === 'BuyerSignup' ? 'block' : 'none' }}>
-        <Trans i18nKey='hereToSellInstead' t={t} components={[<Box sx={{...hyperlink}} component={Link} to="/SellerSignup" />]} />
+        <Trans i18nKey='hereToSellInstead' t={t} components={[<Box sx={{...hyperlink}} component={Link} to="/seller-signup" />]} />
       </Typography>
     </Box>
   )
