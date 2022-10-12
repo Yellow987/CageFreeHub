@@ -2,8 +2,7 @@ import React from "react";
 import MailIcon from "@mui/icons-material/Mail";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import { makeStyles } from "@material-ui/core";
-import { Theme } from "../Components/Theme";
+
 import { Box, ThemeProvider, createTheme, Typography } from "@mui/material";
 import { borders } from '@mui/system';
 import { Button } from '@mui/material';
