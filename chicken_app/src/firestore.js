@@ -9,7 +9,7 @@ import {getAuth} from 'firebase/auth'
 const app = initializeApp(firebaseConfig);
 
 // Initialize services
-const db = getFirestore();
+export const db = getFirestore();
 
 // Collection Reference
 const colRef = collection(db, 'farms');

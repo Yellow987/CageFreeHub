@@ -153,7 +153,7 @@ function GlobalNavBar() {
                 ))}
             </Menu>
           </Box>
-          <Button sx={{ display: currentUser ? 'none' : 'block' }} variant="outlined" component={Link} to="/Login" >{t('login')}</Button>
+          <Button sx={{ display: currentUser ? 'none' : 'block' }} variant="outlined" component={Link} to="/login" >{t('login')}</Button>
           <Box sx={{ display: currentUser ? 'block' : 'none' }}>
             <IconButton
               aria-label="idk"

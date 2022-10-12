@@ -40,11 +40,11 @@ const Home = ()=> {
                             <Trans i18nKey='isBuyer' t={t} components={[<Box fontWeight='Bold' display="inline" />]} />
                         </Typography>
                         <Box sx={styles.twoButtons}>
-                            <Button component={Link} to="/SellerSignup" 
+                            <Button component={Link} to="/seller-signup" 
                                 variant="contained" sx={styles.marginButton}> 
                                 {t('sellerSignup')}
                             </Button>
-                            <Button component={Link} to="/BuyerSignup"  
+                            <Button component={Link} to="/buyer-signup"  
                                 variant="outlined" sx={{ boxShadow: 3, mt: {xs: 1, sm: 0} }} mt="200px">
                                 {t('buyerSignup')}
                             </Button>
