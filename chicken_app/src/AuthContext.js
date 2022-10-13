@@ -1,8 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { auth } from './firestore'
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendSignInLinkToEmail } from 'firebase/auth'
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification } from 'firebase/auth'
 import { db } from './firestore'
-import { composeInitialProps } from 'react-i18next'
 
 const AuthContext = React.createContext()
 
@@ -15,27 +14,15 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true)
     const [userData, setUserData] = useState(null)
 
-    function sendVerificationEmail() {
-        console.log('trying')
-        const email = currentUser.email
-        console.log(currentUser.email)
-        const actionCodeSettings = {
-            // URL you want to redirect back to. The domain (www.example.com) for this
-            // URL must be in the authorized domains list in the Firebase Console.
-            url: 'http://localhost:3000/profile',
-            // This must be true.
-            handleCodeInApp: true,
-        };
-        sendSignInLinkToEmail(auth, email, actionCodeSettings)
+    async function sendVerificationEmail() {
+        await sendEmailVerification(auth.currentUser)
         .then(() => {
-            window.localStorage.setItem('emailForSignIn', email);
-            console.log('win')
+            console.log('email sent')
         })
     }
 
     async function signup(email, password) {
         await createUserWithEmailAndPassword(auth, email, password);
-        console.log('verifying')
         sendVerificationEmail()
     }
 
