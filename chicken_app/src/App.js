@@ -8,8 +8,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 import ConfirmEmail from './Pages/Profile/ConfirmEmail';
 import Theme from './Components/Theme';
 import { AuthProvider } from './AuthContext'
-import PrivateRoute from './Components/PrivateRoute';
+//import PrivateRoute from './Components/PrivateRoute';
 import Welcome from './Pages/Profile/Welcome';
+import ProfileProgressBar from './Components/ProfileProgressBar';
+import SellerBasics from './Pages/Profile/SellerBasics';
 
 function App() {
   return (
@@ -25,7 +27,10 @@ function App() {
           <Route path="/seller-signup" element={<Signup props={{ hereTo: 'SellerSignup' }}/>} />
           <Route path="/login" element={<Signup props={{ hereTo: 'Login' }}/> }/>
           <Route path="/profile/confirm-email" element={<ConfirmEmail/>} />
-          <Route path="/profile" element={<Welcome />} />
+          <Route path='/profile' element={<Welcome />} />
+          <Route path="/profile" element={<ProfileProgressBar />}>
+            <Route path="/profile/basics" element={<SellerBasics />} />
+          </Route>
           <Route path="*" element={<>404</>} />
 
         </Routes>
