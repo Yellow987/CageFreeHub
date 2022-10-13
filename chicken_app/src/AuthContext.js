@@ -12,27 +12,15 @@ export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
 
-    function sendVerificationEmail() {
-        console.log('trying')
-        const email = currentUser.email
-        console.log(currentUser.email)
-        const actionCodeSettings = {
-            // URL you want to redirect back to. The domain (www.example.com) for this
-            // URL must be in the authorized domains list in the Firebase Console.
-            url: 'http://localhost:3000/profile',
-            // This must be true.
-            handleCodeInApp: true,
-        };
-        sendSignInLinkToEmail(auth, email, actionCodeSettings)
+    async function sendVerificationEmail() {
+        await sendEmailVerification(auth.currentUser)
         .then(() => {
-            window.localStorage.setItem('emailForSignIn', email);
-            console.log('win')
+            console.log('email sent')
         })
     }
 
     async function signup(email, password) {
         await createUserWithEmailAndPassword(auth, email, password);
-        console.log('verifying')
         sendVerificationEmail()
     }
 
