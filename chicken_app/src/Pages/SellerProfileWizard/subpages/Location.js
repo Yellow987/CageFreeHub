@@ -1,39 +1,29 @@
-import { Field } from 'react-final-form'
 import { Button } from '@mui/material'
-import { countries } from '../components/other'
-import RenderTextInput from '../components/RenderTextInput'
-import RenderDropdown from '../components/RenderDropdown'
+import TextField from '@mui/material/TextField';
 
-function Location() {
+
+function Location(props) {
     return(
         <>
             <h2>Location(s)</h2>
             <div>
                 <h3>Farm location</h3>
-                <Field 
-                    name='city'
-                    label='City'
+                <TextField
+                    id="city"
+                    label="City"
+                    value={props.city}
                     placeholder='E.g. Beijing'
-                    component={RenderTextInput}
+                    onChange={(event)=>props.setCity(event.target.value)}
                 />
-                <Field 
-                    name='country'
-                    label='Country'
+                <TextField
+                    id="country"
+                    label="Country"
+                    value={props.country}
                     placeholder='Select country'
-                    options={countries}
-                    component={RenderDropdown}
-                >
-                </Field>
+                    onChange={(event)=>props.setCountry(event.target.value)}
+                />
             </div>
             <Button>+ I have an additional farm location.</Button>
-            <Field 
-                name='distributionCountries'
-                label='Distribution country (countries)'
-                placeholder='Select countries to which you distribute'
-                // multiple
-                options={countries}
-                component={RenderDropdown}
-            />
         </>
     )
 }
