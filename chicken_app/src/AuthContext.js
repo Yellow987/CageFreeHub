@@ -12,22 +12,20 @@ export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
 
-    async function signup(email, password) {
-        let user = null;
-        try{
-            user = await createUserWithEmailAndPassword(auth, email, password);
-            sendEmailVerification(auth.currentUser)
-              .then(() => {
-                console.log('sent email')
-              });
-          }catch (error){
-            console.log(error.message);
-          }
-        return user;
+    async function sendVerificationEmail() {
+        await sendEmailVerification(auth.currentUser)
+        .then(() => {
+            console.log('email sent')
+        })
     }
 
-    function login(email, password) {
-        return signInWithEmailAndPassword(auth, email, password)
+    async function signup(email, password) {
+        await createUserWithEmailAndPassword(auth, email, password);
+        sendVerificationEmail()
+    }
+
+    async function login(email, password) {
+        return await signInWithEmailAndPassword(auth, email, password)
     }
 
     function logout(){
@@ -43,6 +41,7 @@ export function AuthProvider({ children }) {
     }, [])
 
     const value = { 
+        sendVerificationEmail,
         currentUser,
         signup,
         login,

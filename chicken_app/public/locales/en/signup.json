@@ -1,0 +1,20 @@
+{
+    "signupSellerTitle": "Sign up to list your cage-free profile",
+    "signupBuyerTitle": "Sign up to discover cage-free sellers",
+    "loginTitle": "Log in to your account",
+    "email": "Email",
+    "password": "Password",
+    "login": "login",
+    "yesIAgree": "Yes, I understand and agree to the ",
+    "ToS": "Yes, I understand and agree to the <0>Cage Free Hub Terms of Service</0>",
+    "createAccount": "Create Account",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account? <0>Login</0>",
+    "hereToBuyInstead": "Here to buy eggs instead? <0>Sign up as a buyer</0>",
+    "hereToSellInstead": "Here to sell instead? <0>Sign up as an egg seller</0>",
+    "signupBuyer": "Sign up as an egg buyer",
+    "signupSeller": "Sign up as a cage-free seller",
+    
+    "errorPassword": "Password must be at least 6 characters",
+    "errorEmail": "Email is not valid"
+}

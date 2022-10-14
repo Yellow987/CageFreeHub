@@ -5,7 +5,7 @@ import chickenImage from './../Images/chickenImage.jpg';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import { Link } from "react-router-dom"
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 
 const Home = ()=> {
     const { t } = useTranslation(['home']);
@@ -34,17 +34,17 @@ const Home = ()=> {
                             {t('title')}
                         </Typography>
                         <Typography variant="p_large" style={{marginBottom:'10px'}} >
-                            <Box fontWeight='Bold' display="inline">{t('isSeller')}</Box>{t('sellerTask')}
+                            <Trans i18nKey='isSeller' t={t} components={[<Box fontWeight='Bold' display="inline" />]} />
                         </Typography>
                         <Typography variant="p_large" style={{marginBottom:'48px'}} >
-                            <Box fontWeight='Bold' display="inline">{t('isBuyer')}</Box>{t('buyerTask')}
+                            <Trans i18nKey='isBuyer' t={t} components={[<Box fontWeight='Bold' display="inline" />]} />
                         </Typography>
                         <Box sx={styles.twoButtons}>
-                            <Button component={Link} to="/SellerSignup" 
+                            <Button component={Link} to="/seller-signup" 
                                 variant="contained" sx={styles.marginButton}> 
                                 {t('sellerSignup')}
                             </Button>
-                            <Button component={Link} to="/BuyerSignup"  
+                            <Button component={Link} to="/buyer-signup"  
                                 variant="outlined" sx={{ boxShadow: 3, mt: {xs: 1, sm: 0} }} mt="200px">
                                 {t('buyerSignup')}
                             </Button>

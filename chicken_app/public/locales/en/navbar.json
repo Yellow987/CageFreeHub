@@ -1,5 +1,8 @@
 {
     "login": "Login",
     "support": "Support",
-    "english": "English"    
+    "questions": "Questions? In need of help?",
+    "pleaseEmail": "Please email us at ",
+    "editProfile": "Edit Profile",
+    "logout": "logout"
 }

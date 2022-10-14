@@ -107,7 +107,7 @@ function GlobalNavBar() {
                     border:'0'
                   }} {...bindTrigger(popupState)}>
                     <HelpOutlineIcon fontSize='small' style={{ marginRight:6}}/>
-                    Support
+                    {t('support')}
                   </Button>
                   <Popover
                     {...bindPopover(popupState)}
@@ -153,7 +153,7 @@ function GlobalNavBar() {
                 ))}
             </Menu>
           </Box>
-          <Button sx={{ display: currentUser ? 'none' : 'block' }} variant="outlined" component={Link} to="/Login" >{t('login')}</Button>
+          <Button sx={{ display: currentUser ? 'none' : 'block' }} variant="outlined" component={Link} to="/login" >{t('login')}</Button>
           <Box sx={{ display: currentUser ? 'block' : 'none' }}>
             <IconButton
               aria-label="idk"
@@ -172,8 +172,8 @@ function GlobalNavBar() {
               open={Boolean(anchorElLoggedIn)}
               onClose={handleCloseLoggedInMenu}
             >
-              <MenuItem onClick={handleEditProfile}>Edit Profile</MenuItem>
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              <MenuItem onClick={handleEditProfile}>{t('editProfile')}</MenuItem>
+              <MenuItem onClick={handleLogout}>{t('logout')}</MenuItem>
             </Menu>
           </Box>
         </Box>
@@ -196,7 +196,7 @@ function GlobalNavBar() {
             open={Boolean(anchorElNav)}
             onClose={handleCloseNavMenu}>
             <MenuItem component={Link} to="/Login" onClick={handleCloseNavMenu}>
-              Login
+              {t('login')}
             </MenuItem>
           </Menu>
         </Box>
