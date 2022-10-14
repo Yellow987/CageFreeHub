@@ -3,12 +3,12 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { useOutletContext } from 'react-router'
 
-function Locations() {
+function Imagery() {
   const [setPage, goToPage, setGoToPage] = useOutletContext()
   const navigate = useNavigate()
 
   useEffect(() => {
-    setPage('Location(s)')
+    setPage('Imagery')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -21,17 +21,17 @@ function Locations() {
     saveData()  
     if (goToPage === 'next') {
       setGoToPage('')
-      navigate('/profile/contact')
+      navigate('/profile')
     } else if (goToPage === 'back') {
       setGoToPage('')
-      navigate('/profile/basics')
+      navigate('/profile/production-details')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goToPage])
 
   return (
-    <div>Locations</div>
+    <div>Imagery</div>
   )
 }
 
-export default Locations
+export default Imagery

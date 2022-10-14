@@ -3,12 +3,12 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { useOutletContext } from 'react-router'
 
-function Locations() {
+function ProductDetails() {
   const [setPage, goToPage, setGoToPage] = useOutletContext()
   const navigate = useNavigate()
 
   useEffect(() => {
-    setPage('Location(s)')
+    setPage('Product details')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -21,17 +21,17 @@ function Locations() {
     saveData()  
     if (goToPage === 'next') {
       setGoToPage('')
-      navigate('/profile/contact')
+      navigate('/profile/production-details')
     } else if (goToPage === 'back') {
       setGoToPage('')
-      navigate('/profile/basics')
+      navigate('/profile/contact')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goToPage])
 
   return (
-    <div>Locations</div>
+    <div>ProductDetails</div>
   )
 }
 
-export default Locations
+export default ProductDetails
