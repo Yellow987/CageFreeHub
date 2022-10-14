@@ -1,12 +1,15 @@
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import { useOutletContext } from 'react-router';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Box } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/material';
 
 function Basics() {
-    const [setPage, goToPage, setGoToPage] = useOutletContext()
+    const [setPage, goToPage, setGoToPage, formValues] = useOutletContext()
+    const companyNameRef = useRef('hello')
+    const websiteRef = useRef()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -14,13 +17,8 @@ function Basics() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    function saveData() {
-
-    }
-
     useEffect(() => {
         if (goToPage === '') {return}
-        saveData()
         if (goToPage === 'next') {
             setGoToPage('')
             navigate('/profile/locations')
@@ -35,8 +33,9 @@ function Basics() {
     return(
         <Box >
             <Typography variant="h1_32" >Basics</Typography>
-            <TextField label="Company Name" variant="outlined" />
+            <TextField label="Company Name" variant="outlined" value={formValues.companyName[0]} onChange={(e) => formValues.companyName[1](e.target.value)}/>
             <TextField label="Website" variant="outlined" />
+            <Button onClick={() => {console.log(companyNameRef.current.value)}}>button</Button>
         </Box>
     )
 }
