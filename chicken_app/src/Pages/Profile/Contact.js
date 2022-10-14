@@ -12,14 +12,20 @@ function Contact() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  function saveData() {
+        
+  }
+
   useEffect(() => {
-      if (goToPage === 'next') {
-        setGoToPage('')
-        navigate('/profile/contacts')
-      } else if (goToPage === 'back') {
-        setGoToPage('')
-        navigate('/profile/locations')
-      }
+    if (goToPage === '') {return}
+    saveData()
+    if (goToPage === 'next') {
+      setGoToPage('')
+      navigate('/profile/product-details')
+    } else if (goToPage === 'back') {
+      setGoToPage('')
+      navigate('/profile/locations')
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goToPage])
 

@@ -14,6 +14,10 @@ import ProfileProgressBar from './Components/ProfileProgressBar';
 import Basics from './Pages/Profile/Basics';
 import Locations from './Pages/Profile/Locations';
 import Contact from './Pages/Profile/Contact';
+import ProductDetails from './Pages/Profile/ProductDetails';
+import ProductionDetails from './Pages/Profile/ProductionDetails';
+import Imagery from './Pages/Profile/Imagery';
+import Profile from './Pages/Profile/Profile';
 
 function App() {
   return (
@@ -29,11 +33,15 @@ function App() {
           <Route path="/seller-signup" element={<Signup props={{ hereTo: 'SellerSignup' }}/>} />
           <Route path="/login" element={<Signup props={{ hereTo: 'Login' }}/> }/>
           <Route path="/profile/confirm-email" element={<ConfirmEmail/>} />
-          <Route path='/profile' element={<Welcome />} />
-          <Route path="/profile" element={<ProfileProgressBar />}>
+          <Route path='/profile/welcome' element={<Welcome />} />
+          <Route path='/profile' element={<Profile />} />
+          <Route element={<ProfileProgressBar />}>
             <Route path="/profile/basics" element={<Basics />} />
             <Route path="/profile/locations" element={<Locations />} />
             <Route path="/profile/contact" element={<Contact />} />
+            <Route path="/profile/product-details" element={<ProductDetails />} />
+            <Route path="/profile/production-details" element={<ProductionDetails />} />
+            <Route path="/profile/imagery" element={<Imagery />} />
           </Route>
           <Route path="*" element={<>404</>} />
 

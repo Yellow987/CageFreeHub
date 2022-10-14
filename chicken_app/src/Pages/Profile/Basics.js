@@ -15,7 +15,7 @@ function Basics() {
     }, [])
 
     function saveData() {
-        
+
     }
 
     useEffect(() => {
@@ -24,7 +24,10 @@ function Basics() {
         if (goToPage === 'next') {
             setGoToPage('')
             navigate('/profile/locations')
-        } 
+        } else if (goToPage === 'back') {
+            setGoToPage('')
+            navigate('/profile/welcome')
+        }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [goToPage])
 
