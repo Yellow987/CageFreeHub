@@ -30,6 +30,14 @@ const Theme = {
       color: "#1B2B3E",
       display: 'block',
     },
+    h1_32: {
+      fontWeight: 700,
+      fontSize: 32,
+      lineHeight: "150%",
+      letterSpacing: "-0.01rem",
+      color: "#1B2B3E",
+      display: 'block',
+    },
     p_large: {
       fontWeight: 400,
       fontSize: 16,

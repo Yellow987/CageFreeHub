@@ -11,7 +11,9 @@ import { AuthProvider } from './AuthContext'
 //import PrivateRoute from './Components/PrivateRoute';
 import Welcome from './Pages/Profile/Welcome';
 import ProfileProgressBar from './Components/ProfileProgressBar';
-import SellerBasics from './Pages/Profile/SellerBasics';
+import Basics from './Pages/Profile/Basics';
+import Locations from './Pages/Profile/Locations';
+import Contact from './Pages/Profile/Contact';
 
 function App() {
   return (
@@ -29,7 +31,9 @@ function App() {
           <Route path="/profile/confirm-email" element={<ConfirmEmail/>} />
           <Route path='/profile' element={<Welcome />} />
           <Route path="/profile" element={<ProfileProgressBar />}>
-            <Route path="/profile/basics" element={<SellerBasics />} />
+            <Route path="/profile/basics" element={<Basics />} />
+            <Route path="/profile/locations" element={<Locations />} />
+            <Route path="/profile/contact" element={<Contact />} />
           </Route>
           <Route path="*" element={<>404</>} />
 
