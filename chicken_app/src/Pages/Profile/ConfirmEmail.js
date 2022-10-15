@@ -25,7 +25,7 @@ const theme = createTheme({
 });
 
 function ConfirmEmail() {
-  const [emailSent, setEmailSent] = useState({ isEmailSent:false, emailSentDetails:"Email verification sent!"});
+  const [emailSent, setEmailSent] = useState({ isEmailSent:true, emailSentDetails:"Email verification sent!"});
   const auth = getAuth();
   console.log("emailSent", emailSent);
   sendEmailVerification(auth.currentUser).then(() => {
@@ -34,7 +34,7 @@ function ConfirmEmail() {
   console.log("emailSent2", emailSent);
   return (
     <ThemeProvider theme={theme}>
-      <Box align='flex' mx={{ sm:'auto', xs:'24px' }} sx={{maxWidth:'700px', mt:{ sm:'116px', xs:'24px'}, borderColor: 'text.primary', color: "success.main" }}>
+      <Box align='flex' mx={{ sm:'auto', xs:'24px' }} sx={{margin: 'auto', maxWidth:'700px', mt:{ sm:'116px', xs:'24px'}, borderColor: 'text.primary', color: "success.main" }}>
         <Alert icon={<MailIcon fontSize="inherit" sx={{marginTop: "3px", color: '#6bb09e'}}/>} severity="success" sx={{backgroundColor: "background.paper", marginTop: "15px", marginBottom: "-5px", }}>
           <AlertTitle variant="h5" sx={{color: '#6bb09e', fontColor: "text.primary", fontWeight: "bold" }}>
             Confirm your email
@@ -45,12 +45,12 @@ function ConfirmEmail() {
             our directory of cage-free egg sellers.{" "}
           </Typography>
         </Alert>
-        <Button sx={{border:"1px solid #DFE3E9", radius:"3px", fontWeight: "bold", color: "#7ab8a8", backgroundColor: "background.paper", marginTop: "15px", marginBottom: "-5px", }} type="submit" fullWidth>
+        <Button sx={{margin: 'auto', border:"1px solid #DFE3E9", radius:"3px", fontWeight: "bold", color: "#7ab8a8", backgroundColor: "background.paper", marginTop: "15px", marginBottom: "10px", }} type="submit" fullWidth>
           Resend confirmation email
         </Button>
-        <Alert severity='error' sx={{ display: emailSent.isEmailSent ? "block" : "none" }}>
-          <AlertTitle>{emailSent.emailSentDetails}</AlertTitle>
-        </Alert>
+          <Alert severity='error' sx={{margin: 'auto', display: emailSent.isEmailSent ? "flex" : "none" }}>
+            <AlertTitle>{emailSent.emailSentDetails}</AlertTitle>
+          </Alert>
       </Box>
     </ThemeProvider>
   );
