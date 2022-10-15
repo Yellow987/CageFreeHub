@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Box, MenuItem } from '@mui/material';
+import { Accordion, AccordionSummary, Box, List, ListItem, MenuItem, Divider } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import Menu from '@mui/material/Menu';
 import Popover from '@mui/material/Popover';
@@ -17,6 +17,7 @@ import { useAuth } from '../AuthContext';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LanguageIcon from '@mui/icons-material/Language';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
+import CloseIcon from '@mui/icons-material/Close';
 
 const styles = {
   betaBox : {
@@ -32,6 +33,9 @@ function GlobalNavBar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElLanguage, setAnchorElLanguage] = useState(null);
   const [anchorElLoggedIn, setAnchorElLoggedIn] = useState(null)
+  const [isAccordionExpanded, setIsAccordionExpanded] = useState(false)
+  const [accordionIconIsClose, setAccordionIconIsClose] = useState(false)
+
   const languages = [
     {name:"English", symbol:"en"}, 
     {name:"Spanish", symbol:"ESP"}, 
@@ -82,8 +86,50 @@ function GlobalNavBar() {
     logout()
   }
 
+  function handleAccordion() {
+    if (isAccordionExpanded) {
+      setIsAccordionExpanded(false)
+      setTimeout(function () {
+        setAccordionIconIsClose(false)
+    }, 100);
+    } else {
+      setIsAccordionExpanded(true)
+      setAccordionIconIsClose(true)
+    }
+  }
+
   return (
-    <AppBar color="secondary" elevation={0} position="static">
+    <>
+      <Accordion expanded={isAccordionExpanded} elevation={0} sx={{ display:{ xs:'block', sm:'none'} }}>
+        <AccordionSummary expandIcon={accordionIconIsClose ? <CloseIcon onClick={() => handleAccordion()} /> : <MenuIcon onClick={() => handleAccordion()} />} >
+          <Typography color={grey[400]} sx={{ fontWeight: 'bold', textDecoration: "none" }} variant="h6">
+            Cage Free Hub
+          </Typography>
+          <Box bgcolor='primary.main' sx={{ ...styles.betaBox }}>
+            <Typography color="common.white" variant="h6" component="div" sx={{ fontSize: 12 }}>
+              Beta
+            </Typography>
+          </Box>
+        </AccordionSummary>
+        <List>
+          <ListItem button component={Link} to="/login" sx={{ display: currentUser ? 'none' : 'block' }}>
+            <Typography variant='p_large' sx={{ margin:'auto' }}>Login</Typography>
+          </ListItem>
+          <Box sx={{ display: currentUser ? 'block' : 'none' }}>
+            <ListItem button component={Link} to="/TODO" >
+              <Typography variant='p_large' sx={{ margin:'auto' }}>Edit Profile</Typography>
+            </ListItem>
+            <Divider />
+            <ListItem button component={Link} to="/login" onClick={() => logout()} >
+              <Typography variant='p_large' sx={{ margin:'auto' }}>Logout</Typography>
+            </ListItem>
+          </Box>
+          <Divider />
+          <SupportPopup />
+          <Divider />
+        </List>
+      </Accordion>
+    <AppBar color="secondary" elevation={0} position="static" sx={{ display:{ xs:'none', sm:'block'} }}>
       <Toolbar>
         <Typography component={Link} to="/" 
         color={grey[400]} sx={{ fontWeight: 'bold', textDecoration: "none" }} variant="h6">
@@ -202,6 +248,7 @@ function GlobalNavBar() {
         </Box>
       </Toolbar>
     </AppBar> 
+  </>
   )
 }
 
