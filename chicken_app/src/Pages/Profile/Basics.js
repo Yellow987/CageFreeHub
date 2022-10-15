@@ -35,7 +35,6 @@ function Basics() {
             <Typography variant="h1_32" >Basics</Typography>
             <TextField label="Company Name" variant="outlined" value={formValues.companyName[0]} onChange={(e) => formValues.companyName[1](e.target.value)}/>
             <TextField label="Website" variant="outlined" />
-            <Button onClick={() => {console.log(companyNameRef.current.value)}}>button</Button>
         </Box>
     )
 }

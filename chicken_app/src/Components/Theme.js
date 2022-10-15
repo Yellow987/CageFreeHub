@@ -14,14 +14,6 @@ const Theme = {
     button: {
       textTransform: 'none'
     },
-    title: {
-      fontWeight: 700,
-      fontSize: 32,
-      lineHeight: "150%",
-      letterSpacing: "-0.01rem",
-      color: "#1B2B3E",
-      display: 'block',
-    },
     h1: {
       fontWeight: 700,
       fontSize: 24,
@@ -37,6 +29,7 @@ const Theme = {
       letterSpacing: "-0.01rem",
       color: "#1B2B3E",
       display: 'block',
+      textAlign:'left'
     },
     p_large: {
       fontWeight: 400,
@@ -52,6 +45,15 @@ const Theme = {
       color: "#596676",
       display: 'block',
     },
+    p_default_bold: {
+      fontWeight: 700,
+      fontSize: 14,
+      lineHeight: "150%",
+      color: "#1B2B3E",
+      display: 'block',
+      textAlign:'left'
+    },
+    
     p_small: {
       fontWeight: 400,
       fontSize: 12,

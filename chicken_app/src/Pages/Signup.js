@@ -120,7 +120,7 @@ function Signup(props) {
       </Alert>
       <form onSubmit={handleSubmit}>
         <TextField error={!errors.isEmailValid} helperText={errors.emailErrorText} fullWidth label={t('email')} variant="outlined" sx={{ ...format }} inputRef={emailRef}/>
-        <TextField error={!errors.isPasswordValid} helperText={errors.passwordErrorText} fullWidth label={t('password')} type="password" autoComplete="on" variant="outlined" sx={{ ...format }} inputRef={passwordRef}/>
+        <TextField error={!errors.isPasswordValid} helperText={errors.passwordErrorText} fullWidth label={t('password')} type="password" autoComplete="on" variant="outlined" sx={{ ...format }} inputRef={passwordRef} />
         <FormControlLabel sx={{ ...format, display: hereTo === 'Login' ? 'none' : 'block', lineHeight:0 }}
         label={
           <Typography variant='p_small' display="inline" sx={{ lineHeight: 0 }}>
