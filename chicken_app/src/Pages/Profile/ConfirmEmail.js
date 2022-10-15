@@ -25,12 +25,13 @@ const theme = createTheme({
 });
 
 function ConfirmEmail() {
-  const [emailSent, setEmailSent] = useState({ isEmailSent:true, emailSentDetails:"Email verification sent!"});
+  const [emailSent, setEmailSent] = useState({ isEmailSent:false, emailSentDetails:"Email verification sent!"});
   const auth = getAuth();
   console.log("emailSent", emailSent);
   sendEmailVerification(auth.currentUser).then(() => {
     setEmailSent({ isEmailSent:true, emailSentDetails:"Email verification sent!"});
   });
+  console.log("emailSent2", emailSent);
   return (
     <ThemeProvider theme={theme}>
       <Box align='flex' mx={{ sm:'auto', xs:'24px' }} sx={{maxWidth:'700px', mt:{ sm:'116px', xs:'24px'}, borderColor: 'text.primary', color: "success.main" }}>
@@ -44,10 +45,10 @@ function ConfirmEmail() {
             our directory of cage-free egg sellers.{" "}
           </Typography>
         </Alert>
-        <Button variant="h5" sx={{fontWeight: "bold", fontColor: "text.primary", backgroundColor: "background.paper", marginTop: "15px", marginBottom: "-5px", }} type="submit" fullWidth>
+        <Button sx={{border:"1px solid #DFE3E9", radius:"3px", fontWeight: "bold", color: "#7ab8a8", backgroundColor: "background.paper", marginTop: "15px", marginBottom: "-5px", }} type="submit" fullWidth>
           Resend confirmation email
         </Button>
-        <Alert severity='error' display={emailSent.isEmailSent ? "block" : "none"}>
+        <Alert severity='error' sx={{ display: emailSent.isEmailSent ? "block" : "none" }}>
           <AlertTitle>{emailSent.emailSentDetails}</AlertTitle>
         </Alert>
       </Box>
