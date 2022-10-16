@@ -6,9 +6,9 @@ import Typography from '@mui/material/Typography';
 import { Box } from '@mui/system';
 import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
-import {SelectSingleCountry, SelectMultipleCountries} from '../../Components/FormParts'
+import {SelectSingleCountry, SelectMultipleCountries, FarmLocation} from '../../Components/FormParts'
 function Locations() {
-  const [setPage, goToPage, setGoToPage, formValues] = useOutletContext()
+  const [setPage, goToPage, setGoToPage, formValues, addLocation] = useOutletContext()
   const navigate = useNavigate()
   useEffect(() => {
     setPage('Location(s)')
@@ -26,7 +26,7 @@ function Locations() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goToPage])
-  const {countryName, city, distributioncountry} = formValues;
+  const {countryName, city, distributioncountry, location} = formValues;
   return (
     <Box style={{
       display:'flex', 
@@ -40,6 +40,7 @@ function Locations() {
                 Farm Location
             </Typography>
         </InputLabel>
+        <FarmLocation locations={location}  addLocation={addLocation}></FarmLocation>
         <Box
           style={{
             display:'flex', 

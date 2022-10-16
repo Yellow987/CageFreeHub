@@ -17,6 +17,9 @@ function ProfileProgressBar() {
     city: useState(''),
     countryName: useState(''),
     distributioncountry:useState([]),
+    location: useState([
+      {'city':'', 'country':''}
+    ]),
     eggform:useState(''),
     eggtypes: useState(''),
     email: useState(''),
@@ -24,6 +27,13 @@ function ProfileProgressBar() {
     jobtitle: useState(''),
     phonenumber: useState(''),
     productionsystem: useState(''),
+  }
+  function addLocation(){
+    console.log(formValues.location)
+    console.log(typeof formValues.location[0])
+    formValues.location[1](formValues.location[0].push({
+      'city':'', 'country':''
+    }))
   }
   const pages = ["Basics", "Location(s)", "Contact", "Product details", "Production details", "Imagery"]
   const db = getFirestore();
@@ -36,6 +46,7 @@ function ProfileProgressBar() {
               companyName: formValues.companyName[0],
               countryName: formValues.countryName[0],
               distributioncountry: formValues.distributioncountry[0],
+              location: formValues.location[0],
               eggform: formValues.eggform[0],
               eggtypes: formValues.eggtypes[0],
               email: formValues.email[0],
@@ -61,7 +72,7 @@ function ProfileProgressBar() {
         ))}
       </Box>
       <Box sx={{ marginTop:6, maxWidth:'400px' }}>
-        <Outlet context={[setPage, goToPage, setGoToPage, formValues]} /> 
+        <Outlet context={[setPage, goToPage, setGoToPage, formValues, addLocation]} /> 
         <Box align='right' sx={{ marginTop:6 }}>
           <Button><Typography variant='p_default' onClick={() => {setGoToPage('back')}}>← Back</Typography></Button>
           <Button variant='contained' onClick={() => { setGoToPage('next'); sendData()}}>Next →</Button>
