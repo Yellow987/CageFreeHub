@@ -1,0 +1,39 @@
+[debug] [2022-10-18T05:39:59.111Z] ----------------------------------------------------------------------
+[debug] [2022-10-18T05:39:59.113Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\daryl\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js init hosting
+[debug] [2022-10-18T05:39:59.113Z] CLI Version:   11.10.0
+[debug] [2022-10-18T05:39:59.113Z] Platform:      win32
+[debug] [2022-10-18T05:39:59.113Z] Node Version:  v16.17.1
+[debug] [2022-10-18T05:39:59.114Z] Time:          Mon Oct 17 2022 22:39:59 GMT-0700 (Mountain Standard Time)
+[debug] [2022-10-18T05:39:59.114Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-10-18T05:39:59.120Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-10-18T05:39:59.120Z] > authorizing via signed-in user (daryldsouza123@gmail.com)
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  C:\Users\daryl\OneDrive\Desktop\Keep_these\ChickenApp\chicken_app
+
+[info] 
+=== Project Setup
+[info] 
+[info] First, let's associate this project directory with a Firebase project.
+[info] You can create multiple project aliases by running firebase use --add, 
+[info] but for now we'll just set up a default project.
+[info] 
+[debug] [2022-10-18T05:40:01.697Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects pageSize=100
+[debug] [2022-10-18T05:40:02.249Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects 200
+[debug] [2022-10-18T05:40:02.249Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects [omitted]
+[info] i  Using project freerangeeggfarm-26736 (freerangeeggfarm) 
+[info] 
+=== Hosting Setup
+[info] 
+[info] Your public directory is the folder (relative to your project directory) that
+[info] will contain Hosting assets to be uploaded with firebase deploy. If you
+[info] have a build process for your assets, use your build's output directory.
+[info] 
