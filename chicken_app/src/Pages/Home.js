@@ -30,7 +30,7 @@ const Home = ()=> {
             <Grid container spacing={2} alignItems='center' direction={{sm:"row", xs:"column"}}>
                 <Grid item xs={12} sm={6}>
                     <Box maxWidth="440px" >
-                        <Typography variant="title" sx={{marginBottom:'24px'}} >
+                        <Typography variant="h1_32" sx={{marginBottom:'24px'}} >
                             {t('title')}
                         </Typography>
                         <Typography variant="p_large" style={{marginBottom:'10px'}} >
