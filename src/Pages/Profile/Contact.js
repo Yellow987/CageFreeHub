@@ -1,13 +1,10 @@
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
 import { useOutletContext } from 'react-router';
 import { useEffect, useRef } from 'react';
 import { Box } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
-import InputLabel from '@mui/material/InputLabel';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
+import { Alert, FormGroup, TextField, Typography, FormControlLabel, Checkbox, MenuItem, InputLabel, FormControl } from '@mui/material'
+
 function Contact() {
     const [setPage, goToPage, setGoToPage, formValues] = useOutletContext()
     // const companyNameRef = useRef('hello')
@@ -23,10 +20,10 @@ function Contact() {
         if (goToPage === '') {return}
         if (goToPage === 'next') {
             setGoToPage('')
-            navigate('/profile/locations')
+            navigate('/profile/product-details')
         } else if (goToPage === 'back') {
             setGoToPage('')
-            navigate('/profile/welcome')
+            navigate('/profile/locations')
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [goToPage])
@@ -40,6 +37,9 @@ function Contact() {
             flexFlow:'column', 
             textAlign:'left'}} >
             <Typography variant="h1_32" >Contact person for purchase inquiries</Typography>
+            <Alert sx={{ marginTop:5 }} iconMapping={{success: <WorkOutlineIcon sx={{ margin:'auto'}}/> }}>
+              <Typography variant='p_default' color='#3FAB94' >All information provided is completely confidential. We do not share information with third parties, and buyers must be confirmed by us to access profiles</Typography>
+            </Alert>
             <InputLabel style={{margin:'32px 0 10px 0'}}>
               <Typography variant="label" >
                   Full Name of Contact
