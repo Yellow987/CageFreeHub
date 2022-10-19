@@ -7,7 +7,7 @@ function SupportPopup() {
 
   return (
     <Box sx={{ maxWidth:'280px', p:2 }}>
-        <Typography variant='p_default' fontWeight='Bold'>
+        <Typography variant='p_default' fontWeight='Bold' color='#1B2B3E'>
             {t('questions')}
         </Typography>
         <Typography variant='p_default' style={{wordWrap: 'break-word'}}>
