@@ -40,37 +40,7 @@ function Locations() {
                 Farm Location
             </Typography>
         </InputLabel>
-        <FarmLocation locations={location}  addLocation={addLocation}></FarmLocation>
-        <Box
-          style={{
-            display:'flex', 
-            justifyContent:'flex-start', 
-            flexFlow:'column', 
-            textAlign:'left',
-            backgroundColor:'#F5F7F8',
-            padding:'16px'
-          }}
-        >
-            <InputLabel style={{margin:'0 0 10px 0'}}>
-                <Typography variant="label" >
-                City
-                </Typography>
-            </InputLabel>
-            <TextField 
-                variant="outlined" 
-                value={city[0]} 
-                onChange={(e) => city[1](e.target.value)}
-            />
-            <InputLabel style={{margin:'32px 0 10px 0'}}>
-                <Typography variant="label" >
-                Country
-                </Typography>
-            </InputLabel>
-            <SelectSingleCountry 
-                  country={countryName[0]} 
-                  setCountry={countryName[1]}
-                ></SelectSingleCountry>
-        </Box>
+        <FarmLocation locations={location} ></FarmLocation>
         <InputLabel style={{margin:'32px 0 10px 0'}}>
             <Typography variant="label" >
               Distribution country (countries)

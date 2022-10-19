@@ -10,7 +10,7 @@ function ProfileProgressBar() {
   const [page, setPage] = useState('')
   const [goToPage, setGoToPage] = useState('')
   const formValues = {
-    companyName: useState(''),
+    companyName: useState(''), 
     website: useState(''),
     approved: false,
     certifyingbody: useState(''),
@@ -28,13 +28,8 @@ function ProfileProgressBar() {
     phonenumber: useState(''),
     productionsystem: useState(''),
   }
-  function addLocation(){
-    console.log(formValues.location)
-    console.log(typeof formValues.location[0])
-    formValues.location[1](formValues.location[0].push({
-      'city':'', 'country':''
-    }))
-  }
+
+  
   const pages = ["Basics", "Location(s)", "Contact", "Product details", "Production details", "Imagery"]
   const db = getFirestore();
   const { currentUser } = useAuth();
@@ -59,7 +54,6 @@ function ProfileProgressBar() {
       await setDoc(doc(db, "farms", currentUser.uid), data);
   }
 
-  //TODO send to firebase on button click. 
 
   return (
     <Box align='center' mx={{ sm:'10%', xs:'24px' }} sx={{ marginTop:6 }}>
@@ -72,7 +66,7 @@ function ProfileProgressBar() {
         ))}
       </Box>
       <Box sx={{ marginTop:6, maxWidth:'400px' }}>
-        <Outlet context={[setPage, goToPage, setGoToPage, formValues, addLocation]} /> 
+        <Outlet context={[setPage, goToPage, setGoToPage, formValues]} /> 
         <Box align='right' sx={{ marginTop:6 }}>
           <Button><Typography variant='p_default' onClick={() => {setGoToPage('back')}}>← Back</Typography></Button>
           <Button variant='contained' onClick={() => { setGoToPage('next'); sendData()}}>Next →</Button>

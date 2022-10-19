@@ -12,19 +12,19 @@ import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
 
 export function SelectSingleCountry(props) {
-    const {country, setCountry} = props;
+    const {country, setCountry, index} = props;
     const options = useMemo(() => countryList().getData(), [])
    return(
         <FormControl>
             <Select
             value={country}
-            onChange={(e)=>setCountry(e.target.value)}
+            onChange={(e)=>setCountry(e.target.value, index)}
             placeholder='country'
             >
                 {
-                    options.map((country)=>{
+                    options.map((country, countryIndex)=>{
                         return(
-                            <MenuItem value={country.value}>{country.label}</MenuItem>
+                            <MenuItem key={countryIndex} value={country.value}>{country.label}</MenuItem>
                         )
                     })
                 }
@@ -73,14 +73,23 @@ export function SelectMultipleCountries(props) {
 
 
 export function FarmLocation(props){
-    const {locations, addLocation} = props;
-    console.log(locations);
-
+    const {locations} = props;
+    console.log(locations[0])
+    function setCity(cityName, index){
+        console.log('index',index)
+        locations[0][index].city = cityName
+        locations[1]([...locations[0]])
+    }
+    function setCountry(countryName, index){
+        locations[0][index].country = countryName
+        locations[1]([...locations[0]])
+    }
     return(
         <>
-        {locations.map((location)=>{
+        {locations[0].map((location, index)=>{
             return(
                 <Box
+                key={index}
                 style={{
                 display:'flex', 
                 justifyContent:'flex-start', 
@@ -98,21 +107,22 @@ export function FarmLocation(props){
                 <TextField 
                     variant="outlined"                                               
                     value={location.city} 
-                    //   onChange={(e)=>setCity(e.target.value)}
+                    onChange={(e)=>setCity(e.target.value, index)}
                 />
                 <InputLabel style={{margin:'32px 0 10px 0'}}>
                     <Typography variant="label" >
                     Country
                     </Typography>
                 </InputLabel>
-                {/* <SelectSingleCountry 
+                <SelectSingleCountry 
                         country={location.country} 
-                        setCountry={}
-                    ></SelectSingleCountry> */}
+                        setCountry={setCountry}
+                        index={index}
+                    ></SelectSingleCountry>
             </Box>
           )
         })}
-        <Button onClick={()=>addLocation()} >+ I have an additional farm location</Button>
+        <Button onClick={(e)=>{ locations[0].push({'city':'', 'country':''}); locations[1]([...locations[0]]); e.preventDefault()}} >+ I have an additional farm location</Button>
         </>
     )
 
