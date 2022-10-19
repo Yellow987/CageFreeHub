@@ -4,12 +4,11 @@ import { useOutletContext } from 'react-router';
 import { useEffect, useRef } from 'react';
 import { Box } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
-
+import InputLabel from '@mui/material/InputLabel';
 function Basics() {
     const [setPage, goToPage, setGoToPage, formValues] = useOutletContext()
-    const companyNameRef = useRef('hello')
-    const websiteRef = useRef()
+    // const companyNameRef = useRef('hello')
+    // const websiteRef = useRef()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -28,13 +27,39 @@ function Basics() {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [goToPage])
-
+    const {companyName, website} = formValues;
+    
 
     return(
-        <Box >
+        <Box style={{
+            display:'flex', 
+            justifyContent:'flex-start', 
+            flexFlow:'column', 
+            textAlign:'left'}} >
             <Typography variant="h1_32" >Basics</Typography>
-            <TextField label="Company Name" variant="outlined" value={formValues.companyName[0]} onChange={(e) => formValues.companyName[1](e.target.value)}/>
-            <TextField label="Website" variant="outlined" />
+            <InputLabel style={{margin:'32px 0 10px 0'}}>
+                <Typography variant="label" >
+                    Company Name
+                </Typography>
+            </InputLabel>
+            <TextField 
+                // label="Company Name" 
+                variant="outlined" 
+                value={companyName[0]} 
+                onChange={(e) => companyName[1](e.target.value)}
+            />
+            <InputLabel style={{margin:'32px 0 10px 0'}}>
+                <Typography variant="label" >
+                    Website
+                </Typography>
+            </InputLabel>
+            <TextField 
+                // label="Website" 
+                variant="outlined" 
+                value={website[0]}
+                onChange={(e)=>website[1](e.target.value)}
+                placeholder='E.g. http://marriot.com'
+            />
         </Box>
     )
 }
