@@ -82,7 +82,7 @@ function Signup(props) {
     if (hereTo === "Login") {
       try{
         await login(emailRef.current.value, passwordRef.current.value)
-        navigate('/SellerProfileWizard')
+        navigate('/TODO')
       } catch {
         setAuthError({ isAuthError:true, errorDetails:"Invalid Username/Email or Password"})
       }
