@@ -5,7 +5,8 @@ import { useOutletContext } from 'react-router'
 import { Box, Select, ListItemText, Typography, Checkbox, MenuItem, InputLabel, FormControl } from '@mui/material'
 
 function ProductionDetails() {
-  const [setPage, goToPage, setGoToPage] = useOutletContext()
+  const [setPage, goToPage, setGoToPage, formValues] = useOutletContext();
+  const {productionsystem, certifyingbody} = formValues;
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -56,12 +57,12 @@ function ProductionDetails() {
           </InputLabel>
           <FormControl>
             <Select
-            // value={}
-            // onChange={}
+            value={certifyingbody[0]}
+            onChange={(e) => certifyingbody[1](e.target.value)}
             placeholder='Select your certification status'
             >
                 {
-                    certificationOpts.map((option, index)=>{
+                    productionSystemOpts.map((option, index)=>{
                         return(
                             <MenuItem key={index} value={option}>{option}</MenuItem>
                         )
@@ -71,30 +72,31 @@ function ProductionDetails() {
         </FormControl>
         <InputLabel style={{margin:'32px 0 10px 0'}}>
             <Typography variant="label" >
-              Production system of farm(s)
+              Do you have cage-free egg certification?
             </Typography>
         </InputLabel>
         <FormControl>
             <Select
-            value={productionSystem}
+            value={typeof productionsystem[0] === 'string' ? productionsystem[0].split(',') : productionsystem[0]}
             onChange={(event) => {
               const {
                 target: { value },
               } = event;
-              setProductionSystem(
+              productionsystem[1](
                 // On autofill we get a stringified value.
                 typeof value === 'string' ? value.split(',') : value,
               );
             }}
-            // renderValue={(selected) => selected.join(', ')}
+            renderValue={(selected) => selected.join(', ')}
             multiple
-            placeholder={'Select production system(s) utilized'}
+            placeholder={'Select your certification status'}
+            
             >
                 {
-                    productionSystemOpts.map((item, index)=>{
+                    certificationOpts.map((item, index)=>{
                         return(
                             <MenuItem key={index} value={item}>
-                                <Checkbox checked={productionSystem.indexOf(item) > -1} />
+                                <Checkbox checked={productionsystem[0].indexOf(item) > -1} />
                                 <ListItemText primary={item} />
                             </MenuItem>
                         )

@@ -6,7 +6,8 @@ import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import { Alert, FormGroup, TextField, Typography, FormControlLabel, Checkbox, MenuItem, InputLabel, FormControl } from '@mui/material'
 
 function Contact() {
-    const [setPage, goToPage, setGoToPage, formValues] = useOutletContext()
+    const [setPage, goToPage, setGoToPage, formValues] = useOutletContext();
+    const {fullname, jobtitle} = formValues;
     // const companyNameRef = useRef('hello')
     // const websiteRef = useRef()
     const navigate = useNavigate()
@@ -27,7 +28,7 @@ function Contact() {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [goToPage])
-    const {companyName, website} = formValues;
+    
     
 
     return(
@@ -48,9 +49,9 @@ function Contact() {
             <TextField 
                 // label="Company Name" 
                 variant="outlined" 
-                value={companyName[0]} 
+                value={fullname[0]} 
                 placeholder='E.g. Chung Lui'
-                onChange={(e) => companyName[1](e.target.value)}
+                onChange={(e) => fullname[1](e.target.value)}
             />
             <InputLabel style={{margin:'32px 0 10px 0'}}>
               <Typography variant="label" >
@@ -60,8 +61,8 @@ function Contact() {
             <TextField 
                 // label="Website" 
                 variant="outlined" 
-                value={website[0]}
-                onChange={(e)=>website[1](e.target.value)}
+                value={jobtitle[0]}
+                onChange={(e)=>jobtitle[1](e.target.value)}
                 placeholder='E.g. CEO'
             />
             <InputLabel style={{margin:'32px 0 10px 0'}}>
