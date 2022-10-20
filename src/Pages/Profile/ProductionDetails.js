@@ -59,12 +59,12 @@ function ProductionDetails() {
               const {
                 target: { value },
               } = event;
-              setProductionSystem(
+              productionsystem[1](
                 // On autofill we get a stringified value.
                 typeof value === 'string' ? value.split(',') : value,
               );
             }}
-            // renderValue={(selected) => selected.join(', ')}
+            renderValue={(selected) => selected.join(', ')}
             multiple
             placeholder={'Select production system(s) utilized'}
             >

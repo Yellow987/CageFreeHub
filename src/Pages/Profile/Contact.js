@@ -38,7 +38,7 @@ function Contact() {
                   Full Name of Contact
               </Typography>
             </InputLabel>
-            <TextField> 
+            <TextField
                 variant="outlined" 
                 value={fullname[0]} 
                 placeholder='E.g. Chung Lui'
