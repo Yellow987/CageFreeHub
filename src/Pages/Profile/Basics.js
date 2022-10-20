@@ -1,15 +1,12 @@
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import { useOutletContext } from 'react-router';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { Box } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '@mui/material';
 
 function Basics() {
     const [setPage, goToPage, setGoToPage, formValues] = useOutletContext()
-    const companyNameRef = useRef('hello')
-    const websiteRef = useRef()
     const navigate = useNavigate()
 
     useEffect(() => {

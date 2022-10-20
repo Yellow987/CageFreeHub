@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router'
 import { Box, Button, LinearProgress, Typography } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 function ProfileProgressBar() {
   const [page, setPage] = useState('')
