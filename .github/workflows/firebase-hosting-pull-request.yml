@@ -4,16 +4,20 @@
 name: Deploy to Firebase Hosting on PR
 'on': pull_request
 jobs:
+  make_env:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          touch .env
+          echo REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }} >> .env
+          echo REACT_APP_FIREBASE_APP_ID=${{ secrets.REACT_APP_FIREBASE_APP_ID }} >> .env 
+          cat .env 
   build_and_preview:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: |
-          touch .env
-          echo API_KEY=${{ secrets.env }}
-          echo API_KEY=${{ secrets.env }} >> .env 
-          cat .env 
           npm ci 
           npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
