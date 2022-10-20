@@ -27,6 +27,7 @@ function ProfileProgressBar() {
     jobtitle: useState(''),
     phonenumber: useState(''),
     productionsystem: useState(''),
+    certificationstatus: useState(''),
   }
 
   
@@ -49,7 +50,8 @@ function ProfileProgressBar() {
               jobtitle: formValues.jobtitle[0],
               phonenumber: formValues.phonenumber[0],
               productionsystem: formValues.productionsystem[0],
-              website: formValues.website[0]
+              website: formValues.website[0],
+              certificationstatus: formValues.certificationstatus[0]
           }
       await setDoc(doc(db, "farms", currentUser.uid), data);
   }
