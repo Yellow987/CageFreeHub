@@ -9,7 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: touch .env && echo API_KEY=${{ secrets.env }} >> .env && cat .env && npm ci && npm run build
+      - run: |
+        touch .env 
+        echo API_KEY=${{ secrets.env }}
+        echo API_KEY=${{ secrets.env }} >> .env 
+        cat .env 
+        npm ci 
+        npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
