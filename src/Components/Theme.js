@@ -31,6 +31,11 @@ const Theme = {
       display: 'block',
       textAlign:'left'
     },
+    label: {
+      fontWeight: 700,
+      fontSize: 14,
+      color: '#1B2B3E',
+    },
     p_large: {
       fontWeight: 400,
       fontSize: 16,

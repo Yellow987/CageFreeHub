@@ -2,23 +2,21 @@ import React from 'react'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { useOutletContext } from 'react-router'
+import Typography from '@mui/material/Typography';
+import { Box } from '@mui/system';
+import InputLabel from '@mui/material/InputLabel';
 
+import {SelectMultipleCountries, FarmLocation} from '../../Components/FormParts'
 function Locations() {
-  const [setPage, goToPage, setGoToPage] = useOutletContext()
+  const [setPage, goToPage, setGoToPage, formValues] = useOutletContext()
   const navigate = useNavigate()
-
   useEffect(() => {
     setPage('Location(s)')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  function saveData() {
-        
-  }
-
+  
   useEffect(() => {
     if (goToPage === '') {return}
-    saveData()  
     if (goToPage === 'next') {
       setGoToPage('')
       navigate('/profile/contact')
@@ -28,9 +26,31 @@ function Locations() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goToPage])
-
+  const {distributioncountry, location} = formValues;
   return (
-    <div>Locations</div>
+    <Box style={{
+      display:'flex', 
+      justifyContent:'flex-start', 
+      flexFlow:'column', 
+      textAlign:'left'}} 
+    >
+        <Typography variant="h1_32" >Location(s)</Typography>
+        <InputLabel style={{margin:'32px 0 10px 0'}}>
+            <Typography variant="label" >
+                Farm Location
+            </Typography>
+        </InputLabel>
+        <FarmLocation locations={location} ></FarmLocation>
+        <InputLabel style={{margin:'32px 0 10px 0'}}>
+            <Typography variant="label" >
+              Distribution country (countries)
+            </Typography>
+        </InputLabel>
+        <SelectMultipleCountries
+              countries={distributioncountry[0]}
+              setCountries={distributioncountry[1]}
+            ></SelectMultipleCountries>
+    </Box>
   )
 }
 
