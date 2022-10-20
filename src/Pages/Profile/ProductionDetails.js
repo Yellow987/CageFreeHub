@@ -11,7 +11,6 @@ function ProductionDetails() {
 
   useEffect(() => {
     setPage('Production details')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function saveData() {
@@ -28,7 +27,6 @@ function ProductionDetails() {
       setGoToPage('')
       navigate('/profile/product-details')
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goToPage])
   const certificationOpts = [
     'Yes, we are certified',
@@ -61,15 +59,14 @@ function ProductionDetails() {
               const {
                 target: { value },
               } = event;
-              productionsystem[1](
+              setProductionSystem(
                 // On autofill we get a stringified value.
                 typeof value === 'string' ? value.split(',') : value,
               );
             }}
-            renderValue={(selected) => selected.join(', ')}
+            // renderValue={(selected) => selected.join(', ')}
             multiple
-            placeholder={'Select your certification status'}
-            
+            placeholder={'Select production system(s) utilized'}
             >
                 {
                     productionSystemOpts.map((item, index)=>{
@@ -119,7 +116,6 @@ function ProductionDetails() {
         />
         </>
         }
-
     </Box>
   )
 }

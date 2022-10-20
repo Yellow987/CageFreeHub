@@ -8,13 +8,9 @@ import { Alert, FormGroup, TextField, Typography, FormControlLabel, Checkbox, Me
 function Contact() {
     const [setPage, goToPage, setGoToPage, formValues] = useOutletContext();
     const {fullname, jobtitle} = formValues;
-    // const companyNameRef = useRef('hello')
-    // const websiteRef = useRef()
     const navigate = useNavigate()
-
     useEffect(() => {
         setPage('Contact')
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -26,11 +22,7 @@ function Contact() {
             setGoToPage('')
             navigate('/profile/locations')
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [goToPage])
-    
-    
-
     return(
         <Box style={{
             display:'flex', 
@@ -46,8 +38,7 @@ function Contact() {
                   Full Name of Contact
               </Typography>
             </InputLabel>
-            <TextField 
-                // label="Company Name" 
+            <TextField> 
                 variant="outlined" 
                 value={fullname[0]} 
                 placeholder='E.g. Chung Lui'
@@ -59,7 +50,6 @@ function Contact() {
               </Typography>
             </InputLabel>
             <TextField 
-                // label="Website" 
                 variant="outlined" 
                 value={jobtitle[0]}
                 onChange={(e)=>jobtitle[1](e.target.value)}
