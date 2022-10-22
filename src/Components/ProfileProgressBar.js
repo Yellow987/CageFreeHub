@@ -1,11 +1,10 @@
 import React from 'react'
 import { Outlet } from 'react-router'
 import { Box, Button, LinearProgress, Typography } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useAuth } from '../AuthContext'
-import {
-  getFirestore, doc, setDoc
-} from 'firebase/firestore'
+import { getFirestore, doc, setDoc } from 'firebase/firestore'
+
 function ProfileProgressBar() {
   const [page, setPage] = useState('')
   const [goToPage, setGoToPage] = useState('')

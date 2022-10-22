@@ -1,27 +1,11 @@
-import { React, useState, useRef } from "react";
+import { React, useState } from "react";
 import MailIcon from "@mui/icons-material/Mail";
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
 import { getAuth, sendEmailVerification } from "firebase/auth";
 
-import { Box, createTheme, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Button } from "@mui/material";
-
-const theme = createTheme({
-  palette: {
-    background: {
-      paper: "#f1faf8",
-    },
-    typography: {
-      body1: {
-        color: "#6bb09e",
-      },
-    },
-    text: {
-      primary: "#6bb09e",
-    },
-  },
-});
 
 function ConfirmEmail() {
   const [emailSent, setEmailSent] = useState({ isEmailSent:true, emailSentDetails:"Email verification sent!"});

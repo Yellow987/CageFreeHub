@@ -1,9 +1,9 @@
 import { useOutletContext } from 'react-router';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { Box } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
-import { Alert, FormGroup, TextField, Typography, FormControlLabel, Checkbox, MenuItem, InputLabel, FormControl } from '@mui/material'
+import { Alert, FormGroup, TextField, Typography, FormControlLabel, Checkbox, InputLabel } from '@mui/material'
 
 function Contact() {
     const [setPage, goToPage, setGoToPage, formValues] = useOutletContext();
