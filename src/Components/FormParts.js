@@ -3,7 +3,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import countryList from 'react-select-country-list';
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import Checkbox from '@mui/material/Checkbox';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
@@ -35,7 +35,7 @@ export function SelectSingleCountry(props) {
 }
 
 export function SelectMultipleCountries(props) {
-    const {countries, setCountries, multiselect} = props;
+    const {countries, setCountries } = props;
     const options = useMemo(() => countryList().getData(), [])
     const handleChange = (event) => {
         const {

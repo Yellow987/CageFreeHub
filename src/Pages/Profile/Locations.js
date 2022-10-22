@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { useOutletContext } from 'react-router'
 import Typography from '@mui/material/Typography';
 import { Box } from '@mui/system';
 import InputLabel from '@mui/material/InputLabel';
-import TextField from '@mui/material/TextField';
-import {SelectSingleCountry, SelectMultipleCountries, FarmLocation} from '../../Components/FormParts'
+
+import {SelectMultipleCountries, FarmLocation} from '../../Components/FormParts'
 function Locations() {
-  const [setPage, goToPage, setGoToPage, formValues, addLocation] = useOutletContext()
+  const [setPage, goToPage, setGoToPage, formValues] = useOutletContext()
   const navigate = useNavigate()
   useEffect(() => {
     setPage('Location(s)')
@@ -26,7 +26,7 @@ function Locations() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goToPage])
-  const {countryName, city, distributioncountry, location} = formValues;
+  const {distributioncountry, location} = formValues;
   return (
     <Box style={{
       display:'flex', 
