@@ -9,6 +9,13 @@ const Theme = {
     secondary: {
       main: '#FFFFFF',
     },
+    grey: {
+      main: '#788492',
+    },
+    danger: {
+      main: '#FCEDED',
+      contrastText: '#1B2B3E'
+    },
   },
   typography: {
     button: {
