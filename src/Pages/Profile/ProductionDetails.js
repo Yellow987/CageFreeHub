@@ -11,6 +11,7 @@ function ProductionDetails() {
 
   useEffect(() => {
     setPage('Production details')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function saveData() {
@@ -27,6 +28,7 @@ function ProductionDetails() {
       setGoToPage('')
       navigate('/profile/product-details')
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goToPage])
   const certificationOpts = [
     'Yes, we are certified',
@@ -101,7 +103,7 @@ function ProductionDetails() {
             </Select>
         </FormControl>
         {
-          certificationstatus[0] == 'Yes, we are certified' &&
+          certificationstatus[0] === 'Yes, we are certified' &&
           <>
           <InputLabel style={{margin:'32px 0 10px 0'}}>
           <Typography variant="label" >

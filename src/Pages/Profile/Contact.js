@@ -11,6 +11,7 @@ function Contact() {
     const navigate = useNavigate()
     useEffect(() => {
         setPage('Contact')
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -22,6 +23,7 @@ function Contact() {
             setGoToPage('')
             navigate('/profile/locations')
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [goToPage])
     return(
         <Box style={{
