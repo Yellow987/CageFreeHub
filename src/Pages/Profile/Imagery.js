@@ -5,14 +5,16 @@ import { useOutletContext } from 'react-router'
 import { Box, Button, Grid, ImageList } from '@mui/material'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { Alert, Typography, Paper } from '@mui/material'
 import ImageUploading from "react-images-uploading";
+import { getStorage, ref } from "firebase/storage";
+import { useAuth } from './../../AuthContext';
 
 function Imagery() {
   const [setPage, goToPage, setGoToPage] = useOutletContext()
   const [images, setImages] = useState([])
   const navigate = useNavigate()
+  const { currentUser } = useAuth()
 
   const onImageUploadChange = (imageList, addUpdateIndex) => {
     // data for submit
@@ -20,13 +22,19 @@ function Imagery() {
     setImages(imageList);
   };
 
+  function uploadImagesToFirebase() {
+    if (images == null) {return}
+    const storage = getStorage()
+    const imageRef = ref(storage, 'images/' + currentUser.uid)
+  }
+
   useEffect(() => {
     setPage('Imagery')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   function saveData() {
-        
+    
   }
 
   useEffect(() => {
