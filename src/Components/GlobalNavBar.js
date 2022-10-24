@@ -11,7 +11,7 @@ import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import SupportPopup from './SupportPopup';
 import MenuIcon from '@mui/icons-material/Menu';
 import IconButton from '@mui/material/IconButton';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../AuthContext';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -28,6 +28,7 @@ const styles = {
 }
 
 function GlobalNavBar() {
+  const navigate = useNavigate()
   const { currentUser, logout } = useAuth()
   const { t, i18n } = useTranslation(['navbar']);
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -89,7 +90,7 @@ function GlobalNavBar() {
   function handleAccordion() {
     if (isAccordionExpanded) {
       setIsAccordionExpanded(false)
-      setTimeout(function () {
+      setTimeout(() => {
         setAccordionIconIsClose(false)
     }, 100);
     } else {
@@ -112,15 +113,15 @@ function GlobalNavBar() {
           </Box>
         </AccordionSummary>
         <List>
-          <ListItem button component={Link} to="/login" sx={{ display: currentUser ? 'none' : 'block' }}>
+          <ListItem button component={Link} to="/login" onClick={() => handleAccordion()} sx={{ display: currentUser ? 'none' : 'block' }}>
             <Typography variant='p_large' sx={{ margin:'auto' }}>Login</Typography>
           </ListItem>
           <Box sx={{ display: currentUser ? 'block' : 'none' }}>
-            <ListItem button component={Link} to="/TODO" >
+            <ListItem button component={Link} to="/TODO" onClick={() => handleAccordion()}>
               <Typography variant='p_large' sx={{ margin:'auto' }}>Edit Profile</Typography>
             </ListItem>
             <Divider />
-            <ListItem button component={Link} to="/login" onClick={() => logout()} >
+            <ListItem button onClick={() => {handleAccordion();setTimeout(() => {logout();navigate('/login')}, 100)}} >
               <Typography variant='p_large' sx={{ margin:'auto' }}>Logout</Typography>
             </ListItem>
           </Box>
