@@ -1,4 +1,4 @@
-import { React, useState, useRef } from 'react'
+import { React, useEffect, useState, useRef } from 'react'
 import { Box, Typography, TextField, Checkbox, FormControlLabel } from '@mui/material'
 import { Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,6 +7,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { useTranslation, Trans } from 'react-i18next';
+import { getFirestore, doc, setDoc } from 'firebase/firestore'
 
 function Signup(props) {
   const { hereTo } = props.props
@@ -20,6 +21,7 @@ function Signup(props) {
     textDecoration: "none",
   }
 
+  const { currentUser } = useAuth()
   const { t } = useTranslation(['signup']);
   const { signup, login } = useAuth()
   const navigate = useNavigate()
@@ -82,19 +84,36 @@ function Signup(props) {
     if (hereTo === "Login") {
       try{
         await login(emailRef.current.value, passwordRef.current.value)
-        navigate('/TODO')
       } catch {
         setAuthError({ isAuthError:true, errorDetails:"Invalid Username/Email or Password"})
       }
     } else {
       try {
         await signup(emailRef.current.value, passwordRef.current.value)
-        navigate("/profile/confirm-email")
       } catch {
         setAuthError({ isAuthError:true, errorDetails:"creat acct error"})
       }
     }
     setLoading(false)
+  }
+
+  useEffect(() => {
+    if (currentUser === null) { return }
+    if (hereTo === "Login"){
+      navigate('/TODO')
+    } else {
+      setUserData()
+      navigate('/profile/basics')
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser])
+
+  async function setUserData(){
+    const db = getFirestore()
+    let data = {
+      isSeller: hereTo === "SellerSignup"
+    }
+    await setDoc(doc(db, "users", currentUser.uid), data);
   }
 
   function getTitle(hereTo) {
