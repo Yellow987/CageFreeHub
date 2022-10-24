@@ -100,7 +100,8 @@ function GlobalNavBar() {
   }
 
   return (
-    <>
+  <>
+    <AppBar color="secondary" elevation={0} position="sticky">
       <Accordion expanded={isAccordionExpanded} elevation={0} sx={{ display:{ xs:'block', sm:'none'} }}>
         <AccordionSummary expandIcon={accordionIconIsClose ? <CloseIcon onClick={() => handleAccordion()} /> : <MenuIcon onClick={() => handleAccordion()} />} >
           <Typography color={grey[400]} sx={{ fontWeight: 'bold', textDecoration: "none" }} variant="h6">
@@ -130,7 +131,8 @@ function GlobalNavBar() {
           <Divider />
         </List>
       </Accordion>
-    <AppBar color="secondary" elevation={0} position="static" sx={{ display:{ xs:'none', sm:'block'} }}>
+    </AppBar>
+    <AppBar color="secondary" elevation={0} position="sticky" sx={{ display:{ xs:'none', sm:'block'} }}>
       <Toolbar>
         <Typography component={Link} to="/" 
         color={grey[400]} sx={{ fontWeight: 'bold', textDecoration: "none" }} variant="h6">

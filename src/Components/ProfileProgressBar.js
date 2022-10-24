@@ -66,7 +66,7 @@ function ProfileProgressBar() {
       </Box>
       <Box sx={{ marginTop:6, maxWidth:'400px' }}>
         <Outlet context={[setPage, goToPage, setGoToPage, formValues]} /> 
-        <Box align='right' sx={{ marginTop:6 }}>
+        <Box align='right' sx={{ marginTop:6, marginBottom:2 }}>
           <Button><Typography variant='p_default' onClick={() => {setGoToPage('back')}}>← Back</Typography></Button>
           <Button variant='contained' onClick={() => { setGoToPage('next'); sendData()}}>Next →</Button>
         </Box>
