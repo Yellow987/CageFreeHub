@@ -79,7 +79,7 @@ function Imagery() {
     saveData()  
     if (goToPage === 'next') {
       setGoToPage('')
-      navigate('/profile')
+      navigate('/profile/' + currentUser.uid)
     } else if (goToPage === 'back') {
       setGoToPage('')
       navigate('/profile/production-details')
