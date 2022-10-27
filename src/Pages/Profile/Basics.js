@@ -5,8 +5,10 @@ import { useEffect } from 'react';
 import { Box } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 import InputLabel from '@mui/material/InputLabel';
+import { Button } from '@mui/material';
+
 function Basics() {
-    const [setPage, goToPage, setGoToPage, formValues] = useOutletContext()
+    const [setPage, goToPage, setGoToPage, parentMethod] = useOutletContext()
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -25,7 +27,6 @@ function Basics() {
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [goToPage])
-    const {companyName, website} = formValues;
     
 
     return(
@@ -34,7 +35,7 @@ function Basics() {
             justifyContent:'flex-start', 
             flexFlow:'column', 
             textAlign:'left'}} >
-            <Typography variant="h1_32" >Basics</Typography>
+            {/* <Typography variant="h1_32" >Basics</Typography>
             <InputLabel style={{margin:'32px 0 10px 0'}}>
                 <Typography variant="label" >
                     Company Name
@@ -57,7 +58,8 @@ function Basics() {
                 value={website[0]}
                 onChange={(e)=>website[1](e.target.value)}
                 placeholder='E.g. http://marriot.com'
-            />
+            /> */}
+            <Button onClick={() => {parentMethod('childstr')}}>save</Button>
         </Box>
     )
 }
