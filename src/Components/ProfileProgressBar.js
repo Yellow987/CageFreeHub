@@ -68,7 +68,7 @@ function ProfileProgressBar() {
         <Outlet context={[setPage, goToPage, setGoToPage, formValues]} /> 
         <Box align='right' sx={{ marginTop:6 }}>
           <Button><Typography variant='p_default' onClick={() => {setGoToPage('back')}}>← Back</Typography></Button>
-          <Button variant='contained' onClick={() => { setGoToPage('next'); sendData()}}>Next →</Button>
+          <Button variant='contained' onClick={() => { setGoToPage('next'); sendData()}}>{page === 'Imagery' ? "Submit for approval" : "Next →"}</Button>
         </Box>
       </Box>
     </Box>
