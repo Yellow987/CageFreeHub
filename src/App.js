@@ -34,7 +34,6 @@ function App() {
           <Route path="/login" element={<Signup props={{ hereTo: 'Login' }}/> }/>
           <Route path="/profile/confirm-email" element={<ConfirmEmail/>} />
           <Route path='/profile/welcome' element={<Welcome />} />
-          <Route path='/profile' element={<Profile />} />
           <Route element={<ProfileProgressBar />}>
             <Route path="/profile/basics" element={<Basics />} />
             <Route path="/profile/locations" element={<Locations />} />
@@ -43,6 +42,7 @@ function App() {
             <Route path="/profile/production-details" element={<ProductionDetails />} />
             <Route path="/profile/imagery" element={<Imagery />} />
           </Route>
+          <Route path="profile/:id" element={<Profile />}/>
           <Route path="*" element={<>404</>} />
 
         </Routes>
