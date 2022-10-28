@@ -11,11 +11,15 @@ function ProfileProgressBar() {
   const pages = ["Basics", "Location(s)", "Contact", "Product details", "Production details", "Imagery"]
   const db = getFirestore();
   const { currentUser } = useAuth();
-  async function sendData(){
+  const docRef = doc(db, "farms", currentUser.uid)
+
+  async function saveData(values){
+    console.log(values)
     let data = {
       approved: false,
+      ...values
     }
-    await setDoc(doc(db, "farms", currentUser.uid), data);
+    await setDoc(docRef, data);
   }
 
   function parentMethod(str) {
@@ -33,10 +37,10 @@ function ProfileProgressBar() {
         ))}
       </Box>
       <Box sx={{ marginTop:6, maxWidth:'400px', textAlign:'left', marginBottom:2 }}>
-        <Outlet context={[setPage, goToPage, setGoToPage, parentMethod]} /> 
+        <Outlet context={[setPage, goToPage, setGoToPage, saveData, docRef]} /> 
         <Box align='right' sx={{ marginTop:6, marginBottom:2 }}>
           <Button><Typography variant='p_default' onClick={() => {setGoToPage('back')}}>← Back</Typography></Button>
-          <Button variant='contained' onClick={() => { setGoToPage('next'); sendData()}}>{page === 'Imagery' ? "Submit for approval" : "Next →"}</Button>
+          <Button variant='contained' onClick={() => { setGoToPage('next') }}>{page === 'Imagery' ? "Submit for approval" : "Next →"}</Button>
         </Box>
       </Box>
     </Box>

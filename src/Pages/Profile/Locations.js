@@ -34,7 +34,7 @@ function Locations() {
       flexFlow:'column', 
       textAlign:'left'}} 
     >
-        <Typography variant="h1_32" >Location(s)</Typography>
+        {/* <Typography variant="h1_32" >Location(s)</Typography>
         <InputLabel style={{margin:'32px 0 10px 0'}}>
             <Typography variant="label" >
                 Farm Location
@@ -49,7 +49,7 @@ function Locations() {
         <SelectMultipleCountries
               countries={distributioncountry[0]}
               setCountries={distributioncountry[1]}
-            ></SelectMultipleCountries>
+            ></SelectMultipleCountries> */}
     </Box>
   )
 }
