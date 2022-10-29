@@ -1,9 +1,9 @@
 import React from 'react'
 import { Outlet } from 'react-router'
 import { Box, Button, LinearProgress, Typography } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../AuthContext'
-import { getFirestore, doc, setDoc } from 'firebase/firestore'
+import { getFirestore, doc, setDoc, onSnapshot } from 'firebase/firestore'
 
 function ProfileProgressBar() {
   const [page, setPage] = useState('')
@@ -12,19 +12,21 @@ function ProfileProgressBar() {
   const db = getFirestore();
   const { currentUser } = useAuth();
   const docRef = doc(db, "farms", currentUser.uid)
+  const [data, setData] = useState(null)
 
   async function saveData(values){
-    console.log(values)
-    let data = {
-      approved: false,
+    const newData = {
+      ...data,
       ...values
     }
-    await setDoc(docRef, data);
+    await setDoc(docRef, newData);
   }
 
-  function parentMethod(str) {
-    console.log(str)
-  }
+  useEffect(() => {
+    onSnapshot(docRef, (doc) => {
+      setData(doc.data())
+    })
+  }, [docRef])
 
   return (
     <Box align='center' mx={{ sm:'10%', xs:'24px' }} sx={{ marginTop:6 }}>
@@ -37,9 +39,9 @@ function ProfileProgressBar() {
         ))}
       </Box>
       <Box sx={{ marginTop:6, maxWidth:'400px', textAlign:'left', marginBottom:2 }}>
-        <Outlet context={[setPage, goToPage, setGoToPage, saveData, docRef]} /> 
+        {data && <Outlet context={[setPage, goToPage, setGoToPage, saveData, data]} />}
         <Box align='right' sx={{ marginTop:6, marginBottom:2 }}>
-          <Button><Typography variant='p_default' onClick={() => {setGoToPage('back')}}>← Back</Typography></Button>
+          <Button><Typography variant='p_default' onClick={() => { setGoToPage('back') }}>← Back</Typography></Button>
           <Button variant='contained' onClick={() => { setGoToPage('next') }}>{page === 'Imagery' ? "Submit for approval" : "Next →"}</Button>
         </Box>
       </Box>

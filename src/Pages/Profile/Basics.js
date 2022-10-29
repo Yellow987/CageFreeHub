@@ -7,22 +7,16 @@ import { useNavigate } from 'react-router-dom';
 import { doc, getDoc } from "firebase/firestore";
 
 function Basics() {
-    const [setPage, goToPage, setGoToPage, saveData, docRef] = useOutletContext()
+    const [setPage, goToPage, setGoToPage, saveData, data] = useOutletContext()
     const navigate = useNavigate()
     const websiteRef = useRef('')
     const organizationNameRef = useRef('')
-    const [loading, setloading] = useState(true)
 
     useEffect(() => {
         setPage('Basics')
-        getDoc(docRef).then((snap) => {
-            const data = snap.data()
-            websiteRef.current.value = data.website
-            organizationNameRef.current.value = data.organizationName
-            setloading(false)
-        })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+        websiteRef.current.value = data.website
+        organizationNameRef.current.value = data.organizationName
+    }, [data])
 
     useEffect(() => {
         if (goToPage === '') {return}
@@ -34,11 +28,10 @@ function Basics() {
             setGoToPage('')
             navigate('/profile/welcome')
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [goToPage])
     
     return(
-        <Box sx={{ display:loading ? 'none' : 'flex', flexDirection:'column' }}>
+        <Box sx={{ display:'flex', flexDirection:'column' }}>
             <Typography variant="h1_32" >Basics</Typography>
             <Typography variant="label" sx={{ marginTop:4, marginBottom:1}}>
                 Organization Name
