@@ -19,12 +19,31 @@ function ProfileProgressBar() {
       ...data,
       ...values
     }
-    await setDoc(docRef, newData);
+    if (JSON.stringify(newData) !== JSON.stringify(data)) {
+      await setDoc(docRef, newData);
+    }
   }
 
   useEffect(() => {
     onSnapshot(docRef, (doc) => {
-      setData(doc.data())
+      if (doc.exists()) {
+        setData(doc.data())
+      } else {
+        const initialData = {
+          //Meta
+          approved: false,
+
+          //Basics
+          organizationName: '',
+          website: '',
+
+          //locations
+          locations: [{city:'',country:''}]
+
+
+        }
+        setDoc(docRef, initialData);
+      }
     })
   }, [docRef])
 

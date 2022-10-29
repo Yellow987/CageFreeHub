@@ -1,22 +1,19 @@
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
 import { useOutletContext } from 'react-router';
-import { useEffect, useRef, useState } from 'react';
-import { Box } from '@mui/system';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { doc, getDoc } from "firebase/firestore";
+import { Typography, TextField, Box } from '@mui/material';
 
 function Basics() {
     const [setPage, goToPage, setGoToPage, saveData, data] = useOutletContext()
     const navigate = useNavigate()
     const websiteRef = useRef('')
-    const organizationNameRef = useRef('')
+    const organizationNameRef = useRef()
 
     useEffect(() => {
         setPage('Basics')
         websiteRef.current.value = data.website
         organizationNameRef.current.value = data.organizationName
-    }, [data])
+    }, [setPage])
 
     useEffect(() => {
         if (goToPage === '') {return}
@@ -28,6 +25,7 @@ function Basics() {
             setGoToPage('')
             navigate('/profile/welcome')
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [goToPage])
     
     return(
@@ -40,7 +38,7 @@ function Basics() {
             <Typography variant="label" sx={{ marginTop:4, marginBottom:1}}>
                 Website
             </Typography>
-            <TextField fullWidth defaultValue='' inputRef={websiteRef} placeholder='E.g. http://marriot.com'/>
+            <TextField fullWidth inputRef={websiteRef} placeholder='E.g. http://marriot.com'/>
         </Box>
     )
 }
