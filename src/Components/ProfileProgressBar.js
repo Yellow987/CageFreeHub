@@ -13,6 +13,8 @@ function ProfileProgressBar() {
   const { currentUser } = useAuth();
   const docRef = doc(db, "farms", currentUser.uid)
   const [data, setData] = useState(null)
+  console.log('profile')
+
 
   async function saveData(values){
     const newData = {
@@ -45,7 +47,7 @@ function ProfileProgressBar() {
         setDoc(docRef, initialData);
       }
     })
-  }, [docRef])
+  }, [])
 
   return (
     <Box align='center' mx={{ sm:'10%', xs:'24px' }} sx={{ marginTop:6 }}>

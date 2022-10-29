@@ -12,7 +12,8 @@ function ProductDetails() {
   const [inputStates, setInputStates] = useState(types.reduce((map, type) => { return {...map, [type]: {isChecked:false, unit:'Eggs', currency:'USD'} }; }, {}))
   const inputRefs = useRef(types.reduce((map, type) => { return {...map, [type]:{capacityRef:'', priceRef:''} }; }, {}))
   const navigate = useNavigate()
-
+  console.log('hi')
+  
   useEffect(() => {
     setPage('Product details')
     // eslint-disable-next-line react-hooks/exhaustive-deps

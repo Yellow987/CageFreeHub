@@ -8,16 +8,18 @@ function Locations() {
   const [setPage, goToPage, setGoToPage, saveData, data] = useOutletContext()
   const navigate = useNavigate()
   const cityRefs = useRef([])
-  const [countries, setCountries] = useState([])
+  const [countries, setCountries] = useState(data.locations)
+  console.log('hi')
   const supportedCountries = ["China", "India", "Indonesia", "Japan", "Malaysia", "Philippines", "Thailand"]
 
   useEffect(() => {
     setPage('Location(s)')
+    console.log(data.locations)
     data.locations.forEach((location, i) => {
+      //countries.push(location.country)
       cityRefs.current[0].value = location.city
-      countries.push(location.country)
     })
-  }, [setPage])
+  }, [])
   
   useEffect(() => {
     if (goToPage === '') {return}
@@ -42,7 +44,7 @@ function Locations() {
     <Box sx={{ display:'flex', flexDirection:'column' }}>
       <Typography variant="h1_32" >Location(s)</Typography>
       <Typography variant="label" sx={{ marginTop:4 }} >Farm Location</Typography>
-      {data.locations.map((location, i) => (
+      {countries.map((location, i) => (
         <Box key={i} sx={{ background:'#F5F7F8', padding:'16px', marginTop:1 }}>
           <Typography variant="label" >City</Typography>
           <TextField fullWidth sx={{ marginTop:1, marginBottom:2, background:'#FFFFFF' }} inputRef={el => cityRefs.current[i] = el}></TextField>
@@ -54,7 +56,7 @@ function Locations() {
           </Select>
         </Box>
       ))}
-      <Button sx={{ marginTop:3 }} onClick={() => {console.log(cityRefs)}}>
+      <Button sx={{ marginTop:3 }} onClick={() => {countries.push('wauoifh'); console.log(cityRefs)}}>
         <Typography variant='p_small'>+ I have an additional farm location</Typography>
       </Button>
       <Typography variant="label" sx={{ marginTop:4 }}>Distribution country (countries)</Typography>

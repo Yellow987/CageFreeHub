@@ -8,6 +8,7 @@ function Basics() {
     const navigate = useNavigate()
     const websiteRef = useRef('')
     const organizationNameRef = useRef()
+    console.log('hi')
 
     useEffect(() => {
         setPage('Basics')
