@@ -5,8 +5,6 @@ import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import { getAuth, sendEmailVerification } from "firebase/auth";
 import { useTranslation} from "react-i18next";
 import { Button } from "@mui/material";
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
-import { useAuth } from '../../AuthContext';
 
 let CEO = "CEO";
 let companyOwner = "CompanyOwner";
@@ -35,18 +33,6 @@ function BuyerSignup() {
     event.preventDefault()
     setLoading(true)
     setLoading(false)
-  }
-
-  const db = getFirestore();
-  const { currentUser } = useAuth();
-  async function sendData(){
-      let data = {
-        email: workEmail,
-        name: fullName,
-        orginization: orginizationName,
-        role: orginizationRole
-          }
-      await setDoc(doc(db, "buyers", currentUser.uid), data);
   }
 
   return (
