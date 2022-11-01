@@ -8,13 +8,12 @@ function Basics() {
     const navigate = useNavigate()
     const websiteRef = useRef('')
     const organizationNameRef = useRef()
-    console.log('hi')
 
     useEffect(() => {
         setPage('Basics')
         websiteRef.current.value = data.website
         organizationNameRef.current.value = data.organizationName
-    }, [setPage])
+    }, [setPage, data.website, data.organizationName])
 
     useEffect(() => {
         if (goToPage === '') {return}

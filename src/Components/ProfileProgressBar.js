@@ -1,7 +1,7 @@
 import React from 'react'
 import { Outlet } from 'react-router'
 import { Box, Button, LinearProgress, Typography } from '@mui/material';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback  } from 'react';
 import { useAuth } from '../AuthContext'
 import { getFirestore, doc, setDoc, onSnapshot } from 'firebase/firestore'
 
@@ -11,10 +11,8 @@ function ProfileProgressBar() {
   const pages = ["Basics", "Location(s)", "Contact", "Product details", "Production details", "Imagery"]
   const db = getFirestore();
   const { currentUser } = useAuth();
-  const docRef = doc(db, "farms", currentUser.uid)
+  const docRef = useCallback(() => { return doc(db, "farms", currentUser.uid) }, [db, currentUser.uid])
   const [data, setData] = useState(null)
-  console.log('profile')
-
 
   async function saveData(values){
     const newData = {
@@ -22,12 +20,12 @@ function ProfileProgressBar() {
       ...values
     }
     if (JSON.stringify(newData) !== JSON.stringify(data)) {
-      await setDoc(docRef, newData);
+      await setDoc(docRef(), newData);
     }
   }
 
   useEffect(() => {
-    onSnapshot(docRef, (doc) => {
+    onSnapshot(docRef(), (doc) => {
       if (doc.exists()) {
         setData(doc.data())
       } else {
@@ -40,14 +38,26 @@ function ProfileProgressBar() {
           website: '',
 
           //locations
-          locations: [{city:'',country:''}]
+          locations: [{city:'',country:''}],
 
+          //Contact
+
+
+          //Product details
+          productDetails: {},
+
+          //Production details
+          ProductionDetails: {
+            productionSystem: [],
+            certification: '',
+            certifyingOrganization: ''
+          }
 
         }
         setDoc(docRef, initialData);
       }
     })
-  }, [])
+  }, [docRef])
 
   return (
     <Box align='center' mx={{ sm:'10%', xs:'24px' }} sx={{ marginTop:6 }}>
