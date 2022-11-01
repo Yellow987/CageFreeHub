@@ -1,26 +1,40 @@
 import React from 'react'
-import { useEffect } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router'
 import { useOutletContext } from 'react-router'
-import { Box, Select, ListItemText, Typography, Checkbox, MenuItem, InputLabel, FormControl, TextField } from '@mui/material'
+import { Box, Select, Typography, MenuItem, TextField } from '@mui/material'
+//import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
+//import ImageUploading from "react-images-uploading";
 
 function ProductionDetails() {
-  const [setPage, goToPage, setGoToPage, formValues] = useOutletContext();
-  const {productionsystem, certifyingbody, certificationstatus} = formValues;
+  const [setPage, goToPage, setGoToPage, saveData, data] = useOutletContext()
+  const [certification, setCertification] = useState('')
+  const [productionSystem, setProductionSystem] = useState([])
+  const certifyingOrganizationRef = useRef()
+  //const [images, setImages]
   const navigate = useNavigate()
 
   useEffect(() => {
     setPage('Production details')
+    setProductionSystem(data.productionDetails.productionSystem)
+    setCertification(data.productionDetails.certification)
+    certifyingOrganizationRef.current.value = data.productionDetails.certifyingOrganization
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  function saveData() {
-        
+  function sendData() {
+    const productionDetails = {
+      productionSystem: productionSystem,
+      certification: certification,
+      certifyingOrganization: certification === certificationOpts[2] ? '' : certifyingOrganizationRef.current.value
+    }
+
+    saveData({productionDetails: productionDetails})
   }
 
   useEffect(() => {
     if (goToPage === '') {return}
-    saveData()  
+    sendData()
     if (goToPage === 'next') {
       setGoToPage('')
       navigate('/profile/imagery')
@@ -30,6 +44,7 @@ function ProductionDetails() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goToPage])
+
   const certificationOpts = [
     'Yes, we are certified',
     'We are in the process of certification',
@@ -42,82 +57,48 @@ function ProductionDetails() {
     'Free-range: cage-free system that provides outdoor access',
     'Mobile unit: house or structure on wheels',
   ]
+
   return (
-    <Box style={{
-      display:'flex', 
-      justifyContent:'flex-start', 
-      flexFlow:'column', 
-      textAlign:'left'}} >
-        <Typography variant="h1_32" >Production details</Typography>
-        <InputLabel style={{margin:'32px 0 10px 0'}}>
-            <Typography variant="label" >
-              Production system of farm(s)
-            </Typography>
-        </InputLabel>
-        <FormControl>
-            <Select
-            value={typeof productionsystem[0] === 'string' ? productionsystem[0].split(',') : productionsystem[0]}
-            onChange={(event) => {
-              const {
-                target: { value },
-              } = event;
-              productionsystem[1](
-                // On autofill we get a stringified value.
-                typeof value === 'string' ? value.split(',') : value,
-              );
-            }}
-            renderValue={(selected) => selected.join(', ')}
-            multiple
-            placeholder={'Select production system(s) utilized'}
-            >
-                {
-                    productionSystemOpts.map((item, index)=>{
-                        return(
-                            <MenuItem key={index} value={item}>
-                                <Checkbox checked={productionsystem[0].indexOf(item) > -1} />
-                                <ListItemText primary={item} />
-                            </MenuItem>
-                        )
-                    })
-                }
-            </Select>
-        </FormControl>
-        <InputLabel style={{margin:'32px 0 10px 0'}}>
-            <Typography variant="label" >
-              Do you have cage-free egg certification?
-            </Typography>
-          </InputLabel>
-          <FormControl>
-            <Select
-            value={certificationstatus[0]}
-            onChange={(e) => certificationstatus[1](e.target.value)}
-            placeholder='Select your certification status'
-            >
-                {
-                    certificationOpts.map((option, index)=>{
-                        return(
-                            <MenuItem key={index} value={option}>{option}</MenuItem>
-                        )
-                    })
-                }
-            </Select>
-        </FormControl>
-        {
-          certificationstatus[0] === 'Yes, we are certified' &&
-          <>
-          <InputLabel style={{margin:'32px 0 10px 0'}}>
-          <Typography variant="label" >
-            Title of certifying organization
-          </Typography>
-        </InputLabel>
-        <TextField 
-            // label="Company Name" 
-            variant="outlined" 
-            value={certifyingbody[0]} 
-            onChange={(e) => certifyingbody[1](e.target.value)}
-        />
-        </>
-        }
+    <Box sx={{ display:'flex', flexDirection:'column' }} >
+      <Typography variant="h1_32">Production details</Typography>
+      <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Production system of farm(s)</Typography>
+      <Select multiple renderValue={Opts => Opts.map((opt) => opt = opt.split(':')[0]).join('; ') }  value={productionSystem} onChange={(e) => setProductionSystem(e.target.value)}>
+        {productionSystemOpts.map((productionSystem, i) => (
+          <MenuItem key={i} value={productionSystem}>{productionSystem}</MenuItem>
+        ))}
+      </Select>
+      <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>
+        Do you have cage-free egg certification?
+      </Typography>
+      <Select value={certification} onChange={(e) => setCertification(e.target.value)}>
+        {certificationOpts.map((certificationOpt, i) => (
+          <MenuItem key={i} value={certificationOpt}>{certificationOpt}</MenuItem>
+        ))}
+      </Select>
+      <Box  sx={{ marginTop:4, display:(certification === certificationOpts[0] || certification === certificationOpts[1]) ? 'block' : 'none' }}>
+        <Typography variant="label">Title of certifying organization</Typography>
+        <TextField fullWidth inputRef={certifyingOrganizationRef} sx={{ marginTop:1 }}></TextField>
+      </Box>
+      {certification === certificationOpts[0] && <Box>Image</Box>
+        // <ImageUploading maxNumber={1} value={logo} onChange={(uploadedLogo) => {setLogo(uploadedLogo)}} dataURLKey="data_url" acceptType={["jpg", "png"]} maxFileSize='8000000'>
+        // {({ imageList, onImageUpload, onImageRemove, errors }) => (
+        //   <Box>
+        //     <Paper sx={{ marginTop:1 }} ><Button color='grey' fullWidth variant='outlined' onClick={(onImageUpload)}>
+        //       <ImageOutlinedIcon fontSize='small' sx={{ stroke: "#ffffff" }} />Upload Logo
+        //     </Button></Paper>
+        //     {imageList.length === 1 && <Box sx={{ marginTop:2, width:'200px' }}>
+        //       <img src={imageList[0].data_url} alt="" width='100%'/>
+        //       <Button color='danger' fullWidth variant='contained' onClick={() => onImageRemove(0)}>Remove</Button>
+        //     </Box>}
+        //     {errors && <Alert severity="error" sx={{ marginTop:2 }}><AlertTitle>Error</AlertTitle>
+        //       {errors.maxNumber && <Typography>You can only have 6 images</Typography>}
+        //       {errors.acceptType && <Typography>Unsupported file type. Please upload only .png and .jpg file types</Typography>}
+        //       {errors.maxFileSize && <Typography>File size must be under 8MB</Typography>}
+        //     </Alert>}
+        //   </Box>
+        // )}
+        // </ImageUploading>
+      }
     </Box>
   )
 }

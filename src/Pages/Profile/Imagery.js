@@ -7,7 +7,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { Alert, Typography, Paper, AlertTitle } from '@mui/material'
 import ImageUploading from "react-images-uploading";
-import { getStorage, ref, uploadBytes, deleteObject, listAll } from "firebase/storage";
+import { getStorage, ref, uploadBytes, deleteObject, listAll, getBytes } from "firebase/storage";
 import { useAuth } from './../../AuthContext';
 
 function Imagery() {
@@ -16,9 +16,9 @@ function Imagery() {
   const [logo, setLogo] = useState([])
   const navigate = useNavigate()
   const { currentUser } = useAuth()
+  const storage = getStorage()
 
   function handleSaveImages() {
-    const storage = getStorage()
     deleteImages(storage).then(() => {
       uploadImagesToFirebase(storage)
     })
@@ -27,12 +27,15 @@ function Imagery() {
 
   function uploadImagesToFirebase(storage) {
     for (const [i, image] of images.entries()) {
+      if (!image.hasOwnProperty('file')) { continue }
+      console.log('uploading image')
       const imageRef = ref(storage, currentUser.uid + '/images/' + i.toString())
       uploadBytes(imageRef, image.file).catch((error) => { console.log('could not upload') })
     }
   }
 
   function replaceLogo(storage) {
+    if (!logo.hasOwnProperty('file')) { return }
     const logoRef = ref(storage, currentUser.uid + '/logo/logo')
     deleteObject(logoRef).then(() => {
       if (logo.length !== 0) {
@@ -46,27 +49,51 @@ function Imagery() {
   }
 
   async function deleteImages(storage) {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
       const listRef = ref(storage, currentUser.uid + '/images')
-      listAll(listRef).then((res) => {
+      listAll(listRef).then((res, i) => {
         if (res.items.length === 0) {resolve()}
-        res.items.forEach((itemRef) => {
-          let deleteImages = 0
+        const promises = []
+        res.items.forEach((itemRef, i) => {
+          if (i < images.length ) { return }
           const deleteRef = ref(storage, itemRef._location.path_)
-          deleteObject(deleteRef).then(() => {
-            deleteImages += 1
-            if (deleteImages === res.items.length) {resolve()}
-          }).catch((error) => {
-            console.log('err deleting')
-            reject()
-          })
+          promises.push(deleteObject(deleteRef))
         })
+        Promise.allSettled(promises).then(() => {resolve()})
       })
     })
   }
 
   useEffect(() => {
     setPage('Imagery')
+
+    //Get images on loadpage
+    const logoRef = ref(storage, currentUser.uid + '/logo/logo')
+    console.log('hi')
+    getBytes(logoRef).then((file) => {
+      console.log(file)
+      setLogo([{data_url: file}])
+    }).catch((e) => {
+      if (e.code !== 'storage/object-not-found') { throw e}
+    })
+
+    // const imagesRef = ref(storage, currentUser.uid + '/images')
+    // listAll(imagesRef).then((res) => {
+    //   if (res.items.length === 0) {return}
+    //   const promises = []
+    //   res.items.forEach((itemRef, i) => {
+    //     const imageRef = ref(storage, itemRef._location.path_)
+    //     promises.push(getDownloadURL(imageRef))
+    //   })
+    //   Promise.allSettled(promises).then((results) => {
+    //     const retrievedImages = []
+    //     results.forEach((result, i) => {
+    //       retrievedImages[i] = {data_url: result.value}
+    //     })
+    //     setImages(retrievedImages)
+    //   })
+    // })
+    
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -79,7 +106,7 @@ function Imagery() {
     saveData()  
     if (goToPage === 'next') {
       setGoToPage('')
-      navigate('/profile')
+      navigate('/profile/' + currentUser.uid)
     } else if (goToPage === 'back') {
       setGoToPage('')
       navigate('/profile/production-details')
@@ -120,7 +147,7 @@ function Imagery() {
       )}
       </ImageUploading>
       <Typography variant='p_default_bold' sx={{ marginTop:4 }}>Logo (optional)</Typography>
-      <ImageUploading maxNumber={4} value={logo} onChange={(uploadedLogo) => {setLogo(uploadedLogo)}} dataURLKey="data_url" acceptType={["jpg", "png"]} maxFileSize='8000000'>
+      <ImageUploading maxNumber={1} value={logo} onChange={(uploadedLogo) => {setLogo(uploadedLogo)}} dataURLKey="data_url" acceptType={["jpg", "png"]} maxFileSize='8000000'>
       {({ imageList, onImageUpload, onImageRemove, errors }) => (
         <Box>
           <Paper sx={{ marginTop:1 }} ><Button color='grey' fullWidth variant='outlined' onClick={(onImageUpload)}>

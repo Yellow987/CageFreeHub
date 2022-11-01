@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { auth } from './firestore'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification } from 'firebase/auth'
+import { getFirestore } from 'firebase/firestore'
 
 const AuthContext = React.createContext()
 
@@ -11,6 +12,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState()
     const [loading, setLoading] = useState(true)
+    const db = getFirestore();
 
     async function sendVerificationEmail() {
         await sendEmailVerification(auth.currentUser)
@@ -45,7 +47,8 @@ export function AuthProvider({ children }) {
         currentUser,
         signup,
         login,
-        logout
+        logout,
+        db
     }
     return (
         <AuthContext.Provider value={value}>

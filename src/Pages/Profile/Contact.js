@@ -6,8 +6,7 @@ import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import { Alert, FormGroup, TextField, Typography, FormControlLabel, Checkbox, InputLabel } from '@mui/material'
 
 function Contact() {
-    const [setPage, goToPage, setGoToPage, formValues] = useOutletContext();
-    const {fullname, jobtitle} = formValues;
+    const [setPage, goToPage, setGoToPage] = useOutletContext();
     const navigate = useNavigate()
     useEffect(() => {
         setPage('Contact')
@@ -42,9 +41,7 @@ function Contact() {
             </InputLabel>
             <TextField
                 variant="outlined" 
-                value={fullname[0]} 
                 placeholder='E.g. Chung Lui'
-                onChange={(e) => fullname[1](e.target.value)}
             />
             <InputLabel style={{margin:'32px 0 10px 0'}}>
               <Typography variant="label" >
@@ -53,8 +50,6 @@ function Contact() {
             </InputLabel>
             <TextField 
                 variant="outlined" 
-                value={jobtitle[0]}
-                onChange={(e)=>jobtitle[1](e.target.value)}
                 placeholder='E.g. CEO'
             />
             <InputLabel style={{margin:'32px 0 10px 0'}}>
