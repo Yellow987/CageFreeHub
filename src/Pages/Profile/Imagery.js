@@ -7,7 +7,7 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { Alert, Typography, Paper, AlertTitle } from '@mui/material'
 import ImageUploading from "react-images-uploading";
-import { getStorage, ref, uploadBytes, deleteObject, listAll, getDownloadURL, getBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, deleteObject, listAll, getBytes } from "firebase/storage";
 import { useAuth } from './../../AuthContext';
 
 function Imagery() {
