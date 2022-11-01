@@ -9,7 +9,7 @@ import { useTranslation, Trans } from 'react-i18next';
 
 const Home = ()=> {
     const { t } = useTranslation(['home']);
-
+    
     const styles = {
         twoButtons: {
             display: 'flex',

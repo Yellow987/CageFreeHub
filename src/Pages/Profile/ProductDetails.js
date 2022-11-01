@@ -7,18 +7,25 @@ import { Box } from '@mui/system'
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 
 function ProductDetails() {
-  const [setPage, goToPage, setGoToPage] = useOutletContext()
+  const [setPage, goToPage, setGoToPage, saveData, data] = useOutletContext()
   const types = ['Shell', 'Frozen', 'Liquid', 'Powder', 'Other']
   const [inputStates, setInputStates] = useState(types.reduce((map, type) => { return {...map, [type]: {isChecked:false, unit:'Eggs', currency:'USD'} }; }, {}))
   const inputRefs = useRef(types.reduce((map, type) => { return {...map, [type]:{capacityRef:'', priceRef:''} }; }, {}))
   const navigate = useNavigate()
-
+  
   useEffect(() => {
     setPage('Product details')
+    let temp = {}
+    Object.entries(data.productDetails).forEach(([product, details]) => {
+      temp = {...temp, [product]: { isChecked:true, unit:details.unit, currency:details.currency } }
+      inputRefs.current[product]['capacityRef'].value = details.capacity
+      inputRefs.current[product]['priceRef'].value = details.price
+    })
+    setInputStates({...inputStates, ...temp})
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  function saveData() {
+  function sendData() {
     const productDetails = {}
     for (const [type, value] of Object.entries(inputStates)) {
       if (value['isChecked']) {
@@ -30,13 +37,12 @@ function ProductDetails() {
         }
       }
     }
-    
-    return productDetails
-  }
+    saveData({productDetails: productDetails})
+    }
 
   useEffect(() => {
     if (goToPage === '') {return}
-    saveData()  
+    sendData()  
     if (goToPage === 'next') {
       setGoToPage('')
       navigate('/profile/production-details')
@@ -56,7 +62,7 @@ function ProductDetails() {
       <Typography variant='p_default_bold' sx={{ marginTop:4 }}>Cage-free egg types</Typography>
       {types.map((type) => (
         <Box key={type}>
-          <FormControlLabel sx={{ marginTop:2, display:'flex', flexDirection:'row' }} control={<Checkbox onClick={() => {setInputStates({...inputStates, [type]:{...inputStates[type], isChecked:!inputStates[type]['isChecked']} })}} />} label={type} />
+          <FormControlLabel sx={{ marginTop:2, display:'flex', flexDirection:'row' }} control={<Checkbox checked={inputStates[type]["isChecked"]} onClick={() => {setInputStates({...inputStates, [type]:{...inputStates[type], isChecked:!inputStates[type]['isChecked']} })}} />} label={type} />
           <Box sx={{ display:inputStates[type]['isChecked'] ? 'block' : 'none' }}>
             <Box >
               <Typography variant='p_default_bold' color='#596676;' sx={{ marginTop:2 }}>Total production capacity (per year)</Typography>
