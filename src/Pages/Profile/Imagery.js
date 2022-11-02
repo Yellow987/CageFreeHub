@@ -7,54 +7,53 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { Alert, Typography, Paper, AlertTitle } from '@mui/material'
 import ImageUploading from "react-images-uploading";
-import { getStorage, ref, uploadBytes, deleteObject, listAll, getBytes } from "firebase/storage";
+import { getStorage, ref, uploadBytes, deleteObject, listAll, getDownloadURL } from "firebase/storage";
 import { useAuth } from './../../AuthContext';
+import uuid from 'react-uuid';
 
 function Imagery() {
-  const [setPage, goToPage, setGoToPage] = useOutletContext()
-  const [images, setImages] = useState([])
+  const [setPage, goToPage, setGoToPage, saveData, data] = useOutletContext()
+  const [images, setImages] = useState(data.images)
   const [logo, setLogo] = useState([])
   const navigate = useNavigate()
   const { currentUser } = useAuth()
   const storage = getStorage()
+  const imageFolder = currentUser.uid + '/images'
+  const logoFolder = currentUser.uid + '/logo'
 
   function handleSaveImages() {
-    deleteImages(storage).then(() => {
-      uploadImagesToFirebase(storage)
+    deleteImages(ref(storage, imageFolder)).then(() => {
+      saveImages(images, imageFolder)
     })
-    replaceLogo(storage)
-  }
-
-  function uploadImagesToFirebase(storage) {
-    for (const [i, image] of images.entries()) {
-      if (!image.hasOwnProperty('file')) { continue }
-      console.log('uploading image')
-      const imageRef = ref(storage, currentUser.uid + '/images/' + i.toString())
-      uploadBytes(imageRef, image.file).catch((error) => { console.log('could not upload') })
-    }
-  }
-
-  function replaceLogo(storage) {
-    if (!logo.hasOwnProperty('file')) { return }
-    const logoRef = ref(storage, currentUser.uid + '/logo/logo')
-    deleteObject(logoRef).then(() => {
-      if (logo.length !== 0) {
-        uploadBytes(logoRef, logo[0].file).catch((error) => { console.log('could not upload logo') })
-      }  
-    }).catch(() => {
-      if (logo.length !== 0) {
-        uploadBytes(logoRef, logo[0].file).catch((error) => { console.log('could not upload logo') })
-      }  
+    deleteImages(ref(storage, logoFolder)).then(() => {
+      saveImages(logo, logoFolder)
     })
   }
 
-  async function deleteImages(storage) {
+  function saveImages(images, storagePath) {
     return new Promise((resolve) => {
-      const listRef = ref(storage, currentUser.uid + '/images')
-      listAll(listRef).then((res, i) => {
+      const promises = []
+      const uuids = []
+      images.forEach((image) => {
+        const imageUuid = uuid()
+        uuids.push({uuid:imageUuid, data_url:''})
+        const imageRef = ref(storage, storagePath + '/' + imageUuid)
+        promises.push(uploadBytes(imageRef, image.file).catch(() => { console.log('could not upload') }))
+      })
+      Promise.allSettled(promises).then(() => {
+        resolve(uuids)
+      })
+    })
+  }
+
+  async function deleteImages(folderRef) {
+    return new Promise((resolve) => {
+      listAll(folderRef).then((res, i) => {
         if (res.items.length === 0) {resolve()}
         const promises = []
         res.items.forEach((itemRef, i) => {
+          const fileName = itemRef._location.path.split('/')[2]
+          //if (fileName in )
           if (i < images.length ) { return }
           const deleteRef = ref(storage, itemRef._location.path_)
           promises.push(deleteObject(deleteRef))
@@ -64,46 +63,21 @@ function Imagery() {
     })
   }
 
-  useEffect(() => {
-    setPage('Imagery')
-
-    //Get images on loadpage
-    const logoRef = ref(storage, currentUser.uid + '/logo/logo')
-    console.log('hi')
-    getBytes(logoRef).then((file) => {
-      console.log(file)
-      setLogo([{data_url: file}])
-    }).catch((e) => {
-      if (e.code !== 'storage/object-not-found') { throw e}
-    })
-
-    // const imagesRef = ref(storage, currentUser.uid + '/images')
-    // listAll(imagesRef).then((res) => {
-    //   if (res.items.length === 0) {return}
-    //   const promises = []
-    //   res.items.forEach((itemRef, i) => {
-    //     const imageRef = ref(storage, itemRef._location.path_)
-    //     promises.push(getDownloadURL(imageRef))
-    //   })
-    //   Promise.allSettled(promises).then((results) => {
-    //     const retrievedImages = []
-    //     results.forEach((result, i) => {
-    //       retrievedImages[i] = {data_url: result.value}
-    //     })
-    //     setImages(retrievedImages)
-    //   })
-    // })
-    
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  function saveData() {
+  function getImages() {
     
   }
 
   useEffect(() => {
+    setPage('Imagery')
+
+    //Get images on loadpage
+    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+
+  useEffect(() => {
     if (goToPage === '') {return}
-    saveData()  
     if (goToPage === 'next') {
       setGoToPage('')
       navigate('/profile/' + currentUser.uid)
@@ -114,6 +88,37 @@ function Imagery() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goToPage])
 
+  async function getImagesUrl(storagePath, uuids) {
+    return new Promise((resolve) => {
+      const promises = []
+      uuids.forEach((uuid) => {
+        const path = storagePath + '/' + uuid.uuid
+        console.log(path)
+        promises.push(getDownloadURL(ref(storage, path)))
+      })
+      Promise.allSettled(promises).then((urls) => {
+        urls.forEach((url, i) => {
+          uuids[i].data_url = url.value
+        })
+        resolve(uuids)
+      })
+    })
+  }
+
+  function handleImageUpload(imageList){
+    saveImages(imageList, imageFolder).then((uuids) => {
+      getImagesUrl(imageFolder, uuids).then((uuids) => {
+        setImages([...images, ...uuids])
+        saveData({images: [...images, ...uuids]})
+      })
+    })
+  }
+
+  function handleImageRemove(i) {
+    images.splice(i, 1)
+    setImages([...images])
+  }
+
   return (
     <Box>
       <Typography variant="h1_32" >Imagery</Typography>
@@ -123,7 +128,7 @@ function Imagery() {
         </Typography>
       </Alert>
       <Typography variant='p_default_bold' sx={{ marginTop:4 }}>Photos of farm</Typography>
-      <ImageUploading multiple maxNumber={4} value={images} onChange={(imageList) => {setImages(imageList);}} dataURLKey="data_url" acceptType={["jpg", "png"]} maxFileSize='8000000'>
+      <ImageUploading multiple maxNumber={4} onChange={(imageList) => {handleImageUpload(imageList)}} dataURLKey="data_url" acceptType={["jpg", "png"]} maxFileSize='8000000'>
       {({ imageList, onImageUpload, onImageRemove, errors }) => (
         <Box>
           <Paper sx={{ marginTop:1 }} ><Button color='grey' fullWidth variant='outlined' onClick={(onImageUpload)}>
@@ -131,10 +136,10 @@ function Imagery() {
           </Button></Paper>
           
           <Grid container spacing={2} sx={{ marginTop:0 }}>
-            {imageList.map((image, index) => (
+            {images.map((image, index) => (
               <Grid item key={index} width={{ xs:'50%', sm:'25%' }}>
                 <img src={image.data_url} alt="" width='100%'/>
-                <Button color='danger' fullWidth variant='contained' onClick={() => onImageRemove(index)}>Remove</Button>
+                <Button color='danger' fullWidth variant='contained' onClick={() => {handleImageRemove(0)}}>Remove</Button>
               </Grid>
             ))}
           </Grid>

@@ -51,7 +51,11 @@ function ProfileProgressBar() {
             productionSystem: [],
             certification: '',
             certifyingOrganization: ''
-          }
+          },
+
+          //Imagery
+          images: [],
+          logos: []
 
         }
         setDoc(docRef, initialData);
