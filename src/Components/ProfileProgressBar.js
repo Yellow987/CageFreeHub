@@ -13,14 +13,20 @@ function ProfileProgressBar() {
   const { currentUser } = useAuth();
   const docRef = useCallback(() => { return doc(db, "farms", currentUser.uid) }, [db, currentUser.uid])
   const [data, setData] = useState(null)
+  const isEqual = require('lodash.isequal');
+
 
   async function saveData(values){
     const newData = {
       ...data,
       ...values
     }
-    if (JSON.stringify(newData) !== JSON.stringify(data)) {
+    if (!isEqual(data, newData)) {
       await setDoc(docRef(), newData);
+      console.log('update values')
+    } else {
+      console.log(data)
+      console.log(newData)
     }
   }
 

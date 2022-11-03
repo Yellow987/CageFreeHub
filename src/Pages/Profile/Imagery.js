@@ -7,28 +7,19 @@ import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { Alert, Typography, Paper, AlertTitle } from '@mui/material'
 import ImageUploading from "react-images-uploading";
-import { getStorage, ref, uploadBytes, deleteObject, listAll, getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytes, deleteObject, getDownloadURL } from "firebase/storage";
 import { useAuth } from './../../AuthContext';
 import uuid from 'react-uuid';
 
 function Imagery() {
   const [setPage, goToPage, setGoToPage, saveData, data] = useOutletContext()
   const [images, setImages] = useState(data.images)
-  const [logo, setLogo] = useState([])
+  const [logo, setLogo] = useState(data.logos)
   const navigate = useNavigate()
   const { currentUser } = useAuth()
   const storage = getStorage()
   const imageFolder = currentUser.uid + '/images'
   const logoFolder = currentUser.uid + '/logo'
-
-  function handleSaveImages() {
-    deleteImages(ref(storage, imageFolder)).then(() => {
-      saveImages(images, imageFolder)
-    })
-    deleteImages(ref(storage, logoFolder)).then(() => {
-      saveImages(logo, logoFolder)
-    })
-  }
 
   function saveImages(images, storagePath) {
     return new Promise((resolve) => {
@@ -46,31 +37,8 @@ function Imagery() {
     })
   }
 
-  async function deleteImages(folderRef) {
-    return new Promise((resolve) => {
-      listAll(folderRef).then((res, i) => {
-        if (res.items.length === 0) {resolve()}
-        const promises = []
-        res.items.forEach((itemRef, i) => {
-          const fileName = itemRef._location.path.split('/')[2]
-          //if (fileName in )
-          if (i < images.length ) { return }
-          const deleteRef = ref(storage, itemRef._location.path_)
-          promises.push(deleteObject(deleteRef))
-        })
-        Promise.allSettled(promises).then(() => {resolve()})
-      })
-    })
-  }
-
-  function getImages() {
-    
-  }
-
   useEffect(() => {
     setPage('Imagery')
-
-    //Get images on loadpage
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -93,7 +61,6 @@ function Imagery() {
       const promises = []
       uuids.forEach((uuid) => {
         const path = storagePath + '/' + uuid.uuid
-        console.log(path)
         promises.push(getDownloadURL(ref(storage, path)))
       })
       Promise.allSettled(promises).then((urls) => {
@@ -105,18 +72,21 @@ function Imagery() {
     })
   }
 
-  function handleImageUpload(imageList){
-    saveImages(imageList, imageFolder).then((uuids) => {
-      getImagesUrl(imageFolder, uuids).then((uuids) => {
-        setImages([...images, ...uuids])
-        saveData({images: [...images, ...uuids]})
+  function handleImageUpload(imageList, folder, callStateSet, originalImages, arrImagesName){
+    saveImages(imageList, folder).then((uuids) => {
+      getImagesUrl(folder, uuids).then((uuids) => {
+        callStateSet([...originalImages, ...uuids])
+        saveData({[arrImagesName]: [...originalImages, ...uuids]})
       })
     })
   }
 
-  function handleImageRemove(i) {
-    images.splice(i, 1)
-    setImages([...images])
+  function handleImageRemove(i, folder, callStateSet, arrImages, arrImagesName) {
+    const copy = [...arrImages]
+    const deletedImage = copy.splice(i, 1)
+    callStateSet([...copy])
+    saveData({[arrImagesName]: [...copy]})
+    deleteObject(ref(storage, folder + '/' + deletedImage[0].uuid))
   }
 
   return (
@@ -128,8 +98,8 @@ function Imagery() {
         </Typography>
       </Alert>
       <Typography variant='p_default_bold' sx={{ marginTop:4 }}>Photos of farm</Typography>
-      <ImageUploading multiple maxNumber={4} onChange={(imageList) => {handleImageUpload(imageList)}} dataURLKey="data_url" acceptType={["jpg", "png"]} maxFileSize='8000000'>
-      {({ imageList, onImageUpload, onImageRemove, errors }) => (
+      <ImageUploading multiple maxNumber={6} onChange={(imageList) => {handleImageUpload(imageList, imageFolder, setImages, images, 'images')}} dataURLKey="data_url" acceptType={["jpg", "png"]} maxFileSize='8000000'>
+      {({ imageList, onImageUpload, errors }) => (
         <Box>
           <Paper sx={{ marginTop:1 }} ><Button color='grey' fullWidth variant='outlined' onClick={(onImageUpload)}>
             <ImageOutlinedIcon fontSize='small' sx={{ stroke: "#ffffff" }} />Upload photos
@@ -139,7 +109,7 @@ function Imagery() {
             {images.map((image, index) => (
               <Grid item key={index} width={{ xs:'50%', sm:'25%' }}>
                 <img src={image.data_url} alt="" width='100%'/>
-                <Button color='danger' fullWidth variant='contained' onClick={() => {handleImageRemove(0)}}>Remove</Button>
+                <Button color='danger' fullWidth variant='contained' onClick={() => {handleImageRemove(index, imageFolder, setImages, images, 'images')}}>Remove</Button>
               </Grid>
             ))}
           </Grid>
@@ -152,15 +122,15 @@ function Imagery() {
       )}
       </ImageUploading>
       <Typography variant='p_default_bold' sx={{ marginTop:4 }}>Logo (optional)</Typography>
-      <ImageUploading maxNumber={1} value={logo} onChange={(uploadedLogo) => {setLogo(uploadedLogo)}} dataURLKey="data_url" acceptType={["jpg", "png"]} maxFileSize='8000000'>
-      {({ imageList, onImageUpload, onImageRemove, errors }) => (
+      <ImageUploading maxNumber={1} value={logo} onChange={(uploadedLogo) => {handleImageUpload(uploadedLogo, logoFolder, setLogo, logo, 'logos')}} dataURLKey="data_url" acceptType={["jpg", "png"]} maxFileSize='8000000'>
+      {({ imageList, onImageUpload, errors }) => (
         <Box>
           <Paper sx={{ marginTop:1 }} ><Button color='grey' fullWidth variant='outlined' onClick={(onImageUpload)}>
             <ImageOutlinedIcon fontSize='small' sx={{ stroke: "#ffffff" }} />Upload Logo
           </Button></Paper>
-          {imageList.length === 1 && <Box sx={{ marginTop:2, width:'200px' }}>
+          {logo.length === 1 && <Box sx={{ marginTop:2, width:'200px' }}>
             <img src={imageList[0].data_url} alt="" width='100%'/>
-            <Button color='danger' fullWidth variant='contained' onClick={() => onImageRemove(0)}>Remove</Button>
+            <Button color='danger' fullWidth variant='contained' onClick={() => handleImageRemove(0, logoFolder, setLogo, logo, 'logos')}>Remove</Button>
           </Box>}
           {errors && <Alert severity="error" sx={{ marginTop:2 }}><AlertTitle>Error</AlertTitle>
             {errors.maxNumber && <Typography>You can only have 6 images</Typography>}
@@ -170,7 +140,6 @@ function Imagery() {
         </Box>
       )}
       </ImageUploading>
-      <Button onClick={() => {handleSaveImages()}}>save</Button>
     </Box>
   )
 }
