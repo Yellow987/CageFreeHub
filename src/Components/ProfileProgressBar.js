@@ -41,7 +41,9 @@ function ProfileProgressBar() {
           locations: [{city:'',country:''}],
 
           //Contact
-
+          name: '',
+          jobTitle: '',
+          contactChannels: {phone: '', whatsapp: '', wechat: ''},
 
           //Product details
           productDetails: {},
