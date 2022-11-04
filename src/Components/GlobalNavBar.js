@@ -101,10 +101,10 @@ function GlobalNavBar() {
 
   return (
   <>
-    <AppBar color="secondary" elevation={0} position="sticky">
-      <Accordion expanded={isAccordionExpanded} elevation={0} sx={{ display:{ xs:'block', sm:'none'} }}>
-        <AccordionSummary expandIcon={accordionIconIsClose ? <CloseIcon onClick={() => handleAccordion()} /> : <MenuIcon onClick={() => handleAccordion()} />} >
-          <Typography color={grey[400]} sx={{ fontWeight: 'bold', textDecoration: "none" }} variant="h6">
+    <AppBar color="secondary" elevation={0} position="sticky" sx={{display:{ xs:'flex', sm:'none'}}}>
+      <Accordion expanded={isAccordionExpanded} elevation={0}>
+        <AccordionSummary expandIcon={accordionIconIsClose ? <CloseIcon onClick={() => handleAccordion()} /> : <MenuIcon onClick={() => handleAccordion()} />}>
+        <Typography color={grey[400]} sx={{ fontWeight: 'bold', textDecoration: "none", alignSelf:'center'}} variant="h6">
             Cage Free Hub
           </Typography>
           <Box bgcolor='primary.main' sx={{ ...styles.betaBox }}>
@@ -112,6 +112,18 @@ function GlobalNavBar() {
               Beta
             </Typography>
           </Box>
+          <Box sx={{ flexGrow: 1 }}/>
+          <Button size="square"
+          onClick={() => handleAccordion()}
+          style={{
+            backgroundColor:'#EFFAF9', 
+            color:'#3FAB94',  
+            border:'0',
+            alignSelf:'center'
+          }}
+          sx={{marginRight:2}}>
+            <HelpOutlineIcon fontSize='support_icon'/>
+          </Button>
         </AccordionSummary>
         <List>
           <ListItem button component={Link} to="/login" onClick={() => handleAccordion()} sx={{ display: currentUser ? 'none' : 'block' }}>
