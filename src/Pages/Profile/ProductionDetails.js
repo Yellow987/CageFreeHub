@@ -2,9 +2,8 @@ import React from 'react'
 import { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router'
 import { useOutletContext } from 'react-router'
-import { Box, Select, Typography, MenuItem, TextField } from '@mui/material'
-//import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
-//import ImageUploading from "react-images-uploading";
+import { Box, Select, Typography, MenuItem, TextField, Paper, Input } from '@mui/material'
+import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 
 function ProductionDetails() {
   const [setPage, goToPage, setGoToPage, saveData, data] = useOutletContext()
@@ -79,25 +78,13 @@ function ProductionDetails() {
         <Typography variant="label">Title of certifying organization</Typography>
         <TextField fullWidth inputRef={certifyingOrganizationRef} sx={{ marginTop:1 }}></TextField>
       </Box>
-      {certification === certificationOpts[0] && <Box>Image</Box>
-        // <ImageUploading maxNumber={1} value={logo} onChange={(uploadedLogo) => {setLogo(uploadedLogo)}} dataURLKey="data_url" acceptType={["jpg", "png"]} maxFileSize='8000000'>
-        // {({ imageList, onImageUpload, onImageRemove, errors }) => (
-        //   <Box>
-        //     <Paper sx={{ marginTop:1 }} ><Button color='grey' fullWidth variant='outlined' onClick={(onImageUpload)}>
-        //       <ImageOutlinedIcon fontSize='small' sx={{ stroke: "#ffffff" }} />Upload Logo
-        //     </Button></Paper>
-        //     {imageList.length === 1 && <Box sx={{ marginTop:2, width:'200px' }}>
-        //       <img src={imageList[0].data_url} alt="" width='100%'/>
-        //       <Button color='danger' fullWidth variant='contained' onClick={() => onImageRemove(0)}>Remove</Button>
-        //     </Box>}
-        //     {errors && <Alert severity="error" sx={{ marginTop:2 }}><AlertTitle>Error</AlertTitle>
-        //       {errors.maxNumber && <Typography>You can only have 6 images</Typography>}
-        //       {errors.acceptType && <Typography>Unsupported file type. Please upload only .png and .jpg file types</Typography>}
-        //       {errors.maxFileSize && <Typography>File size must be under 8MB</Typography>}
-        //     </Alert>}
-        //   </Box>
-        // )}
-        // </ImageUploading>
+      {certification === certificationOpts[0] && 
+        <Box sx={{ marginTop:4 }}>
+          <Typography variant="label" sx={{ marginBottom:1 }}>
+            Upload certification
+          </Typography>
+          <Input fullWidth type="file" />
+        </Box>
       }
     </Box>
   )
