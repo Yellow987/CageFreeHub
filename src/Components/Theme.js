@@ -16,6 +16,10 @@ const Theme = {
       main: '#FCEDED',
       contrastText: '#1B2B3E'
     },
+    megaDanger: {
+      main: '#DC3545',
+      contrastText: '#FFFFFF'
+    }
   },
   typography: {
     button: {
