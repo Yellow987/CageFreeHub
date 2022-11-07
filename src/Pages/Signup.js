@@ -103,7 +103,7 @@ function Signup(props) {
       navigate('/TODO')
     } else {
       setUserData()
-      navigate('/profile/basics')
+      navigate('/profile/welcome')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser])
