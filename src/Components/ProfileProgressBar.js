@@ -58,7 +58,8 @@ function ProfileProgressBar() {
           ProductionDetails: {
             productionSystem: [],
             certification: '',
-            certifyingOrganization: ''
+            certifyingOrganization: '',
+            certificationFile: {name: '', url: ''}
           },
 
           //Imagery
