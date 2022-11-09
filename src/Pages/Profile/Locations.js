@@ -54,7 +54,10 @@ function Locations() {
       <Typography variant="label" sx={{ marginTop:4 }} >Farm Location</Typography>
       {countries.map((location, i) => (
         <Box key={i} sx={{ background:'#F5F7F8', padding:'16px', marginTop:1 }}>
-          <Typography variant="label" >City</Typography>
+          <Box sx={{ display:'flex', flexDirection:'row', justifyContent:'space-between' }}>
+            <Typography variant="label" >City</Typography>
+            {i !== 0 && <Button sx={{ height:'24px' }} color='danger' variant='contained' disableElevation onClick={() => {removeLocation(i)} }>Remove location</Button>}
+          </Box>
           <TextField fullWidth sx={{ marginTop:1, marginBottom:2, background:'#FFFFFF' }} inputRef={el => cityRefs.current[i] = el}></TextField>
           <Typography variant="label" >Country</Typography>
           <Select fullWidth sx={{ marginTop:1, background:'#FFFFFF' }} value={countries[i]} onChange={(e) => {const copy = [...countries]; copy[i] = e.target.value; setCountries(copy) }}>
@@ -62,7 +65,6 @@ function Locations() {
               <MenuItem key={supportedCountry} value={supportedCountry}>{supportedCountry}</MenuItem>
             ))}
           </Select>
-          {i !== 0 && <Button onClick={() => {removeLocation(i)} }>Remove location</Button>}
         </Box>
       ))}
       <Button sx={{ marginTop:3 }} onClick={() => {setCountries([...countries, ''])}}>

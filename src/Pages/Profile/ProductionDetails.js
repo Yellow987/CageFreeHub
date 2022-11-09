@@ -2,22 +2,25 @@ import React from 'react'
 import { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router'
 import { useOutletContext } from 'react-router'
-import { Box, Select, Typography, MenuItem, TextField } from '@mui/material'
-//import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
-//import ImageUploading from "react-images-uploading";
+import { Box, Select, Typography, MenuItem, TextField, Button, Link } from '@mui/material'
+import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { useAuth } from './../../AuthContext';
 
 function ProductionDetails() {
   const [setPage, goToPage, setGoToPage, saveData, data] = useOutletContext()
-  const [certification, setCertification] = useState('')
-  const [productionSystem, setProductionSystem] = useState([])
+  const [certification, setCertification] = useState(data.productionDetails.certification)
+  const [productionSystem, setProductionSystem] = useState(data.productionDetails.productionSystem)
   const certifyingOrganizationRef = useRef()
-  //const [images, setImages]
+  const fileInputRef = useRef();
+  const [certificationFile, setCertificationFile] = useState(data.productionDetails.certificationFile)
   const navigate = useNavigate()
+  const storage = getStorage()
+  const { currentUser } = useAuth()
+  const certificateRef = ref(storage, currentUser.uid + '/certification/certificate')
 
   useEffect(() => {
     setPage('Production details')
-    setProductionSystem(data.productionDetails.productionSystem)
-    setCertification(data.productionDetails.certification)
     certifyingOrganizationRef.current.value = data.productionDetails.certifyingOrganization
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -26,7 +29,8 @@ function ProductionDetails() {
     const productionDetails = {
       productionSystem: productionSystem,
       certification: certification,
-      certifyingOrganization: certification === certificationOpts[2] ? '' : certifyingOrganizationRef.current.value
+      certifyingOrganization: certification === certificationOpts[2] ? '' : certifyingOrganizationRef.current.value,
+      certificationFile: certification === certificationOpts[0] ? certificationFile : ''
     }
 
     saveData({productionDetails: productionDetails})
@@ -58,11 +62,25 @@ function ProductionDetails() {
     'Mobile unit: house or structure on wheels',
   ]
 
+  function handleFileUpload(e) {
+    e.preventDefault()
+    const certification = e.target.files[0]
+    if (!certification) {
+      return
+    }
+
+    uploadBytes(certificateRef, certification).then(() => {
+      getDownloadURL(certificateRef).then((url) => {
+        setCertificationFile({name: e.target.files[0].name, url: url})
+      })
+    })
+  }
+  
   return (
     <Box sx={{ display:'flex', flexDirection:'column' }} >
       <Typography variant="h1_32">Production details</Typography>
       <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Production system of farm(s)</Typography>
-      <Select multiple renderValue={Opts => Opts.map((opt) => opt = opt.split(':')[0]).join('; ') }  value={productionSystem} onChange={(e) => setProductionSystem(e.target.value)}>
+      <Select multiple renderValue={Opts => Opts.map((opt) => opt = opt.split(':')[0]).join('; ') } value={productionSystem} onChange={(e) => setProductionSystem(e.target.value)}>
         {productionSystemOpts.map((productionSystem, i) => (
           <MenuItem key={i} value={productionSystem}>{productionSystem}</MenuItem>
         ))}
@@ -79,25 +97,25 @@ function ProductionDetails() {
         <Typography variant="label">Title of certifying organization</Typography>
         <TextField fullWidth inputRef={certifyingOrganizationRef} sx={{ marginTop:1 }}></TextField>
       </Box>
-      {certification === certificationOpts[0] && <Box>Image</Box>
-        // <ImageUploading maxNumber={1} value={logo} onChange={(uploadedLogo) => {setLogo(uploadedLogo)}} dataURLKey="data_url" acceptType={["jpg", "png"]} maxFileSize='8000000'>
-        // {({ imageList, onImageUpload, onImageRemove, errors }) => (
-        //   <Box>
-        //     <Paper sx={{ marginTop:1 }} ><Button color='grey' fullWidth variant='outlined' onClick={(onImageUpload)}>
-        //       <ImageOutlinedIcon fontSize='small' sx={{ stroke: "#ffffff" }} />Upload Logo
-        //     </Button></Paper>
-        //     {imageList.length === 1 && <Box sx={{ marginTop:2, width:'200px' }}>
-        //       <img src={imageList[0].data_url} alt="" width='100%'/>
-        //       <Button color='danger' fullWidth variant='contained' onClick={() => onImageRemove(0)}>Remove</Button>
-        //     </Box>}
-        //     {errors && <Alert severity="error" sx={{ marginTop:2 }}><AlertTitle>Error</AlertTitle>
-        //       {errors.maxNumber && <Typography>You can only have 6 images</Typography>}
-        //       {errors.acceptType && <Typography>Unsupported file type. Please upload only .png and .jpg file types</Typography>}
-        //       {errors.maxFileSize && <Typography>File size must be under 8MB</Typography>}
-        //     </Alert>}
-        //   </Box>
-        // )}
-        // </ImageUploading>
+      {certification === certificationOpts[0] && 
+        <Box sx={{ marginTop:4 }}>
+          <Button color='grey' fullWidth variant='outlined' onClick={()=>fileInputRef.current.click()}>
+            <ImageOutlinedIcon fontSize='small' sx={{ stroke: "#ffffff" }} />Upload certificate 
+          </Button>
+          <input 
+            ref={fileInputRef} 
+            type="file" 
+            onChange={(e) => handleFileUpload(e)}
+            style={{ display: 'none' }} 
+          />
+          {certificationFile.url && <Typography sx={{ marginTop:3 }}>
+            <Link 
+              href={certificationFile.url}
+              target="_blank">
+              {certificationFile.name}
+            </Link>
+          </Typography>}
+        </Box>
       }
     </Box>
   )

@@ -1,5 +1,20 @@
 
 const Theme = {
+  components: {
+    MuiButton: {
+      variants: [
+        {
+          props: { size: 'square' },
+          style: {
+            maxWidth: '32px', 
+            maxHeight: '32px', 
+            minWidth: '32px', 
+            minHeight: '32px'
+          },
+        },
+      ],
+    }
+  },
   palette: {
     primary: {
       light: '#EFFAF9',
@@ -16,6 +31,10 @@ const Theme = {
       main: '#FCEDED',
       contrastText: '#1B2B3E'
     },
+    megaDanger: {
+      main: '#DC3545',
+      contrastText: '#FFFFFF'
+    }
   },
   typography: {
     button: {
@@ -42,6 +61,9 @@ const Theme = {
       fontWeight: 700,
       fontSize: 14,
       color: '#1B2B3E',
+    },
+    support_icon:{
+      fontSize: 12
     },
     p_large: {
       fontWeight: 400,
