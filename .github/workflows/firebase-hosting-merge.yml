@@ -7,14 +7,28 @@ name: Deploy to Firebase Hosting on merge
     branches:
       - main
 jobs:
-  build_and_deploy:
+  build_and_deploy_on_PROD:
+    runs-on: ubuntu-latest
+    environment: prod_env
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          npm ci 
+          REACT_APP_FIREBASE_API_KEY=${{ env.REACT_APP_FIREBASE_API_KEY }} REACT_APP_FIREBASE_APP_ID=${{ env.REACT_APP_FIREBASE_APP_ID }} REACT_APP_FIREBASE_AUTH_DOMAIN=${{ env.REACT_APP_FIREBASE_AUTH_DOMAIN }} REACT_APP_FIREBASE_MESSAGING_SENDER_ID=${{ env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID }} REACT_APP_FIREBASE_PROJECT_ID=${{ env.REACT_APP_FIREBASE_PROJECT_ID }} REACT_APP_FIREBASE_STORAGE_BUCKET=${{ env.REACT_APP_FIREBASE_STORAGE_BUCKET }} npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_CHICKENS_ARE_MY_FRIENDS }}'
+          channelId: live
+          projectId: freerangeeggfarm-26736
+  build_and_deploy_on_DEV:
     runs-on: ubuntu-latest
     environment: env
     steps:
       - uses: actions/checkout@v2
       - run: |
-          npm ci 
-          REACT_APP_FIREBASE_API_KEY=${{ secrets.REACT_APP_FIREBASE_API_KEY }} REACT_APP_FIREBASE_APP_ID=${{ secrets.REACT_APP_FIREBASE_APP_ID }} REACT_APP_FIREBASE_AUTH_DOMAIN=${{ secrets.REACT_APP_FIREBASE_AUTH_DOMAIN }} REACT_APP_FIREBASE_MESSAGING_SENDER_ID=${{ secrets.REACT_APP_FIREBASE_MESSAGING_SENDER_ID }} REACT_APP_FIREBASE_PROJECT_ID=${{ secrets.REACT_APP_FIREBASE_PROJECT_ID }} REACT_APP_FIREBASE_STORAGE_BUCKET=${{ secrets.REACT_APP_FIREBASE_STORAGE_BUCKET }} npm run build
+          npm ci --legacy-peer-deps
+          REACT_APP_FIREBASE_API_KEY=${{ env.REACT_APP_FIREBASE_API_KEY }} REACT_APP_FIREBASE_APP_ID=${{ env.REACT_APP_FIREBASE_APP_ID }} REACT_APP_FIREBASE_AUTH_DOMAIN=${{ env.REACT_APP_FIREBASE_AUTH_DOMAIN }} REACT_APP_FIREBASE_MESSAGING_SENDER_ID=${{ env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID }} REACT_APP_FIREBASE_PROJECT_ID=${{ env.REACT_APP_FIREBASE_PROJECT_ID }} REACT_APP_FIREBASE_STORAGE_BUCKET=${{ env.REACT_APP_FIREBASE_STORAGE_BUCKET }} npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
