@@ -18,6 +18,11 @@ import ProductDetails from './Pages/Profile/ProductDetails';
 import ProductionDetails from './Pages/Profile/ProductionDetails';
 import Imagery from './Pages/Profile/Imagery';
 import Profile from './Pages/Profile/Profile';
+<<<<<<< HEAD:chicken_app/src/App.js
+=======
+import Admin from './Pages/Admin';
+import BuyerSignup from './Pages/Profile/BuyerSignup';
+>>>>>>> f507ac2 (adding route to buyer signup and fixing the error status for signup page):src/App.js
 
 function App() {
   return (
@@ -29,6 +34,11 @@ function App() {
       <GlobalNavBar />
         <Routes>
           <Route path="/" element={<Home/>} />
+<<<<<<< HEAD:chicken_app/src/App.js
+=======
+          <Route path="/admin" element={<Admin/>} />
+          <Route path="/buyers" element={<BuyerSignup/>} />
+>>>>>>> f507ac2 (adding route to buyer signup and fixing the error status for signup page):src/App.js
           <Route path="/buyer-signup" element={<Signup props={{ hereTo: 'BuyerSignup' }}/>} />
           <Route path="/seller-signup" element={<Signup props={{ hereTo: 'SellerSignup' }}/>} />
           <Route path="/login" element={<Signup props={{ hereTo: 'Login' }}/> }/>

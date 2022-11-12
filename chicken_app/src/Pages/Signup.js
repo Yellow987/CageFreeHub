@@ -91,7 +91,7 @@ function Signup(props) {
         await signup(emailRef.current.value, passwordRef.current.value)
         navigate("/profile/confirm-email")
       } catch {
-        setAuthError({ isAuthError:true, errorDetails:"creat acct error"})
+        setAuthError({ isAuthError:true, errorDetails:"Create account error"})
       }
     }
     setLoading(false)
@@ -115,8 +115,8 @@ function Signup(props) {
       <Typography variant='h1'>
         {getTitle(hereTo)}
       </Typography>
-      <Alert severity='error' display={authError.isAuthError ? "block" : "none"}>
-        <AlertTitle>{authError.errorDetails}</AlertTitle>
+      <Alert severity='error' style={{display: authError.isAuthError ? "flex" : "none"}}>
+        <Typography>{authError.errorDetails}</Typography>
       </Alert>
       <form onSubmit={handleSubmit}>
         <TextField error={!errors.isEmailValid} helperText={errors.emailErrorText} fullWidth label={t('email')} variant="outlined" sx={{ ...format }} inputRef={emailRef}/>
