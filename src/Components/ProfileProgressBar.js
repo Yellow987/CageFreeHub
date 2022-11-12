@@ -15,11 +15,10 @@ function ProfileProgressBar() {
   const [data, setData] = useState(null)
   const isEqual = require('lodash.isequal');
 
-
   async function saveData(values){
     const newData = {
       ...data,
-      ...values
+      ...values,
     }
     if (!isEqual(data, newData)) {
       await setDoc(docRef(), newData);
@@ -35,9 +34,12 @@ function ProfileProgressBar() {
       if (doc.exists()) {
         setData(doc.data())
       } else {
+        const utcDate = new Date()
         const initialData = {
           //Meta
-          approved: false,
+          status: 'pending',
+          adminLastStatusUpdate: utcDate,
+          creationDate: utcDate,
 
           //Basics
           organizationName: '',

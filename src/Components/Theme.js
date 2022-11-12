@@ -34,6 +34,9 @@ const Theme = {
     megaDanger: {
       main: '#DC3545',
       contrastText: '#FFFFFF'
+    },
+    yellow: {
+      main: '#FFFF00'
     }
   },
   typography: {
