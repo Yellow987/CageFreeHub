@@ -1,9 +1,10 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import {
-    getFirestore, collection, getDocs
+    getFirestore, collection, getDocs, onSnapshot, doc
 } from 'firebase/firestore'
 import {getAuth} from 'firebase/auth'
+
 // Initialize Firebase
 const app = initializeApp({
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -38,3 +39,10 @@ export function getFarms(){
 
 export const auth = getAuth(app);
 
+export function getFarm(id){
+    let farm = '';
+    const db = getFirestore();
+    const docRef = useCallback(() => { return doc(db, "farms", id) }, [db, id])
+
+    return farm;
+}
