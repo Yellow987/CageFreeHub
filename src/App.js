@@ -19,7 +19,7 @@ import ProductionDetails from './Pages/Profile/ProductionDetails';
 import Imagery from './Pages/Profile/Imagery';
 import Profile from './Pages/Profile/Profile';
 import Admin from './Pages/Admin';
-
+import SellerProfile from './Pages/SellerProfile';
 function App() {
   return (
     <ThemeProvider theme={createTheme(Theme)}>
@@ -44,6 +44,7 @@ function App() {
             <Route path="/profile/production-details" element={<ProductionDetails />} />
             <Route path="/profile/imagery" element={<Imagery />} />
           </Route>
+          <Route path="/sellerprofile" element={<SellerProfile />} />
           <Route path="profile/:id" element={<Profile />}/>
           <Route path="*" element={<>404</>} />
 
