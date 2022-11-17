@@ -44,7 +44,6 @@ function App() {
             <Route path="/profile/production-details" element={<ProductionDetails />} />
             <Route path="/profile/imagery" element={<Imagery />} />
           </Route>
-          <Route path="/sellerprofile" element={<SellerProfile />} />
           <Route path="profile/:id" element={<Profile />}/>
           <Route path="*" element={<>404</>} />
 

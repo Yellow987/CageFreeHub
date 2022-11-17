@@ -38,11 +38,3 @@ export function getFarms(){
 }
 
 export const auth = getAuth(app);
-
-export function getFarm(id){
-    let farm = '';
-    const db = getFirestore();
-    const docRef = useCallback(() => { return doc(db, "farms", id) }, [db, id])
-
-    return farm;
-}
