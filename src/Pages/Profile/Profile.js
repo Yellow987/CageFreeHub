@@ -22,8 +22,6 @@ function Profile() {
       setUserData(doc.data())
     })
   }, [docRef])
-  console.log()
-
   return (
     <>
       {data && <Box sx={{ mx:'24px', marginTop:'56px' }}>
@@ -101,7 +99,7 @@ function Profile() {
             </Box>
             <Box width='290px'>
                 <Typography variant="label" sx={{marginBottom:'16px'}}>Contact {data.organizationName}</Typography>
-                {data.contactChannels.phone && (<><Typography variant="p_large" sx={{marginBottom:'16px'}}>Message {data.name} through the phone</Typography>
+                {data.contactChannels.phone && (<><Typography variant="p_large" sx={{marginBottom:'16px'}}>Message {data.name} through the Phone</Typography>
                 <Link href={'tel:' + data.contactChannels.phone} sx={{display:'block'}}>{data.contactChannels.phone}</Link></>)}
  
                 {data.contactChannels.wechat && (<><Typography variant="p_large" sx={{marginBottom:'16px'}}>Message {data.name} through WeChat</Typography>
