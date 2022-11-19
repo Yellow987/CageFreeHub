@@ -8,6 +8,7 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import { useTranslation, Trans } from 'react-i18next';
 import { getFirestore, doc, setDoc } from 'firebase/firestore'
+import tosPDF from '../Media/terms_of_service.pdf'
 
 function Signup(props) {
   const { hereTo } = props.props
@@ -143,11 +144,12 @@ function Signup(props) {
         <FormControlLabel sx={{ ...format, display: hereTo === 'Login' ? 'none' : 'block', lineHeight:0 }}
         label={
           <Typography variant='p_small' display="inline" sx={{ lineHeight: 0 }}>
-            <Trans i18nKey='ToS' t={t} components={[<Box sx={{...hyperlink}} />]} />
+            <Trans i18nKey='ToS' t={t} components={[<a href={tosPDF} target='_blank' rel='noopener'><Box sx={{...hyperlink}} /></a>]} />
           </Typography>
         } control={
           <Checkbox sx={{color: errors.isCheckBoxValid ? '' : '#FF0000'}} inputRef={checkboxRef}/>
         }/>
+        <a href={tosPDF} target='_blank' rel='noopener'>owo </a>
         <Button type="submit" disabled={loading} fullWidth  variant='contained' sx={{ ...format, fontWeight:700 }} ref={buttonRef}>
           <CircularProgress size="1.5rem" sx={{ display: loading ? 'block' : 'none' }}/>
           {!loading ? hereTo === 'Login' ? t('login') : t('createAccount') : ""}
