@@ -19,6 +19,7 @@ import ProductionDetails from './Pages/Profile/ProductionDetails';
 import Imagery from './Pages/Profile/Imagery';
 import Profile from './Pages/Profile/Profile';
 import Admin from './Pages/Admin';
+import BuyerSignup from './Pages/Profile/BuyerSignup';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="/" element={<Home/>} />
           <Route path="/admin" element={<Admin/>} />
           <Route path="/buyer-signup" element={<Signup props={{ hereTo: 'BuyerSignup' }}/>} />
+          <Route path="/buyers" element={<BuyerSignup/>} />
           <Route path="/seller-signup" element={<Signup props={{ hereTo: 'SellerSignup' }}/>} />
           <Route path="/login" element={<Signup props={{ hereTo: 'Login' }}/> }/>
           <Route path="/profile/confirm-email" element={<ConfirmEmail/>} />
