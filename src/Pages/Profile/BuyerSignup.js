@@ -7,12 +7,12 @@ import { useTranslation} from "react-i18next";
 import { Button } from "@mui/material";
 import { getFirestore, doc, setDoc } from 'firebase/firestore';
 import { useAuth } from '../../AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
 
 let CEO = "CEO";
 let companyOwner = "CompanyOwner";
 let productManager = "ProductManager";
 let placeholder = "Select Role";
-
 
 function BuyerSignup() {
 
@@ -23,6 +23,7 @@ function BuyerSignup() {
   const orginizationRole = useRef("")
   const workEmail = useRef(null)
   const buttonRef = useRef(false)
+  const navigate = useNavigate()
 
   const format = {
     width: "397px",
@@ -36,6 +37,10 @@ function BuyerSignup() {
     setLoading(true)
     setLoading(false)
   }
+
+  function OnSubmit () {
+    navigate('/profile/confirm-email')
+  };
 
   const db = getFirestore();
   const { currentUser } = useAuth();
@@ -85,7 +90,7 @@ function BuyerSignup() {
             </Box>
           </form>
               <Box sx={{marginTop: "32px"}}></Box>
-          <Button type="submit" disabled={loading} fullWidth variant='contained' sx={{ ...format, fontWeight: "bold", marginTop: "8px", radius: "3px" }} ref={buttonRef}>
+          <Button onClick = {OnSubmit} type="submit" disabled={loading} fullWidth variant='contained' sx={{ ...format, fontWeight: "bold", marginTop: "8px", radius: "3px" }} ref={buttonRef}>
             Submit <ArrowRightAltIcon fontSize="inherit" style={{ fontSize: "20px" }}/>
           </Button>
         </Box>

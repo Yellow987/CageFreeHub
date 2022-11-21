@@ -99,8 +99,8 @@ function Signup(props) {
 
   useEffect(() => {
     if (currentUser === null) { return }
-    if (hereTo === "Login"){
-      navigate('/TODO')
+    if (hereTo === "BuyerSignup"){
+      navigate('/buyers')
     } else {
       setUserData()
       navigate('/profile/welcome')
