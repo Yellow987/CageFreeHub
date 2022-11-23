@@ -1,95 +1,98 @@
-import { React, useState, useRef } from "react";
+import { React, useRef, useState, useEffect, useCallback } from "react";
 import Alert from "@mui/material/Alert";
-import { Box, FormControl, createTheme, MenuItem, InputLabel, Typography, Select, TextField, Checkbox, FormControlLabel } from '@mui/material'
+import { Box, MenuItem, Typography, Select, TextField, InputLabel, FormControl } from '@mui/material'
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
-import { getAuth, sendEmailVerification } from "firebase/auth";
-import { useTranslation} from "react-i18next";
 import { Button } from "@mui/material";
-import { getFirestore, doc, setDoc } from 'firebase/firestore';
+import { getFirestore, doc, setDoc, onSnapshot } from 'firebase/firestore';
 import { useAuth } from '../../AuthContext';
-
-let CEO = "CEO";
-let companyOwner = "CompanyOwner";
-let productManager = "ProductManager";
-let placeholder = "Select Role";
-
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 function BuyerSignup() {
-
-  const { t } = useTranslation(['signup']);
-  const [loading, setLoading] = useState(false)
-  const fullName = useRef("");
-  const orginizationName = useRef("")
-  const orginizationRole = useRef("")
-  const workEmail = useRef(null)
-  const buttonRef = useRef(false)
-
-  const format = {
-    width: "397px",
-    height: "48px",
-    radius: "3px",
-    marginTop: "8px",
-  } 
-
-  async function handleSubmit(event) {
-    event.preventDefault()
-    setLoading(true)
-    setLoading(false)
-  }
-
-  const db = getFirestore();
+  const nameRef = useRef(null)
+  const organizationRef = useRef(null)
+  const emailRef = useRef(null)
+  const [data, setData] = useState(null)
+  const [role, setRole] = useState('')
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const roles = ['Procurement officer', 'Purchasing officer', 'Sustainability officer', 'Other']
   const { currentUser } = useAuth();
-  async function sendData(){
-      let data = {
-        email: workEmail,
-        name: fullName,
-        orginization: orginizationName,
-        role: orginizationRole
-          }
-      await setDoc(doc(db, "buyers", currentUser.uid), data);
+  const db = getFirestore();
+  const docRef = useCallback(() => { return doc(db, "buyers", currentUser.uid) }, [db, currentUser.uid])
+
+  useEffect(() => {
+    onSnapshot(docRef(), (doc) => {
+      if (doc.exists()) {
+        const docData = doc.data()
+        setData(docData)
+        nameRef.current.value = docData.name
+        organizationRef.current.value = docData.organization
+        setRole(docData.role)
+        emailRef.current.value = docData.email
+        setLoading(false)
+      } else {
+        const utcDate = new Date()
+        const initialData = {
+          //Meta
+          status: 'pending',
+          adminLastStatusUpdate: utcDate,
+          creationDate: utcDate,
+    
+          //Data
+          name: '',
+          organization: '',
+          role: '',
+          email: ''
+        }
+        setDoc(docRef, initialData).then(() => {
+          setLoading(false)
+        })
+      }
+    })
+  }, [docRef])
+
+  function submit(e) {
+    e.preventDefault()
+    setSaving(true)
+
+    const newData = {
+      name: nameRef.current.value,
+      organization: organizationRef.current.value,
+      role: role,
+      email: emailRef.current.value
+    }
+    setDoc(docRef(), {...data, ...newData}).then(() => {
+      setSaving(false)
+    })
   }
 
   return (
-    <Box>
-      <Box display="flex" alignItems="center" flexDirection="column">
-        <Box display="flex" flexDirection='column' justifyContent="flex-start" alignItems="flex-start" sx={{marginTop: "48px", color: "primary.blue", height: "42px", width: "400px"}}>
-          <Typography sx={{left: "0", marginTop: "10px"}} variant="h1_32" >Basic info</Typography>
-        </Box>
-        <Box>
-          <Alert severity="info" sx={{marginTop: "32px", backgroundColor: "#EFFAF9", color: "alert.primary", "& .MuiAlert-icon": {width: "12px", color: "#3FAB94", height: "12px", top: "2px", left: "2px", marginTop: "15px"}}}>
-            <Typography variant='p_default' display="flex" sx={{alignItems: "center", maxHeight: "50px", maxWidth: "340px", color: "#3FAB94", marginTop: "0px", left: "32px", marginLeft: "10px"}}>
-              Please provide us this basic information about you and your organization so that we can assure seller information remains private and respected.
-            </Typography>
-          </Alert>
-        </Box>
-        <Box>
-          <form>
-            <Box display="flex" flexDirection='column' justifyContent="flex-start" alignItems="flex-start" sx={{marginTop: "25px"}}>
-              <Typography variant="p_default" sx={{color:"primary.blue", height: "21px", top: "185px", width: "75px", fontWeight: "bold"}}>Full name</Typography>
-              <TextField label={"E.g. John Doe"} InputLabelProps={{style: { color: "#AFB7C2" } }} InputProps={{ sx: { weight: 397, height: 48 } }} sx={{ ...format}} inputRef={fullName}/>
-              <Box sx={{marginTop: "32px"}}></Box>
-              <Typography variant="p_default" sx={{color:"primary.blue", height: "21px", top: "185px", width: "75px", fontWeight: "bold"}}>Organization</Typography>
-              <TextField label={"E.g. Marriot"} InputLabelProps={{style: { color: "#AFB7C2" } }} InputProps={{ sx: { weight: 397, height: 48 } }} sx={{ ...format}} inputRef={orginizationName}/>
-              <Box sx={{marginTop: "32px"}}></Box>
-              <Typography variant="p_default" sx={{color:"primary.blue", height: "21px", top: "185px", width: "150px", fontWeight: "bold"}}>Role at organization</Typography>
-                <FormControl fullWidth sx={{marginTop: "8px"}}>
-                  <Select sx={{'& .MuiSelect-select .notranslate::after': placeholder ? {content: `"${placeholder}"`, opacity: 0.42,} : {}, width: "397px", height: "48px"}} id="select" value={orginizationRole}>
-                    <MenuItem string={CEO}>CEO</MenuItem>
-                    <MenuItem string={companyOwner}>Company Owner</MenuItem>
-                    <MenuItem string={productManager}>Product Manager</MenuItem>
-                  </Select>
-                </FormControl>
-              <Box sx={{marginTop: "32px"}}></Box>
-              <Typography variant="p_default" sx={{color:"primary.blue", height: "21px", top: "185px", width: "85px", fontWeight: "bold"}}>Work email</Typography>
-              <TextField label={"E.g. johndoe@marriot.com"} InputLabelProps={{style: { color: "#AFB7C2" } }} InputProps={{ sx: { weight: 397, height: 48 } }} sx={{ ...format}} inputRef={workEmail}/>
-            </Box>
-          </form>
-              <Box sx={{marginTop: "32px"}}></Box>
-          <Button type="submit" disabled={loading} fullWidth variant='contained' sx={{ ...format, fontWeight: "bold", marginTop: "8px", radius: "3px" }} ref={buttonRef}>
-            Submit <ArrowRightAltIcon fontSize="inherit" style={{ fontSize: "20px" }}/>
-          </Button>
-        </Box>
-      </Box>
+    <Box align='center' mx={{ sm:'auto', xs:'24px' }} sx={{ maxWidth:'400px', mt:{ sm:'48px', xs:'24px'}, textAlign:'left' }}>
+      <Typography variant='h1'>Basic info</Typography>
+      <Alert sx={{ marginTop:'32px' }} iconMapping={{ success: <InfoOutlinedIcon sx={{ margin:'auto' }} /> }}>
+        <Typography variant='p_default' color='#3FAB94' >
+          Please provide us this basic information about you and your organization so that we can assure seller information remains private and respected
+        </Typography>
+      </Alert>
+      <Typography variant="label" marginTop='32px'>Full name</Typography>
+      <TextField fullWidth style={{ marginTop:'8px' }} inputRef={nameRef} />
+      <Typography variant="label" marginTop='32px'>Organization</Typography>
+      <TextField fullWidth style={{ marginTop:'8px' }} inputRef={organizationRef} />
+      <Typography variant="label" marginTop='32px'>Role at Organization</Typography>
+        <FormControl fullWidth style={{ marginTop:'8px' }}>
+        <InputLabel id='selectRole' >Select role</InputLabel>
+        <Select value={role} onChange={(e) => setRole(e.target.value)} label='Select role' labelId='selectRole'>
+          {roles.map((role) => (
+            <MenuItem key={role} value={role}>{role}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <Typography variant="label" marginTop='32px'>Work email</Typography>
+      <TextField fullWidth style={{ marginTop:'8px' }} inputRef={emailRef} />
+
+      <Button variant="contained" disabled={saving} fullWidth style={{ marginTop:'48px', marginBottom:'32px' }} onClick={(e) => submit(e)}>
+        Submit <ArrowRightAltIcon fontSize="inherit" style={{ fontSize: "20px" }}/>
+      </Button>
     </Box>
   );
 }

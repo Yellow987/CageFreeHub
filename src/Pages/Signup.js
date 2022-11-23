@@ -5,7 +5,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './../AuthContext';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
 import { useTranslation, Trans } from 'react-i18next';
 import { getFirestore, doc, setDoc } from 'firebase/firestore'
 
@@ -101,9 +100,12 @@ function Signup(props) {
     if (currentUser === null) { return }
     if (hereTo === "Login"){
       navigate('/TODO')
-    } else {
+    } else if (hereTo === "SellerSignup") {
       setUserData()
       navigate('/profile/welcome')
+    } else {
+      setUserData()
+      navigate('/buyers')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser])
