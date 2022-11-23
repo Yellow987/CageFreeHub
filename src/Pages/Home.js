@@ -1,7 +1,7 @@
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
-import chickenImage from './../Images/chickenImage.jpg';
+import chickenImage from './../Media/chickenImage.jpg';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import { Link } from "react-router-dom"
