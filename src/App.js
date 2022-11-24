@@ -19,6 +19,7 @@ import ProductionDetails from './Pages/Profile/ProductionDetails';
 import Imagery from './Pages/Profile/Imagery';
 import Profile from './Pages/Profile/Profile';
 import Admin from './Pages/Admin';
+import Sellers from './Pages/Sellers';
 function App() {
   return (
     <ThemeProvider theme={createTheme(Theme)}>
@@ -44,6 +45,7 @@ function App() {
             <Route path="/profile/imagery" element={<Imagery />} />
           </Route>
           <Route path="profile/:id" element={<Profile />}/>
+          <Route path="sellers" element={<Sellers />}/>
           <Route path="*" element={<>404</>} />
 
         </Routes>
