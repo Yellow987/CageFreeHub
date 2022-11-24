@@ -7,7 +7,7 @@ import { getFirestore, doc, setDoc, onSnapshot } from 'firebase/firestore';
 import { useAuth } from '../../AuthContext';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
-function BuyerSignup() {
+function BuyerSetup() {
   const nameRef = useRef(null)
   const organizationRef = useRef(null)
   const emailRef = useRef(null)
@@ -67,7 +67,7 @@ function BuyerSignup() {
   }
 
   return (
-    <Box align='center' mx={{ sm:'auto', xs:'24px' }} sx={{ maxWidth:'400px', mt:{ sm:'48px', xs:'24px'}, textAlign:'left' }}>
+    <Box align='center' mx={{ sm:'auto', xs:'24px' }} sx={{ maxWidth:'400px', mt:{ sm:'48px', xs:'24px'}, textAlign:'left' }} display={loading ? 'none' : 'block'}>
       <Typography variant='h1'>Basic info</Typography>
       <Alert sx={{ marginTop:'32px' }} iconMapping={{ success: <InfoOutlinedIcon sx={{ margin:'auto' }} /> }}>
         <Typography variant='p_default' color='#3FAB94' >
@@ -96,4 +96,4 @@ function BuyerSignup() {
     </Box>
   );
 }
-export default BuyerSignup;
+export default BuyerSetup;

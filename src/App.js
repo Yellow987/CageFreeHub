@@ -12,6 +12,7 @@ const ConfirmEmail = lazy(() => import('./Pages/Profile/ConfirmEmail'));
 const Welcome = lazy(() => import('./Pages/Profile/Welcome'));
 const ProfileProgressBar = lazy(() => import('./Components/ProfileProgressBar'));
 const Basics = lazy(() => import('./Pages/Profile/Basics'));
+const BuyerSetup = lazy(() => import('./Pages/Profile/BuyerSetup'));
 const Locations = lazy(() => import('./Pages/Profile/Locations'));
 const Contact = lazy(() => import('./Pages/Profile/Contact'));
 const ProductDetails = lazy(() => import('./Pages/Profile/ProductDetails'));
@@ -43,7 +44,7 @@ function App() {
               <Route path="/profile/production-details" element={<ProductionDetails />} />
               <Route path="/profile/imagery" element={<Imagery />} />
             </Route>
-            <Route path="/buyers" element={<BuyerSignup/>} />
+            <Route path="/buyer-setup" element={<BuyerSetup/>} />
             <Route path="profile/:id" element={<Profile />}/>
             <Route path="*" element={<>404</>} />
           </Routes>
