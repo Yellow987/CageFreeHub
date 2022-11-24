@@ -33,7 +33,8 @@ function Sellers(){
             Object.values(data).map((farm, index)=>{
                 return(
                     <Box key={index}>
-                        <Typography variant='h2'>{farm.organizationName}</Typography>
+                        <Link href={'/profile/'+ farm.userID} sx={{textDecoration:'none'}}>
+                        <Typography variant='h2' sx={{color:'black'}}>{farm.organizationName}</Typography>
                         <Typography variant='label'>Distribution Country (countries)</Typography>
                         {farm.locations.map((location, index)=>{
                             return( <Typography variant='p_large' sx={{marginTop:'16px'}} key={index}>{location.city+', '+ location.country}</Typography> )
@@ -52,7 +53,7 @@ function Sellers(){
                                 })}
                             </Box>
                         </Box>
-                        <Link href={'/profile/'+ farm.userID}>Read More</Link>
+                        </Link>
                     </Box>
                 )}
             )
