@@ -5,7 +5,6 @@ import GlobalNavBar from './Components/GlobalNavBar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Theme from './Components/Theme';
 import { AuthProvider } from './AuthContext'
-
 const Home = lazy(() => import('./Pages/Home'));
 const Signup = lazy(() => import('./Pages/Signup'));
 const ConfirmEmail = lazy(() => import('./Pages/Profile/ConfirmEmail'));
@@ -13,6 +12,7 @@ const ConfirmEmail = lazy(() => import('./Pages/Profile/ConfirmEmail'));
 const Welcome = lazy(() => import('./Pages/Profile/Welcome'));
 const ProfileProgressBar = lazy(() => import('./Components/ProfileProgressBar'));
 const Basics = lazy(() => import('./Pages/Profile/Basics'));
+const BuyerSetup = lazy(() => import('./Pages/Profile/BuyerSetup'));
 const Locations = lazy(() => import('./Pages/Profile/Locations'));
 const Contact = lazy(() => import('./Pages/Profile/Contact'));
 const ProductDetails = lazy(() => import('./Pages/Profile/ProductDetails'));
@@ -26,10 +26,8 @@ function App() {
     <ThemeProvider theme={createTheme(Theme)}>
         <Suspense fallback={<div>loading...</div>}>
         <CssBaseline/>
-
         <AuthProvider> 
           <GlobalNavBar />
-
           <Routes>
             <Route path="/" element={<Home/>} />
             <Route path="/admin" element={<Admin/>} />
@@ -46,6 +44,7 @@ function App() {
               <Route path="/profile/production-details" element={<ProductionDetails />} />
               <Route path="/profile/imagery" element={<Imagery />} />
             </Route>
+            <Route path="/buyer-setup" element={<BuyerSetup/>} />
             <Route path="profile/:id" element={<Profile />}/>
             <Route path="*" element={<>404</>} />
           </Routes>
