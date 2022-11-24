@@ -6,6 +6,7 @@ import { Button } from "@mui/material";
 import { getFirestore, doc, setDoc, onSnapshot } from 'firebase/firestore';
 import { useAuth } from '../../AuthContext';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { useNavigate } from "react-router";
 
 function BuyerSetup() {
   const nameRef = useRef(null)
@@ -19,6 +20,7 @@ function BuyerSetup() {
   const { currentUser } = useAuth();
   const db = getFirestore();
   const docRef = useCallback(() => { return doc(db, "buyers", currentUser.uid) }, [db, currentUser.uid])
+  const Navigate = useNavigate()
 
   useEffect(() => {
     onSnapshot(docRef(), (doc) => {
@@ -63,6 +65,7 @@ function BuyerSetup() {
     }
     setDoc(docRef(), {...data, ...newData}).then(() => {
       setSaving(false)
+      Navigate('/confirm-email')
     })
   }
 

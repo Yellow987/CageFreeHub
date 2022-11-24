@@ -103,7 +103,7 @@ function Signup(props) {
       navigate('/TODO')
     } else if (hereTo === "SellerSignup") {
       setUserData()
-      navigate('/profile/welcome')
+      navigate('/confirm-email')
     } else {
       setUserData()
       navigate('/buyers')

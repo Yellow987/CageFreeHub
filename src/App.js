@@ -34,7 +34,7 @@ function App() {
             <Route path="/buyer-signup" element={<Signup props={{ hereTo: 'BuyerSignup' }}/>} />
             <Route path="/seller-signup" element={<Signup props={{ hereTo: 'SellerSignup' }}/>} />
             <Route path="/login" element={<Signup props={{ hereTo: 'Login' }}/> }/>
-            <Route path="/profile/confirm-email" element={<ConfirmEmail/>} />
+            <Route path="/confirm-email" element={<ConfirmEmail/>} />
             <Route path='/profile/welcome' element={<Welcome />} />
             <Route element={<ProfileProgressBar />}>
               <Route path="/profile/basics" element={<Basics />} />
