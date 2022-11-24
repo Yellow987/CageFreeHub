@@ -21,7 +21,7 @@ function Signup(props) {
     textDecoration: "none",
   }
 
-  const { currentUser } = useAuth()
+  const { currentUser, doEmailVerification, setCurrentUserInfoAfterSignup } = useAuth()
   const { t } = useTranslation(['signup']);
   const { signup, login } = useAuth()
   const navigate = useNavigate()
@@ -100,13 +100,11 @@ function Signup(props) {
   useEffect(() => {
     if (currentUser === null) { return }
     if (hereTo === "Login"){
-      navigate('/TODO')
-    } else if (hereTo === "SellerSignup") {
+      navigate('/profile/' + currentUser.uid)
+    } else {
+      doEmailVerification()
       setUserData()
       navigate('/confirm-email')
-    } else {
-      setUserData()
-      navigate('/buyers')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser])
@@ -116,7 +114,9 @@ function Signup(props) {
     let data = {
       isSeller: hereTo === "SellerSignup"
     }
-    await setDoc(doc(db, "users", currentUser.uid), data);
+    await setDoc(doc(db, "users", currentUser.uid), data).then(() => {
+      setCurrentUserInfoAfterSignup(data)
+    })
   }
 
   function getTitle(hereTo) {

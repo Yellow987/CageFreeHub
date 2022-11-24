@@ -7,7 +7,8 @@ import Theme from './Components/Theme';
 import { AuthProvider } from './AuthContext'
 const Home = lazy(() => import('./Pages/Home'));
 const Signup = lazy(() => import('./Pages/Signup'));
-const ConfirmEmail = lazy(() => import('./Pages/Profile/ConfirmEmail'));
+const ConfirmEmail = lazy(() => import('./Pages/ConfirmEmail'));
+const Verified = lazy(() => import('./Pages/Verified'));
 //const PrivateRoute = lazy(() => import('./Components/PrivateRoute'));
 const Welcome = lazy(() => import('./Pages/Profile/Welcome'));
 const ProfileProgressBar = lazy(() => import('./Components/ProfileProgressBar'));
@@ -35,6 +36,7 @@ function App() {
             <Route path="/seller-signup" element={<Signup props={{ hereTo: 'SellerSignup' }}/>} />
             <Route path="/login" element={<Signup props={{ hereTo: 'Login' }}/> }/>
             <Route path="/confirm-email" element={<ConfirmEmail/>} />
+            <Route path="/verified" element={<Verified/>} />
             <Route path='/profile/welcome' element={<Welcome />} />
             <Route element={<ProfileProgressBar />}>
               <Route path="/profile/basics" element={<Basics />} />
