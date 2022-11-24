@@ -10,6 +10,7 @@ function Locations() {
   const cityRefs = useRef([])
   const [countries, setCountries] = useState(data.locations.reduce((acc, location) => {return [...acc, location.country]}, []))
   const supportedCountries = ["China", "India", "Indonesia", "Japan", "Malaysia", "Philippines", "Thailand"]
+  const [distributionCountries, setDistributionCountries] = useState(data.distributionCountries)
 
   useEffect(() => {
     setPage('Location(s)')
@@ -27,7 +28,7 @@ function Locations() {
         country: countries[i]
       })
     }
-    saveData({ locations: locations })
+    saveData({ locations: locations, distributionCountries: distributionCountries })
     if (goToPage === 'next') {
       setGoToPage('')
       navigate('/profile/contact')
@@ -71,6 +72,11 @@ function Locations() {
         <Typography variant='p_small'>+ I have an additional farm location</Typography>
       </Button>
       <Typography variant="label" sx={{ marginTop:4 }}>Distribution country (countries)</Typography>
+      <Select style={{ marginTop:'8px' }} multiple renderValue={Opts => Opts.map((opt) => opt = opt.split(':')[0]).join('; ') } value={distributionCountries} onChange={(e) => setDistributionCountries(e.target.value)}>
+        {supportedCountries.map((supportedCountry) => (
+          <MenuItem key={supportedCountry} value={supportedCountry}>{supportedCountry}</MenuItem>
+        ))}
+      </Select>
     </Box>
   )
 }
