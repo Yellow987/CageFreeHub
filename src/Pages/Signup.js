@@ -5,9 +5,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from './../AuthContext';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
 import { useTranslation, Trans } from 'react-i18next';
 import { getFirestore, doc, setDoc } from 'firebase/firestore'
+import tosPDF from '../Media/terms_of_service.pdf'
 
 function Signup(props) {
   const { hereTo } = props.props
@@ -21,7 +21,7 @@ function Signup(props) {
     textDecoration: "none",
   }
 
-  const { currentUser } = useAuth()
+  const { currentUser, doEmailVerification, setCurrentUserInfoAfterSignup } = useAuth()
   const { t } = useTranslation(['signup']);
   const { signup, login } = useAuth()
   const navigate = useNavigate()
@@ -91,7 +91,7 @@ function Signup(props) {
       try {
         await signup(emailRef.current.value, passwordRef.current.value)
       } catch {
-        setAuthError({ isAuthError:true, errorDetails:"creat acct error"})
+        setAuthError({ isAuthError:true, errorDetails:"Create account error"})
       }
     }
     setLoading(false)
@@ -100,10 +100,11 @@ function Signup(props) {
   useEffect(() => {
     if (currentUser === null) { return }
     if (hereTo === "Login"){
-      navigate('/TODO')
+      navigate('/profile/' + currentUser.uid)
     } else {
+      doEmailVerification()
       setUserData()
-      navigate('/profile/basics')
+      navigate('/confirm-email')
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentUser])
@@ -113,7 +114,9 @@ function Signup(props) {
     let data = {
       isSeller: hereTo === "SellerSignup"
     }
-    await setDoc(doc(db, "users", currentUser.uid), data);
+    await setDoc(doc(db, "users", currentUser.uid), data).then(() => {
+      setCurrentUserInfoAfterSignup(data)
+    })
   }
 
   function getTitle(hereTo) {
@@ -134,8 +137,8 @@ function Signup(props) {
       <Typography variant='h1'>
         {getTitle(hereTo)}
       </Typography>
-      <Alert severity='error' display={authError.isAuthError ? "block" : "none"}>
-        <AlertTitle>{authError.errorDetails}</AlertTitle>
+      <Alert severity='error' style={{display: authError.isAuthError ? "flex" : "none"}}>
+        <Typography>{authError.errorDetails}</Typography>
       </Alert>
       <form onSubmit={handleSubmit}>
         <TextField error={!errors.isEmailValid} helperText={errors.emailErrorText} fullWidth label={t('email')} variant="outlined" sx={{ ...format }} inputRef={emailRef}/>
@@ -143,7 +146,7 @@ function Signup(props) {
         <FormControlLabel sx={{ ...format, display: hereTo === 'Login' ? 'none' : 'block', lineHeight:0 }}
         label={
           <Typography variant='p_small' display="inline" sx={{ lineHeight: 0 }}>
-            <Trans i18nKey='ToS' t={t} components={[<Box sx={{...hyperlink}} />]} />
+            <Trans i18nKey='ToS' t={t} components={[<a href={tosPDF} target='_blank' rel='noopener noreferrer'><Box sx={{...hyperlink}} /></a>]} />
           </Typography>
         } control={
           <Checkbox sx={{color: errors.isCheckBoxValid ? '' : '#FF0000'}} inputRef={checkboxRef}/>

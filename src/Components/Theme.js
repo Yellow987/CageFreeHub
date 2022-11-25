@@ -70,6 +70,7 @@ const Theme = {
     label: {
       fontWeight: 700,
       fontSize: 14,
+      display: 'block',
       color: '#1B2B3E',
     },
     support_icon:{

@@ -17,7 +17,10 @@ function Basics() {
 
     useEffect(() => {
         if (goToPage === '') {return}
-        saveData({ organizationName:organizationNameRef.current.value, website:websiteRef.current.value })
+        saveData({ 
+            organizationName: organizationNameRef.current.value, 
+            website: websiteRef.current.value.startsWith('http') ? websiteRef.current.value : 'https://' + websiteRef.current.value 
+        })
         if (goToPage === 'next') {
             setGoToPage('')
             navigate('/profile/locations')

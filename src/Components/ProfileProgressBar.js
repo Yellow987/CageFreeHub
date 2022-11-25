@@ -47,6 +47,7 @@ function ProfileProgressBar() {
 
           //locations
           locations: [{city:'',country:''}],
+          distributionCounties: [],
 
           //Contact
           name: '',
