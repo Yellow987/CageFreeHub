@@ -40,9 +40,16 @@ function Profile() {
           </>
         }
         <Typography variant='h1' sx={{ marginTop:7 }}></Typography>
-        <Box sx={{display:'flex', margin:'0 auto', justifyContent:'space-between', maxWidth:'1060px'}}>
-            <Box width='620px'>
-                <Box sx={{display:'flex', justifyContent:'space-between', marginBottom:'54px'}}>
+        <Box sx={{display:'flex', 
+        margin:'0 auto', 
+        justifyContent:'space-between', 
+        maxWidth:{xs:'90%', md:'880px', lg:'1060px'}, 
+        flexDirection:{xs:'column', md:'row'}}}>
+            <Box sx={{order:{xs:'2', md:'-1'}, 
+                      maxWidth:{xs:'90%', md:'620px'},
+                      width:{xs:'90%', md:'620px'}
+                    }}>
+                <Box sx={{display:'flex', justifyContent:'space-between', marginBottom:'54px', alignItems:'center'}}>
                     <Typography variant="h1_32" >{data.organizationName}</Typography>
                     <img src={data.logos[0].data_url}  style={{width:'30px', height:'30px'}} />
                 </Box>
@@ -58,7 +65,9 @@ function Profile() {
                     })}
                     
                 </Box>
-                <Divider light />
+                <Box sx={{height:{xs:"20px", md:'96px'}, display:'flex', alignItems:'center'}}>
+                  <Divider light />
+                </Box>
                 <Box>
                     <Box>
                         <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>Cage-free egg type</Typography>
@@ -72,14 +81,17 @@ function Profile() {
                         {Object.values(data.productDetails).map((productAmount, index)=>{
                           return( <Typography variant='p_large' sx={{marginTop:'16px'}} key={index}>{productAmount.capacity + ' ' + productAmount.unit + ' / ' + productAmount.price + ' ' + productAmount.currency }</Typography> )
                         })}
-
                     </Box>
                 </Box>
-                <Divider light />
+                <Box sx={{height:{xs:"20px", md:'96px'}, display:'flex', alignItems:'center'}}>
+                  <Divider light />
+                </Box>
                 <Box>
                     <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>Website</Typography>
                     <Link href={data.website} sx={{display:'block'}}>{data.website}</Link>
-                    <Divider light sx={{marginBottom:'48px'}} />
+                    <Box sx={{height:{xs:"20px", md:'96px'}, display:'flex', alignItems:'center'}}>
+                      <Divider light />
+                    </Box>
                 
                     <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>Production system of farm(s)</Typography>
                     {data.productionDetails.productionSystem.map((system, index)=>{
@@ -97,7 +109,15 @@ function Profile() {
                 </Box>
 
             </Box>
-            <Box width='290px'>
+            <Box  sx={{
+                            border: "1px solid #DFE3E9",
+                            boxShadow: "0px 1px 4px rgba(27, 43, 62, 0.1)",
+                            borderRadius: "3px", 
+                            maxWidth:{xs: "100%", md:'328px'}, 
+                            margin:"0 auto", 
+                            padding:"20px",
+                            height:'fit-content',
+                        }}>
                 <Typography variant="label" sx={{marginBottom:'16px'}}>Contact {data.organizationName}</Typography>
                 {data.contactChannels.phone && (<><Typography variant="p_large" sx={{marginBottom:'16px'}}>Message {data.name} through the Phone</Typography>
                 <Link href={'tel:' + data.contactChannels.phone} sx={{display:'block'}}>{data.contactChannels.phone}</Link></>)}
@@ -108,7 +128,6 @@ function Profile() {
                 {data.contactChannels.whatsapp && (<><Typography variant="p_large" sx={{marginBottom:'16px'}}>Message {data.name} through WhatsApp</Typography>
                 <Link href={'tel:' + data.contactChannels.whatsapp} sx={{display:'block'}}>{data.contactChannels.whatsapp}</Link></>)}
             </Box>
-
         </Box>
       </Box>}
 
