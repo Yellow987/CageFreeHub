@@ -1,27 +1,27 @@
-import { useEffect, useState, useCallback } from 'react'
-import { Box, Typography,  Divider, Link  } from '@mui/material';
+import { useEffect, useState } from 'react'
+import { Box, Typography, Link  } from '@mui/material';
 import { collection, getFirestore, query, orderBy, where, limit, getDocs } from 'firebase/firestore';
 
 function Sellers(){
-    const db = getFirestore();
     const [data, setData] = useState([])
-  function getData(collectionName, status) {
-    const dataQuery = query(collection(db, collectionName), orderBy('adminLastStatusUpdate'), where('status', '==', status), limit(10))
-    getDocs(dataQuery).then((docs) => {
-      const newData = docs.docs.reduce((acc, doc) => {
-        const docData = doc.data()
-        return [...acc, {
-          ...docData, 
-          userID: doc.id,
-          adminLastStatusUpdate:(new Date(docData['adminLastStatusUpdate'].seconds * 1000)).toString()
-        }]
-      }, [])
-      // console.log(typeof newData)
-      setData([...newData])
-    })
-  }
+
   useEffect(() => {
     getData('farms', 'approved');
+    function getData(collectionName, status) {
+        const dataQuery = query(collection(getFirestore(), collectionName), orderBy('adminLastStatusUpdate'), where('status', '==', status), limit(10))
+        getDocs(dataQuery).then((docs) => {
+          const newData = docs.docs.reduce((acc, doc) => {
+            const docData = doc.data()
+            return [...acc, {
+              ...docData, 
+              userID: doc.id,
+              adminLastStatusUpdate:(new Date(docData['adminLastStatusUpdate'].seconds * 1000)).toString()
+            }]
+          }, [])
+          // console.log(typeof newData)
+          setData([...newData])
+        })
+      }
   }, []);
     console.log(data)
     return(

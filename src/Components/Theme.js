@@ -88,7 +88,6 @@ const Theme = {
       fontSize: 16,
       lineHeight: "150%",
       color: "#1B2B3E",
-      fontWeight: 400,
       display: 'block',
     },
     p_default: {
