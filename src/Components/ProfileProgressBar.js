@@ -22,18 +22,16 @@ function ProfileProgressBar() {
     }
     if (!isEqual(data, newData)) {
       await setDoc(docRef(), newData);
-      console.log('update values')
-    } else {
-      console.log(data)
-      console.log(newData)
     }
   }
 
   useEffect(() => {
+    console.log('start')
     onSnapshot(docRef(), (doc) => {
       if (doc.exists()) {
         setData(doc.data())
       } else {
+        console.log('create')
         const utcDate = new Date()
         const initialData = {
           //Meta
@@ -47,7 +45,7 @@ function ProfileProgressBar() {
 
           //locations
           locations: [{city:'',country:''}],
-          distributionCounties: [],
+          distributionCountries: [],
 
           //Contact
           name: '',
@@ -58,7 +56,7 @@ function ProfileProgressBar() {
           productDetails: {},
 
           //Production details
-          ProductionDetails: {
+          productionDetails: {
             productionSystem: [],
             certification: '',
             certifyingOrganization: '',
@@ -70,7 +68,7 @@ function ProfileProgressBar() {
           logos: []
 
         }
-        setDoc(docRef, initialData);
+        setDoc(docRef(), initialData)
       }
     })
   }, [docRef])

@@ -4,6 +4,7 @@ import {
     getFirestore, collection, getDocs
 } from 'firebase/firestore'
 import {getAuth} from 'firebase/auth'
+
 // Initialize Firebase
 const app = initializeApp({
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -37,4 +38,3 @@ export function getFarms(){
 }
 
 export const auth = getAuth(app);
-

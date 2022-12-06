@@ -21,6 +21,7 @@ const ProductionDetails = lazy(() => import('./Pages/Profile/ProductionDetails')
 const Imagery = lazy(() => import('./Pages/Profile/Imagery'));
 const Profile = lazy(() => import('./Pages/Profile/Profile'));
 const Admin = lazy(() => import('./Pages/Admin'));
+const Sellers = lazy(() => import('./Pages/Sellers'));
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
             </Route>
             <Route path="/buyer-setup" element={<BuyerSetup/>} />
             <Route path="profile/:id" element={<Profile />}/>
+            <Route path="sellers" element={<Sellers />}/>
             <Route path="*" element={<>404</>} />
           </Routes>
         </AuthProvider>

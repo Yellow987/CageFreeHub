@@ -60,6 +60,13 @@ const Theme = {
       display: 'block',
       textAlign:'left'
     },
+    h2:{
+      fontFamily: 'Roboto',
+      fontStyle: "normal",
+      fontWeight: 700,
+      fontSize: 24,
+      lineHeight: "137%",
+    },
     label: {
       fontWeight: 700,
       fontSize: 14,
@@ -74,6 +81,13 @@ const Theme = {
       fontSize: 16,
       lineHeight: "150%",
       color: "#596676",
+      display: 'block',
+    },
+    p_large_dark: {
+      fontWeight: 400,
+      fontSize: 16,
+      lineHeight: "150%",
+      color: "#1B2B3E",
       display: 'block',
     },
     p_default: {
