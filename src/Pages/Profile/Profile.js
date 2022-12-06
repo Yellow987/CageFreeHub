@@ -33,7 +33,7 @@ function Profile() {
           <Grid item xs={12} sm={6}>
             <Box sx={{display:'flex', justifyContent:'space-between', marginBottom:'54px', marginTop:'48px', alignItems:'center'}}>
               <Typography variant="h1_32" >{data.organizationName}</Typography>
-              <img src={data.logos[0].data_url}  style={{width:'30px', height:'30px'}} />
+              <img src={data.logos[0].data_url}  style={{width:'30px', height:'30px'}} alt="" />
             </Box>
           </Grid>
           <Grid item xs={4}></Grid>
@@ -86,7 +86,7 @@ function Profile() {
                 <Typography variant='p_large_dark' sx={{marginTop:'16px', marginBottom:'48px' }}>{data.productionDetails.certifyingOrganization}</Typography>
                 <Carousel>
                 {data.images.map((image, index)=>{
-                  return( <img key={index} src={image.data_url}/> )
+                  return( <img key={index} src={image.data_url} alt=""/> )
                 })}
                 </Carousel>
               </Box>
