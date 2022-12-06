@@ -1,10 +1,7 @@
 import { useEffect, useState, useCallback } from 'react'
-import { useParams } from 'react-router'
 import { Box, Typography,  Divider, Link  } from '@mui/material';
 import { collection, getFirestore, query, orderBy, where, limit, getDocs } from 'firebase/firestore';
-import Carousel from 'react-material-ui-carousel';
-import { useAuth } from './../AuthContext';
-import { getFarms } from './../firestore'
+
 function Sellers(){
     const db = getFirestore();
     const [data, setData] = useState([])

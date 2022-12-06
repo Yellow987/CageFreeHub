@@ -83,6 +83,14 @@ const Theme = {
       color: "#596676",
       display: 'block',
     },
+    p_large_dark: {
+      fontWeight: 400,
+      fontSize: 16,
+      lineHeight: "150%",
+      color: "#1B2B3E",
+      fontWeight: 400,
+      display: 'block',
+    },
     p_default: {
       fontWeight: 400,
       fontSize: 14,
