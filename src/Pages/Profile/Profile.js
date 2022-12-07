@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'react-router'
 import { Box, Typography,  Divider, Link, Grid, Paper } from '@mui/material';
 import AdminApprovalOptions from '../../Components/AdminApprovalOptions';
+import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import Carousel from 'react-material-ui-carousel';
 
@@ -30,16 +31,16 @@ function Profile() {
         </Box>
 
         <Grid container justifyContent='center'>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} md={6}>
             <Box sx={{display:'flex', justifyContent:'space-between', marginBottom:'54px', marginTop:'48px', alignItems:'center'}}>
               <Typography variant="h1_32" >{data.organizationName}</Typography>
-              <img src={data.logos[0].data_url}  style={{width:'30px', height:'30px'}} alt="" />
+              {data.logos.length === 1 && <img src={data.logos[0].data_url}  style={{width:'30px', height:'30px'}} alt="" />}
             </Box>
           </Grid>
           <Grid item xs={4}></Grid>
         </Grid>
         <Grid container justifyContent='center'>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} md={6}>
             <Typography variant="label" sx={{marginBottom:'16px'}}>Distribution country (countries)</Typography>
             {data.locations.map((location, index)=>{
               return( <Typography variant='p_large_dark' sx={{marginTop:'16px'}} key={index}>{location.country}</Typography> )
@@ -82,17 +83,22 @@ function Profile() {
                   return( <Typography variant='p_large_dark' sx={{marginTop:'16px'}} key={index}>{system}</Typography> )
                 })}
                 
-                <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>Certification</Typography>
-                <Typography variant='p_large_dark' sx={{marginTop:'16px', marginBottom:'48px' }}>{data.productionDetails.certifyingOrganization}</Typography>
-                <Carousel>
+                <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>Certification </Typography>
+                <Box sx={{ marginTop:'16px', marginBottom:'48px', display:'flex', alignItems:'center' }}>
+                  <Typography variant='p_large_dark' sx={{ marginRight:'8px' }}>{data.productionDetails.certifyingOrganization}</Typography>
+                  {<Link href={data.productionDetails.certificationFile.url} target='_blank' rel='noopener noreferrer' sx={{ display:'flex', alignItems:'center' }}>
+                    <VisibilityOutlinedIcon fontSize='small' color='primary'/> 
+                  </Link>}
+                </Box>
+                <Carousel height='500px' autoPlay={false} sx={{ marginBottom:'80px'}}>
                 {data.images.map((image, index)=>{
-                  return( <img key={index} src={image.data_url} alt=""/> )
+                  return( <img width='100%' key={index} src={image.data_url} alt=""/> )
                 })}
                 </Carousel>
               </Box>
             </Grid>
-            <Grid item xs={0} sm={1} />
-            <Grid item sm={3} xs={12} order={{xs:-1, sm:3}} marginBottom='24px'>
+            <Grid item xs={0} md={1} />
+            <Grid item md={3} xs={12} order={{xs:-1, md:3}} marginBottom='24px'>
               <Paper elevation={3} style={{ padding:'24px'}}>
                 <Typography variant="label" sx={{marginBottom:'16px'}}>Contact {data.organizationName}</Typography>
                 {data.contactChannels.phone && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>Message {data.name} through the Phone</Typography>
