@@ -35,7 +35,7 @@ function GlobalNavBar() {
   const [anchorElLoggedIn, setAnchorElLoggedIn] = useState(null)
   const [isAccordionExpanded, setIsAccordionExpanded] = useState(false)
   const [accordionIconIsClose, setAccordionIconIsClose] = useState(false)
-  const editProfileLink = currentUserInfo.isSeller ? '/profile/basics' : '/buyer-setup'
+  const [editProfileLink, setEditProfileLink] = useState('')
   const navigate = useNavigate()
 
   const languages = [
@@ -48,6 +48,14 @@ function GlobalNavBar() {
   useEffect(() => { 
     setCurrentLanguage("English")
   }, [])
+
+  useEffect(() => {
+    if (currentUserInfo) {
+      setEditProfileLink(currentUserInfo.isSeller ? '/profile/basics' : '/buyer-setup')
+    } else {
+      setEditProfileLink('')
+    }
+  }, [currentUserInfo])
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -79,6 +87,7 @@ function GlobalNavBar() {
   }
 
   const handleEditProfile = (event) => {
+    event.preventDefault()
     setAnchorElLoggedIn(null)
     navigate(editProfileLink)
   }
