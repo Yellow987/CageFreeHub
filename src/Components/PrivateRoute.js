@@ -3,9 +3,9 @@ import adminUid from '../AdminAccountsConfig';
 import { useNavigate } from 'react-router-dom';
 
 export default function PrivateRoute({ children }) {
-  const { currentUser, currentUserInfo } = useAuth();
+  const { currentUser } = useAuth();
   const navigate = useNavigate()
-  const editProfileLink = currentUserInfo.isSeller ? '/profile/welcome' : '/buyer-setup'
+  // const editProfileLink = currentUserInfo.isSeller ? '/profile/welcome' : '/buyer-setup'
 
   if(!currentUser){
     navigate('/login')
