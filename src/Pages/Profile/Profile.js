@@ -1,16 +1,19 @@
 import { useEffect, useState, useCallback } from 'react'
 import { useParams } from 'react-router'
-import { Box, Typography,  Divider, Link, Grid, Paper } from '@mui/material';
+import { Box, Typography, Divider, Link, Grid, Paper } from '@mui/material';
 import AdminApprovalOptions from '../../Components/AdminApprovalOptions';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import Carousel from 'react-material-ui-carousel';
+import { useAuth } from '../../AuthContext';
+import adminUid from './../../AdminAccountsConfig';
 
 function Profile() {
   const { id } = useParams()
   const [data, setData] = useState(null)
   const db = getFirestore()
   const docRef = useCallback(() => { return doc(db, "farms", id) }, [db, id])
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     getDoc(docRef()).then((doc) => {
@@ -21,16 +24,17 @@ function Profile() {
     <>
       {data && <Box mx='24px' sx={{ marginTop:'56px'}}>
         <AdminApprovalOptions props={{ data:data, docRef:docRef() }}/>
-        <Box sx={{ background:'#F5F7F8', padding:2 }}>
-          <Typography variant='p_large_dark' fontWeight='bold'>Awaiting approval</Typography>
-          <Typography variant='p_large_dark'>
-            <br/>Our team is reviewing your profile for approval <br/><br/>
-            We’ll send a text to the provided number once the profile is approved<br/><br/>
-            This will take 72 hours at most
-          </Typography>
-        </Box>
-
+        
         <Grid container justifyContent='center'>
+          <Grid item xs={12} md={6}>
+            {(currentUser.uid === id || currentUser.uid === adminUid) && <Box>
+              <Typography variant='label'>Approval status</Typography>
+              <Typography variant='h2' color='#CDA957' marginTop={1} marginBottom={1}>{data.status.charAt(0).toUpperCase() + data.status.slice(1)}</Typography>
+              <Typography variant='p_default'>You will receive an email when your profile is approved (this will take 48 business hours at most)</Typography>
+              <Divider light style={{ marginTop:'48px' }}/>
+            </Box>}
+          </Grid>
+          <Grid item xs={4}></Grid>
           <Grid item xs={12} md={6}>
             <Box sx={{display:'flex', justifyContent:'space-between', marginBottom:'54px', marginTop:'48px', alignItems:'center'}}>
               <Typography variant="h1_32" >{data.organizationName}</Typography>
@@ -59,17 +63,17 @@ function Profile() {
                 <Grid item xs={8}>
                   <Typography variant="label" >Production capacity (year) / Price</Typography>
                 </Grid>
+              </Grid>
                 {Object.keys(data.productDetails).map((productDetail) => {return(
-                  <>
+                  <Grid container spacing={2} key={productDetail} marginTop='8px'>
                     <Grid item xs={4}>
                       {productDetail}
                     </Grid>
                     <Grid item xs={8}>
                       {data.productDetails[productDetail].capacity + ' ' + data.productDetails[productDetail].unit + ' / ' + data.productDetails[productDetail].price + ' ' + data.productDetails[productDetail].currency }
                     </Grid>
-                  </>)
+                  </Grid>)
                 })}
-              </Grid>
               </Box>
               <Divider light style={{ marginTop:'48px' }}/>
               <Box>

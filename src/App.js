@@ -9,7 +9,7 @@ const Home = lazy(() => import('./Pages/Home'));
 const Signup = lazy(() => import('./Pages/Signup'));
 const ConfirmEmail = lazy(() => import('./Pages/ConfirmEmail'));
 const Verified = lazy(() => import('./Pages/Verified'));
-//const PrivateRoute = lazy(() => import('./Components/PrivateRoute'));
+const PrivateRoute = lazy(() => import('./Components/PrivateRoute'));
 const Welcome = lazy(() => import('./Pages/Profile/Welcome'));
 const ProfileProgressBar = lazy(() => import('./Components/ProfileProgressBar'));
 const Basics = lazy(() => import('./Pages/Profile/Basics'));
@@ -36,10 +36,10 @@ function App() {
             <Route path="/buyer-signup" element={<Signup props={{ hereTo: 'BuyerSignup' }}/>} />
             <Route path="/seller-signup" element={<Signup props={{ hereTo: 'SellerSignup' }}/>} />
             <Route path="/login" element={<Signup props={{ hereTo: 'Login' }}/> }/>
-            <Route path="/confirm-email" element={<ConfirmEmail/>} />
-            <Route path="/verified" element={<Verified/>} />
-            <Route path='/profile/welcome' element={<Welcome />} />
-            <Route element={<ProfileProgressBar />}>
+            <Route path="/confirm-email" element={<PrivateRoute><ConfirmEmail/></PrivateRoute>} />
+            <Route path="/verified" element={<PrivateRoute><Verified/></PrivateRoute>} />
+            <Route path='/profile/welcome' element={<PrivateRoute><Welcome /></PrivateRoute>} />
+            <Route element={<PrivateRoute><ProfileProgressBar /></PrivateRoute>}>
               <Route path="/profile/basics" element={<Basics />} />
               <Route path="/profile/locations" element={<Locations />} />
               <Route path="/profile/contact" element={<Contact />} />
@@ -47,9 +47,9 @@ function App() {
               <Route path="/profile/production-details" element={<ProductionDetails />} />
               <Route path="/profile/imagery" element={<Imagery />} />
             </Route>
-            <Route path="/buyer-setup" element={<BuyerSetup/>} />
-            <Route path="profile/:id" element={<Profile />}/>
-            <Route path="sellers" element={<Sellers />}/>
+            <Route path="/buyer-setup" element={<PrivateRoute><BuyerSetup/></PrivateRoute>} />
+            <Route path="profile/:id" element={<PrivateRoute><Profile /></PrivateRoute>}/>
+            <Route path="sellers" element={<PrivateRoute><Sellers /></PrivateRoute>}/>
             <Route path="*" element={<>404</>} />
           </Routes>
         </AuthProvider>

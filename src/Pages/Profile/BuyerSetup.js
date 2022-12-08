@@ -17,7 +17,7 @@ function BuyerSetup() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const roles = ['Procurement officer', 'Purchasing officer', 'Sustainability officer', 'Other']
-  const { currentUser } = useAuth();
+  const { currentUser, currentUserInfo } = useAuth();
   const db = getFirestore();
   const docRef = useCallback(() => { return doc(db, "buyers", currentUser.uid) }, [db, currentUser.uid])
   const Navigate = useNavigate()
@@ -64,8 +64,10 @@ function BuyerSetup() {
       email: emailRef.current.value
     }
     setDoc(docRef(), {...data, ...newData}).then(() => {
-      setSaving(false)
-      Navigate('/confirm-email')
+      setDoc(doc(db, "users", currentUser.uid), {...currentUserInfo, isProfileComplete:true }).then(() => {
+        setSaving(false)
+        Navigate('/confirm-email')
+      })
     })
   }
 

@@ -112,7 +112,8 @@ function Signup(props) {
   async function setUserData(){
     const db = getFirestore()
     let data = {
-      isSeller: hereTo === "SellerSignup"
+      isSeller: hereTo === "SellerSignup",
+      isProfileComplete: false
     }
     await setDoc(doc(db, "users", currentUser.uid), data).then(() => {
       setCurrentUserInfoAfterSignup(data)

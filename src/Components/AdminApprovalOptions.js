@@ -1,9 +1,12 @@
 import React from 'react'
 import { Box, Button } from '@mui/material';
 import { setDoc } from 'firebase/firestore'
+import adminUid from '../AdminAccountsConfig'
+import { useAuth } from '../AuthContext';
 
 function AdminApprovalOptions(props) {
   const { data, docRef } = props.props
+  const { currentUser } = useAuth();
 
   function changeProfileStatus(status) {
     setDoc(docRef, {...data, status:status})
@@ -20,10 +23,12 @@ function AdminApprovalOptions(props) {
   }
 
   return (
-    <Box sx={{ marginBottom:4 }}>
-      <Button variant='contained' onClick={() => handleApprove()}>Approve Profile</Button>
-      <Button color='megaDanger' sx={{ marginLeft:5 }} onClick={() => handleReject()} variant='contained'>Reject Profile</Button>
-    </Box>
+    <>
+      {currentUser.uid === adminUid && <Box sx={{ marginBottom:4 }}>
+        <Button variant='contained' onClick={() => handleApprove()}>Approve Profile</Button>
+        <Button color='megaDanger' sx={{ marginLeft:5 }} onClick={() => handleReject()} variant='contained'>Reject Profile</Button>
+      </Box>}
+    </>
   )
 }
 

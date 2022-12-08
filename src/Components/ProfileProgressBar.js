@@ -10,7 +10,7 @@ function ProfileProgressBar() {
   const [goToPage, setGoToPage] = useState('')
   const pages = ["Basics", "Location(s)", "Contact", "Product details", "Production details", "Imagery"]
   const db = getFirestore();
-  const { currentUser } = useAuth();
+  const { currentUser, currentUserInfo } = useAuth();
   const docRef = useCallback(() => { return doc(db, "farms", currentUser.uid) }, [db, currentUser.uid])
   const [data, setData] = useState(null)
   const isEqual = require('lodash.isequal');
@@ -73,6 +73,12 @@ function ProfileProgressBar() {
     })
   }, [docRef])
 
+  function setProfileComplete() {
+    setDoc(doc(db, "users", currentUser.uid), {...currentUserInfo, isProfileComplete:true }).then(() => {
+      setGoToPage('next') 
+    })
+  }
+
   return (
     <Box align='center' mx={{ sm:'10%', xs:'24px' }} sx={{ marginTop:6 }}>
       <Box sx={{ display:'flex', flexDirection:'row', justifyContent: 'center' }} >
@@ -87,7 +93,9 @@ function ProfileProgressBar() {
         {data && <Outlet context={[setPage, goToPage, setGoToPage, saveData, data]} />}
         <Box align='right' sx={{ marginTop:6, marginBottom:2 }}>
           <Button><Typography variant='p_default' onClick={() => { setGoToPage('back') }}>← Back</Typography></Button>
-          <Button variant='contained' onClick={() => { setGoToPage('next') }}>{page === 'Imagery' ? "Submit for approval" : "Next →"}</Button>
+          <Button variant='contained' onClick={() => { if(page==='Imagery'){setProfileComplete()} else {setGoToPage('next') } }}>
+            {page === 'Imagery' ? "Submit for approval" : "Next →"}
+          </Button>
         </Box>
       </Box>
     </Box>
