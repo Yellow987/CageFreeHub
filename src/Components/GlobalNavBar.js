@@ -28,14 +28,15 @@ const styles = {
 }
 
 function GlobalNavBar() {
-  const navigate = useNavigate()
-  const { currentUser, logout } = useAuth()
+  const { currentUser, logout, currentUserInfo } = useAuth()
   const { t, i18n } = useTranslation(['navbar']);
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElLanguage, setAnchorElLanguage] = useState(null);
   const [anchorElLoggedIn, setAnchorElLoggedIn] = useState(null)
   const [isAccordionExpanded, setIsAccordionExpanded] = useState(false)
   const [accordionIconIsClose, setAccordionIconIsClose] = useState(false)
+  const editProfileLink = currentUserInfo.isSeller ? '/profile/basics' : '/buyer-setup'
+  const navigate = useNavigate()
 
   const languages = [
     {name:"English", symbol:"en"}, 
@@ -79,7 +80,7 @@ function GlobalNavBar() {
 
   const handleEditProfile = (event) => {
     setAnchorElLoggedIn(null)
-    //TODO
+    navigate(editProfileLink)
   }
 
   const handleLogout = (event) => {
@@ -130,11 +131,11 @@ function GlobalNavBar() {
             <Typography variant='p_large' sx={{ margin:'auto' }}>Login</Typography>
           </ListItem>
           <Box sx={{ display: currentUser ? 'block' : 'none' }}>
-            <ListItem button component={Link} to="/TODO" onClick={() => handleAccordion()}>
+            <ListItem button component={Link} to={editProfileLink} onClick={() => handleAccordion()}>
               <Typography variant='p_large' sx={{ margin:'auto' }}>Edit Profile</Typography>
             </ListItem>
             <Divider />
-            <ListItem button onClick={() => {handleAccordion();setTimeout(() => {logout();navigate('/login')}, 100)}} >
+            <ListItem button onClick={() => {handleAccordion();setTimeout(() => {logout()}, 100)}} >
               <Typography variant='p_large' sx={{ margin:'auto' }}>Logout</Typography>
             </ListItem>
           </Box>

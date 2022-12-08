@@ -40,9 +40,12 @@ export function AuthProvider({ children }) {
             if (user) {
                 getDoc(doc(getFirestore(), "users", user.uid)).then((doc) => {
                     setCurrentUserInfo(doc.data())
+                    setLoading(false)
                 })
             }
-            setLoading(false)
+            if (!user) {
+                setLoading(false)
+            }
         }) 
         return unsubscribe
     }, [])
