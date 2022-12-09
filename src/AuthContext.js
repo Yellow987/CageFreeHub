@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import { auth } from './firestore'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendEmailVerification } from 'firebase/auth'
-import { getFirestore, getDoc, doc } from 'firebase/firestore'
+import { getFirestore, doc, setDoc, onSnapshot } from 'firebase/firestore'
 
 const AuthContext = React.createContext()
 
@@ -11,15 +11,22 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState()
-    const [currentUserInfo, setCurrentUserInfo] = useState()
+    const [currentUserInfo, setCurrentUserInfo] = useState({})
     const [loading, setLoading] = useState(true)
 
     function doEmailVerification() {
         sendEmailVerification(currentUser)
     }
 
-    async function signup(email, password) {
-        await createUserWithEmailAndPassword(auth, email, password);
+    function signup(email, password, data) {
+        createUserWithEmailAndPassword(auth, email, password).then((user) => {
+            console.log(user.user.uid)
+            console.log(data)
+            setDoc(doc(getFirestore(), "users", user.user.uid), data).then(() => {
+                setCurrentUserInfo(data)
+                console.log('woo')
+            })
+        })
     }
 
     async function login(email, password) {
@@ -30,17 +37,19 @@ export function AuthProvider({ children }) {
         return signOut(auth)
     }
 
-    function setCurrentUserInfoAfterSignup(info) {
-        setCurrentUserInfo(info)
-    }
-
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             setCurrentUser(user)
             if (user) {
-                getDoc(doc(getFirestore(), "users", user.uid)).then((doc) => {
-                    setCurrentUserInfo(doc.data())
-                    setLoading(false)
+                onSnapshot(doc(getFirestore(), "users", user.uid), (doc) => {
+                    if (doc.exists()) {
+                        console.log(doc)
+                        setCurrentUserInfo(doc.data())
+                        setLoading(false)
+                    } else {
+                        console.log('doc not yet exist')
+                        setLoading(false)
+                    }
                 })
             }
             if (!user) {
@@ -52,7 +61,6 @@ export function AuthProvider({ children }) {
 
     const value = { 
         doEmailVerification,
-        setCurrentUserInfoAfterSignup,
         currentUser,
         currentUserInfo,
         signup,
