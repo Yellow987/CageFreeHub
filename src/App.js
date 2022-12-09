@@ -5,8 +5,8 @@ import GlobalNavBar from './Components/GlobalNavBar';
 import CssBaseline from '@mui/material/CssBaseline';
 import Theme from './Components/Theme';
 import { AuthProvider } from './AuthContext'
-const Home = lazy(() => import('./Pages/Home'));
-const Signup = lazy(() => import('./Pages/Signup'));
+import Home from './Pages/Home';
+import Signup from './Pages/Signup';
 const ConfirmEmail = lazy(() => import('./Pages/ConfirmEmail'));
 const Verified = lazy(() => import('./Pages/Verified'));
 const PrivateRoute = lazy(() => import('./Components/PrivateRoute'));
@@ -31,15 +31,15 @@ function App() {
         <AuthProvider> 
           <GlobalNavBar />
           <Routes>
-            <Route path="/" element={<Home/>} />
-            <Route path="/admin" element={<Admin/>} />
-            <Route path="/buyer-signup" element={<Signup props={{ hereTo: 'BuyerSignup' }}/>} />
-            <Route path="/seller-signup" element={<Signup props={{ hereTo: 'SellerSignup' }}/>} />
-            <Route path="/login" element={<Signup props={{ hereTo: 'Login' }}/> }/>
+            <Route path="/" element={<PrivateRoute props={{ onPublicPage: true }}><Home/></PrivateRoute>} />
+            <Route path="/admin" element={<PrivateRoute><Admin/></PrivateRoute>} />
+            <Route path="/buyer-signup" element={<PrivateRoute props={{ onPublicPage: true }}><Signup props={{ hereTo: 'BuyerSignup' }}/></PrivateRoute>} />
+            <Route path="/seller-signup" element={<PrivateRoute props={{ onPublicPage: true }}><Signup props={{ hereTo: 'SellerSignup' }}/></PrivateRoute>} />
+            <Route path="/login" element={<PrivateRoute props={{ onPublicPage: true}}><Signup props={{ hereTo: 'Login' }}/> </PrivateRoute>}/>
             <Route path="/confirm-email" element={<PrivateRoute><ConfirmEmail/></PrivateRoute>} />
             <Route path="/verified" element={<PrivateRoute><Verified/></PrivateRoute>} />
-            <Route path='/profile/welcome' element={<PrivateRoute><Welcome /></PrivateRoute>} />
-            <Route element={<PrivateRoute><ProfileProgressBar /></PrivateRoute>}>
+            <Route path='/profile/welcome' element={<PrivateRoute props={{ allowSellers: true }}><Welcome /></PrivateRoute>} />
+            <Route element={<PrivateRoute props={{ allowSellers: true }}><ProfileProgressBar /></PrivateRoute>}>
               <Route path="/profile/basics" element={<Basics />} />
               <Route path="/profile/locations" element={<Locations />} />
               <Route path="/profile/contact" element={<Contact />} />
@@ -47,9 +47,9 @@ function App() {
               <Route path="/profile/production-details" element={<ProductionDetails />} />
               <Route path="/profile/imagery" element={<Imagery />} />
             </Route>
-            <Route path="/buyer-setup" element={<PrivateRoute><BuyerSetup/></PrivateRoute>} />
-            <Route path="profile/:id" element={<PrivateRoute><Profile /></PrivateRoute>}/>
-            <Route path="sellers" element={<PrivateRoute><Sellers /></PrivateRoute>}/>
+            <Route path="/buyer-setup" element={<PrivateRoute props={{ allowBuyers: true }}><BuyerSetup/></PrivateRoute>} />
+            <Route path="profile/:id" element={<Profile />}/> {/* //privated in the page */}
+            <Route path="sellers" element={<PrivateRoute props={{ allowBuyers: true }}><Sellers /></PrivateRoute>}/>
             <Route path="*" element={<>404</>} />
           </Routes>
         </AuthProvider>

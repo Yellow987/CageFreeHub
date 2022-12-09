@@ -23,6 +23,7 @@ function BuyerSetup() {
   const Navigate = useNavigate()
 
   useEffect(() => {
+    setLoading(false)
     onSnapshot(docRef(), (doc) => {
       if (doc.exists()) {
         const docData = doc.data()
@@ -46,7 +47,7 @@ function BuyerSetup() {
           role: '',
           email: ''
         }
-        setDoc(docRef, initialData).then(() => {
+        setDoc(docRef(), initialData).then(() => {
           setLoading(false)
         })
       }

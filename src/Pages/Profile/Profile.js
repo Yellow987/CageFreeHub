@@ -7,6 +7,7 @@ import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import Carousel from 'react-material-ui-carousel';
 import { useAuth } from '../../AuthContext';
 import adminUid from './../../AdminAccountsConfig';
+import PrivateRoute from './../../Components/PrivateRoute';
 
 function Profile() {
   const { id } = useParams()
@@ -21,13 +22,13 @@ function Profile() {
     })
   }, [docRef])
   return (
-    <>
+    <PrivateRoute props={{ allowBuyers: true, allowUid:id }}>
       {data && <Box mx='24px' sx={{ marginTop:'56px'}}>
         <AdminApprovalOptions props={{ data:data, docRef:docRef() }}/>
         
         <Grid container justifyContent='center'>
           <Grid item xs={12} md={6}>
-            {(currentUser.uid === id || currentUser.uid === adminUid) && <Box>
+            {currentUser && (currentUser.uid === id || currentUser.uid === adminUid) && <Box>
               <Typography variant='label'>Approval status</Typography>
               <Typography variant='h2' color='#CDA957' marginTop={1} marginBottom={1}>{data.status.charAt(0).toUpperCase() + data.status.slice(1)}</Typography>
               <Typography variant='p_default'>You will receive an email when your profile is approved (this will take 48 business hours at most)</Typography>
@@ -118,7 +119,7 @@ function Profile() {
           </Grid>
       </Box>}
 
-    </>
+    </PrivateRoute>
   )
 }
 

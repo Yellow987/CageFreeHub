@@ -24,7 +24,7 @@ function AdminApprovalOptions(props) {
 
   return (
     <>
-      {currentUser.uid === adminUid && <Box sx={{ marginBottom:4 }}>
+      {currentUser?.uid === adminUid && <Box sx={{ marginBottom:4 }}>
         <Button variant='contained' onClick={() => handleApprove()}>Approve Profile</Button>
         <Button color='megaDanger' sx={{ marginLeft:5 }} onClick={() => handleReject()} variant='contained'>Reject Profile</Button>
       </Box>}

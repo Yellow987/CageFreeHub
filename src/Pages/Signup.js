@@ -1,12 +1,11 @@
-import { React, useEffect, useState, useRef } from 'react'
+import { React, useState, useRef } from 'react'
 import { Box, Typography, TextField, Checkbox, FormControlLabel } from '@mui/material'
 import { Button } from '@mui/material';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from './../AuthContext';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import { useTranslation, Trans } from 'react-i18next';
-import { getFirestore, doc, setDoc } from 'firebase/firestore'
 import tosPDF from '../Media/terms_of_service.pdf'
 
 function Signup(props) {
@@ -21,10 +20,8 @@ function Signup(props) {
     textDecoration: "none",
   }
 
-  const { currentUser, doEmailVerification, setCurrentUserInfoAfterSignup } = useAuth()
   const { t } = useTranslation(['signup']);
   const { signup, login } = useAuth()
-  const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
   const emailRef = useRef("");
   const passwordRef = useRef("")
@@ -76,48 +73,29 @@ function Signup(props) {
     return errors ? true : false
   }
 
-  async function handleSubmit(event) {
+  function handleSubmit(event) {
     event.preventDefault()
     if (areValidationErrors()) {return}
 
     setLoading(true)
     if (hereTo === "Login") {
       try{
-        await login(emailRef.current.value, passwordRef.current.value)
+        login(emailRef.current.value, passwordRef.current.value)
       } catch {
         setAuthError({ isAuthError:true, errorDetails:"Invalid Username/Email or Password"})
       }
     } else {
       try {
-        await signup(emailRef.current.value, passwordRef.current.value)
+        let data = {
+          isSeller: hereTo === "SellerSignup",
+          isProfileComplete: false
+        }
+        signup(emailRef.current.value, passwordRef.current.value, data)
       } catch {
         setAuthError({ isAuthError:true, errorDetails:"Create account error"})
       }
     }
     setLoading(false)
-  }
-
-  useEffect(() => {
-    if (currentUser === null) { return }
-    if (hereTo === "Login"){
-      navigate('/profile/' + currentUser.uid)
-    } else {
-      doEmailVerification()
-      setUserData()
-      navigate('/confirm-email')
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentUser])
-
-  async function setUserData(){
-    const db = getFirestore()
-    let data = {
-      isSeller: hereTo === "SellerSignup",
-      isProfileComplete: false
-    }
-    await setDoc(doc(db, "users", currentUser.uid), data).then(() => {
-      setCurrentUserInfoAfterSignup(data)
-    })
   }
 
   function getTitle(hereTo) {

@@ -26,7 +26,6 @@ function ProfileProgressBar() {
   }
 
   useEffect(() => {
-    console.log('start')
     onSnapshot(docRef(), (doc) => {
       if (doc.exists()) {
         setData(doc.data())
@@ -90,7 +89,7 @@ function ProfileProgressBar() {
         ))}
       </Box>
       <Box sx={{ marginTop:6, maxWidth:'400px', textAlign:'left', marginBottom:2 }}>
-        {data && <Outlet context={[setPage, goToPage, setGoToPage, saveData, data]} />}
+        { data && <Outlet context={[setPage, goToPage, setGoToPage, saveData, data]} />}
         <Box align='right' sx={{ marginTop:6, marginBottom:2 }}>
           <Button><Typography variant='p_default' onClick={() => { setGoToPage('back') }}>← Back</Typography></Button>
           <Button variant='contained' onClick={() => { if(page==='Imagery'){setProfileComplete()} else {setGoToPage('next') } }}>
