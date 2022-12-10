@@ -47,8 +47,8 @@ function Profile() {
         <Grid container justifyContent='center'>
           <Grid item xs={12} md={6}>
             <Typography variant="label" sx={{marginBottom:'16px'}}>Distribution country (countries)</Typography>
-            {data.locations.map((location, index)=>{
-              return( <Typography variant='p_large_dark' sx={{marginTop:'16px'}} key={index}>{location.country}</Typography> )
+            {data.distributionCountries.map((country, index)=>{
+              return( <Typography variant='p_large_dark' sx={{marginTop:'16px'}} key={index}>{country}</Typography> )
             })}
             <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>Farm location(s)</Typography>
             {data.locations.map((location, index)=>{
@@ -95,7 +95,7 @@ function Profile() {
                     <VisibilityOutlinedIcon fontSize='small' color='primary'/> 
                   </Link>}
                 </Box>
-                <Carousel height='500px' autoPlay={false} sx={{ marginBottom:'80px'}}>
+                <Carousel height='500px' autoPlay={false} sx={{ marginBottom:'80px'}} navButtonsAlwaysVisible={true}	>
                 {data.images.map((image, index)=>{
                   return( <img width='100%' key={index} src={image.data_url} alt=""/> )
                 })}

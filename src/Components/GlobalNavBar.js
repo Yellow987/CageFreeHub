@@ -58,18 +58,22 @@ function GlobalNavBar() {
   }, [currentUserInfo])
 
   const handleOpenNavMenu = (event) => {
+    event.preventDefault()
     setAnchorElNav(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (event) => {
+    event.preventDefault()
     setAnchorElNav(null);
   };
 
   const handleOpenLanguageMenu = (event) => {
+    event.preventDefault()
     setAnchorElLanguage(event.currentTarget);
   };
 
-  const handleCloseLanguageMenu = () => {
+  const handleCloseLanguageMenu = (event) => {
+    event.preventDefault()
     setAnchorElLanguage(null);
   };
 
@@ -79,10 +83,12 @@ function GlobalNavBar() {
   }
 
   const handleLoggedInMenu = (event) => {
+    event.preventDefault()
     setAnchorElLoggedIn(event.currentTarget)
   }
 
   const handleCloseLoggedInMenu = (event) => {
+    event.preventDefault()
     setAnchorElLoggedIn(null)
   }
 
@@ -93,6 +99,7 @@ function GlobalNavBar() {
   }
 
   const handleLogout = (event) => {
+    event.preventDefault()
     setAnchorElLoggedIn(null)
     logout()
   }
@@ -197,7 +204,8 @@ function GlobalNavBar() {
               )}
             </PopupState>
           </Box>
-          <Box >
+          {/* //NO TRANSLATIONS YET */}
+          <Box sx={{ display:'none' }} >
             <Button
               size="large"
               aria-controls="menu-language"
@@ -243,7 +251,7 @@ function GlobalNavBar() {
               open={Boolean(anchorElLoggedIn)}
               onClose={handleCloseLoggedInMenu}
             >
-              <MenuItem onClick={handleEditProfile}>{t('editProfile')}</MenuItem>
+              <MenuItem onClick={(e) => { handleEditProfile(e);  }}>{t('editProfile')}aa</MenuItem>
               <MenuItem onClick={handleLogout}>{t('logout')}</MenuItem>
             </Menu>
           </Box>
@@ -266,7 +274,7 @@ function GlobalNavBar() {
             transformOrigin={{ vertical: 'top', horizontal: 'right' }}
             open={Boolean(anchorElNav)}
             onClose={handleCloseNavMenu}>
-            <MenuItem component={Link} to="/Login" onClick={handleCloseNavMenu}>
+            <MenuItem component={Link} to="/Login" onClick={(e) => handleCloseNavMenu(e)}>
               {t('login')}
             </MenuItem>
           </Menu>

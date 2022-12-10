@@ -39,7 +39,7 @@ function Basics() {
             </Typography>
             <TextField fullWidth inputRef={organizationNameRef}/>
             <Typography variant="label" sx={{ marginTop:4, marginBottom:1}}>
-                Website
+                Website (optional)
             </Typography>
             <TextField fullWidth inputRef={websiteRef} placeholder='E.g. http://marriot.com'/>
         </Box>

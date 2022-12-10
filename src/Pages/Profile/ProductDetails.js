@@ -79,7 +79,7 @@ function ProductDetails() {
               </Box>
             </Box>
             <Box>
-              <Typography variant='p_default_bold' color='#596676;' sx={{ marginTop:2 }}>Price per egg</Typography>
+              <Typography variant='p_default_bold' color='#596676;' sx={{ marginTop:2 }}>Price per unit (egg, ton, or kilogram)</Typography>
               <Box sx={{ marginTop:1 }}>
                 <TextField placeholder='$' sx={{ marginRight:'5%', width:'47.5%' }} inputRef={el => inputRefs.current[type]['priceRef'] = el} ></TextField>
                 <FormControl sx={{ width:'47.5%' }}>
