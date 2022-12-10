@@ -98,7 +98,7 @@ function Imagery() {
         </Typography>
       </Alert>
       <Typography variant='p_default_bold' sx={{ marginTop:4 }}>Photos of farm</Typography>
-      <ImageUploading multiple maxNumber={6} onChange={(imageList) => {handleImageUpload(imageList, imageFolder, setImages, images, 'images')}} dataURLKey="data_url" acceptType={["jpg", "png"]} maxFileSize='8000000'>
+      <ImageUploading multiple maxNumber={6} onChange={(imageList) => {handleImageUpload(imageList, imageFolder, setImages, images, 'images')}} dataURLKey="data_url" acceptType={["jpg", "png", "jpeg"]} maxFileSize='8000000'>
       {({ imageList, onImageUpload, errors }) => (
         <Box>
           <Paper sx={{ marginTop:1 }} ><Button color='grey' fullWidth variant='outlined' onClick={(onImageUpload)}>
@@ -122,7 +122,7 @@ function Imagery() {
       )}
       </ImageUploading>
       <Typography variant='p_default_bold' sx={{ marginTop:4 }}>Logo (optional)</Typography>
-      <ImageUploading maxNumber={1} value={logo} onChange={(uploadedLogo) => {handleImageUpload(uploadedLogo, logoFolder, setLogo, logo, 'logos')}} dataURLKey="data_url" acceptType={["jpg", "png"]} maxFileSize='8000000'>
+      <ImageUploading maxNumber={1} value={logo} onChange={(uploadedLogo) => {handleImageUpload(uploadedLogo, logoFolder, setLogo, logo, 'logos')}} dataURLKey="data_url" acceptType={["jpg", "png", "jpeg"]} maxFileSize='8000000'>
       {({ imageList, onImageUpload, errors }) => (
         <Box>
           <Paper sx={{ marginTop:1 }} ><Button color='grey' fullWidth variant='outlined' onClick={(onImageUpload)}>

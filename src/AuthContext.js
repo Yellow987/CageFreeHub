@@ -53,6 +53,7 @@ export function AuthProvider({ children }) {
                 })
             }
             if (!user) {
+                setCurrentUserInfo(null)
                 setLoading(false)
             }
         }) 
