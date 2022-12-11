@@ -4,6 +4,7 @@ import { Box, Button, LinearProgress, Typography } from '@mui/material';
 import { useState, useEffect, useCallback  } from 'react';
 import { useAuth } from '../AuthContext'
 import { getFirestore, doc, setDoc, onSnapshot } from 'firebase/firestore'
+import adminUid from '../AdminAccountsConfig'
 
 function ProfileProgressBar() {
   const [page, setPage] = useState('')
@@ -11,7 +12,8 @@ function ProfileProgressBar() {
   const pages = ["Basics", "Location(s)", "Contact", "Product details", "Production details", "Imagery"]
   const db = getFirestore();
   const { currentUser, currentUserInfo } = useAuth();
-  const docRef = useCallback(() => { return doc(db, "farms", currentUser.uid) }, [db, currentUser.uid])
+  const uid = currentUser.uid === adminUid ? JSON.parse(localStorage.getItem('uidToEdit')) : currentUser.uid
+  const docRef = useCallback(() => { return doc(db, "farms", uid) }, [db, uid])
   const [data, setData] = useState(null)
   const isEqual = require('lodash.isequal');
 
@@ -37,6 +39,7 @@ function ProfileProgressBar() {
           status: 'pending',
           adminLastStatusUpdate: utcDate,
           creationDate: utcDate,
+          claimed: adminUid === currentUser.uid ? false : true,
 
           //Basics
           organizationName: '',
@@ -70,16 +73,17 @@ function ProfileProgressBar() {
         setDoc(docRef(), initialData)
       }
     })
-  }, [docRef])
+  }, [docRef, currentUser])
 
   function setProfileComplete() {
-    setDoc(doc(db, "users", currentUser.uid), {...currentUserInfo, isProfileComplete:true }).then(() => {
+    setDoc(doc(db, "users", uid), {...currentUserInfo, isProfileComplete:true }).then(() => {
       setGoToPage('next') 
     })
   }
 
   return (
     <Box align='center' mx={{ sm:'10%', xs:'24px' }} sx={{ marginTop:6 }}>
+      {currentUser.uid === adminUid && <Typography variant='h1'>ADMIN IS EDITING {uid}</Typography>}
       <Box sx={{ display:'flex', flexDirection:'row', justifyContent: 'center' }} >
         {pages.map((pageName) => (
           <Box key={pageName} sx={{ width:'16.66%', marginRight:'2px' }}>
@@ -89,7 +93,7 @@ function ProfileProgressBar() {
         ))}
       </Box>
       <Box sx={{ marginTop:6, maxWidth:'400px', textAlign:'left', marginBottom:2 }}>
-        { data && <Outlet context={[setPage, goToPage, setGoToPage, saveData, data]} />}
+        { data && <Outlet context={[setPage, goToPage, setGoToPage, saveData, data, uid]} />}
         <Box align='right' sx={{ marginTop:6, marginBottom:2 }}>
           <Button><Typography variant='p_default' onClick={() => { setGoToPage('back') }}>← Back</Typography></Button>
           <Button variant='contained' onClick={() => { if(page==='Imagery'){setProfileComplete()} else {setGoToPage('next') } }}>

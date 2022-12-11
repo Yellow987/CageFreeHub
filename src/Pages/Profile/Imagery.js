@@ -8,18 +8,16 @@ import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { Alert, Typography, Paper, AlertTitle } from '@mui/material'
 import ImageUploading from "react-images-uploading";
 import { getStorage, ref, uploadBytes, deleteObject, getDownloadURL } from "firebase/storage";
-import { useAuth } from './../../AuthContext';
 import uuid from 'react-uuid';
 
 function Imagery() {
-  const [setPage, goToPage, setGoToPage, saveData, data] = useOutletContext()
+  const [setPage, goToPage, setGoToPage, saveData, data, uid] = useOutletContext()
   const [images, setImages] = useState(data.images)
   const [logo, setLogo] = useState(data.logos)
   const navigate = useNavigate()
-  const { currentUser } = useAuth()
   const storage = getStorage()
-  const imageFolder = currentUser.uid + '/images'
-  const logoFolder = currentUser.uid + '/logo'
+  const imageFolder = uid + '/images'
+  const logoFolder = uid + '/logo'
 
   function saveImages(images, storagePath) {
     return new Promise((resolve) => {
@@ -48,7 +46,7 @@ function Imagery() {
     if (goToPage === '') {return}
     if (goToPage === 'next') {
       setGoToPage('')
-      navigate('/profile/' + currentUser.uid)
+      navigate('/profile/' + uid)
     } else if (goToPage === 'back') {
       setGoToPage('')
       navigate('/profile/production-details')

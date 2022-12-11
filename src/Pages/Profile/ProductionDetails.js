@@ -5,10 +5,9 @@ import { useOutletContext } from 'react-router'
 import { Box, Select, Typography, MenuItem, TextField, Button, Link } from '@mui/material'
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { useAuth } from './../../AuthContext';
 
 function ProductionDetails() {
-  const [setPage, goToPage, setGoToPage, saveData, data] = useOutletContext()
+  const [setPage, goToPage, setGoToPage, saveData, data, uid] = useOutletContext()
   const [certification, setCertification] = useState(data.productionDetails.certification)
   const [productionSystem, setProductionSystem] = useState(data.productionDetails.productionSystem)
   const certifyingOrganizationRef = useRef()
@@ -16,8 +15,7 @@ function ProductionDetails() {
   const [certificationFile, setCertificationFile] = useState(data.productionDetails.certificationFile)
   const navigate = useNavigate()
   const storage = getStorage()
-  const { currentUser } = useAuth()
-  const certificateRef = ref(storage, currentUser.uid + '/certification/certificate')
+  const certificateRef = ref(storage, uid + '/certification/certificate')
 
   useEffect(() => {
     setPage('Production details')
