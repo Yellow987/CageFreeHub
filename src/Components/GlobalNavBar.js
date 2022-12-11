@@ -18,6 +18,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LanguageIcon from '@mui/icons-material/Language';
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import CloseIcon from '@mui/icons-material/Close';
+import adminUid from '../AdminAccountsConfig';
 
 const styles = {
   betaBox : {
@@ -204,6 +205,9 @@ function GlobalNavBar() {
               )}
             </PopupState>
           </Box>
+          <Box>
+            <Button variant='contained' sx={{ display:currentUser?.uid === adminUid ? 'block' : 'none' }} onClick={() => {navigate('/admin')}} >ADMIN PORTAL</Button>
+          </Box>
           {/* //NO TRANSLATIONS YET */}
           <Box sx={{ display:'none' }} >
             <Button
@@ -251,7 +255,7 @@ function GlobalNavBar() {
               open={Boolean(anchorElLoggedIn)}
               onClose={handleCloseLoggedInMenu}
             >
-              <MenuItem onClick={(e) => { handleEditProfile(e);  }}>{t('editProfile')}aa</MenuItem>
+              <MenuItem onClick={(e) => { handleEditProfile(e);  }}>{t('editProfile')}</MenuItem>
               <MenuItem onClick={handleLogout}>{t('logout')}</MenuItem>
             </Menu>
           </Box>
