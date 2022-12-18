@@ -27,8 +27,6 @@ export default function PrivateRoute({ children, props = {} }) {
   
   if (currentUserInfo && currentUser) {
 
-    console.log(currentUserInfo)
-
     if (currentUser.uid === adminUid) { //always allow admin
       console.log('always allow admin')
       return children

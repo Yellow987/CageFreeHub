@@ -20,11 +20,8 @@ export function AuthProvider({ children }) {
 
     function signup(email, password, data) {
         createUserWithEmailAndPassword(auth, email, password).then((user) => {
-            console.log(user.user.uid)
-            console.log(data)
             setDoc(doc(getFirestore(), "users", user.user.uid), data).then(() => {
                 setCurrentUserInfo(data)
-                console.log('woo')
             })
         })
     }
