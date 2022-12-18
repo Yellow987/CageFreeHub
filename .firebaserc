@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "freerangeeggfarm-26736"
+    "default": "freerangeeggfarm-26736",
+    "prod": "chickens-are-my-friends"
   }
 }
