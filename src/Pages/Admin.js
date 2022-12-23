@@ -7,7 +7,7 @@ import { collection, getFirestore, query, orderBy, where, limit, getDocs } from 
 
 function Admin() {
   const db = getFirestore();
-  const [queryParams, setQueryParams] = useState({whom:'sellers', status:'pending', claim:'claimed'})
+  const [queryParams, setQueryParams] = useState({whom:'sellers', status:'pending'})
   const [data, setData] = useState([])
   const limitRef = useRef(null)
 
@@ -71,17 +71,14 @@ function Admin() {
       <Box sx={{ display:'flex', alignItems: 'center', marginBottom:8 }}>
         <Box sx={{ width:'40%'}}>
           <Box sx={{ marginTop:2 }}>
-            <Button variant='contained' onClick={() => setQueryParams({...queryParams, whom:'sellers'})}>sellers</Button>
-            <Button variant='contained' onClick={() => setQueryParams({...queryParams, whom:'buyers'})}>buyers</Button>
+            <Button variant='contained' color={queryParams.whom === "sellers" ? 'primary' : 'megaDanger'} onClick={() => setQueryParams({...queryParams, whom:'sellers'})}>sellers</Button>
+            <Button variant='contained' color={queryParams.whom === "buyers" ? 'primary' : 'megaDanger'} onClick={() => setQueryParams({...queryParams, whom:'buyers'})}>buyers</Button>
           </Box>
           <Box sx={{ marginTop:2 }}>
-            <Button variant='contained' onClick={() => setQueryParams({...queryParams, status:'approved'})}>Approved</Button>
-            <Button variant='contained' onClick={() => setQueryParams({...queryParams, status:'pending'})}>Pending</Button>
-            <Button variant='contained' onClick={() => setQueryParams({...queryParams, status:'rejected'})}>Rejected</Button>
-          </Box>
-          <Box sx={{ marginTop:2 }}>
-            <Button variant='contained' onClick={() => setQueryParams({...queryParams, claim:'claimed'})}>claimed</Button>
-            <Button variant='contained' onClick={() => setQueryParams({...queryParams, claim:'unclaimed'})}>unclaimed</Button>
+            <Button variant='contained' color={queryParams.status === "approved" ? 'primary' : 'megaDanger'} onClick={() => setQueryParams({...queryParams, status:'approved'})}>Approved</Button>
+            <Button variant='contained' color={queryParams.status === "pending" ? 'primary' : 'megaDanger'} onClick={() => setQueryParams({...queryParams, status:'pending'})}>Pending</Button>
+            <Button variant='contained' color={queryParams.status === "rejected" ? 'primary' : 'megaDanger'} onClick={() => setQueryParams({...queryParams, status:'rejected'})}>Rejected</Button>
+            <Button variant='contained' color={queryParams.status === "unclaimed" ? 'primary' : 'megaDanger'} onClick={() => setQueryParams({...queryParams, status:'unclaimed'})}>Unclaimed</Button>
           </Box>
           <Box sx={{ marginTop:2 }}>
             <Typography>query how many buyers/sellers?:</Typography>

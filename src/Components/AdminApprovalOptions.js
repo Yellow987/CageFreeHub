@@ -1,14 +1,18 @@
-import React from 'react'
-import { Box, Button } from '@mui/material';
+import { useState } from 'react'
+import { Box, Button, Paper, TextField } from '@mui/material';
 import { setDoc } from 'firebase/firestore'
 import adminUid from '../AdminAccountsConfig'
 import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { functions } from './../firestore';
+import { httpsCallable } from 'firebase/functions'
 
 function AdminApprovalOptions(props) {
-  const { data, docRef, id } = props.props
+  const { data, docRef, id, isSeller } = props.props
   const { currentUser } = useAuth();
   const navigate = useNavigate()
+  const [rejectMessageBoxOpen, setRejectMessageBoxOpen] = useState(false)
+  const [rejectionReason, setRejectionReason] = useState("")
 
   function changeProfileStatus(status) {
     setDoc(docRef, {...data, status:status})
@@ -17,13 +21,15 @@ function AdminApprovalOptions(props) {
   function handleApprove(e) {
     e.preventDefault()
     window.confirm('Are you sure you want to **APPROVE** this profile?')
+    sendEmail(true)
     changeProfileStatus('approved')
   }
 
   function handleReject(e) {
     e.preventDefault()
-    window.confirm('Are you sure you want to **REJECT** this profile?')
+    sendEmail(false, rejectionReason)
     changeProfileStatus('rejected')
+    setRejectMessageBoxOpen(false)
   }
 
   function handleEdit(e) {
@@ -32,12 +38,48 @@ function AdminApprovalOptions(props) {
     navigate('/profile/basics')
   }
 
+  function sendEmail(isApproved, emailRejectionReason = "") {
+    const data = {
+      isSeller: isSeller, //needed for all
+      isApproved: isApproved, //needed for all
+      emailTo: "daryldsouza123@gmail.com",//needed for all
+      name: "TEST NAME", //needed for all
+      rejectionReason: emailRejectionReason, //needed when denied
+      userUid: isSeller && isApproved ? id : "" //needed for approved sellers
+    }
+    httpsCallable(functions, 'adminActionOnStatus')(data)
+    .then((result) => {console.log(result)})
+  }
+
   return (
     <>
       {currentUser?.uid === adminUid && <Box sx={{ marginBottom:4 }}>
         <Button variant='contained' onClick={(e) => handleApprove(e)}>Approve Profile</Button>
-        <Button color='megaDanger' sx={{ marginLeft:5 }} onClick={(e) => handleReject(e)} variant='contained'>Reject Profile</Button>
+        <Button color='megaDanger' sx={{ marginLeft:5 }} onClick={(e) => setRejectMessageBoxOpen(true)} variant='contained'>Reject Profile</Button>
         <Button variant='outlined' sx={{ marginLeft:5 }} onClick={(e) => handleEdit(e)} >Edit Profile</Button>
+        {rejectMessageBoxOpen && <Box>
+          <Paper sx={{ margin:2, display:'flex', flexDirection:'column' }}>
+            Reason for rejection:
+            <TextField value={rejectionReason} onChange={(e) => setRejectionReason(e.target.value)}></TextField>
+            <Box sx={{ margin:2 }}>
+              {isSeller && <Box>
+                We were unable to register your organization on the Cage-Free Hub, a database and resource centre that connects buyers and sellers of 
+                cage-free eggs from around the world. {rejectionReason} 
+                <br /><br />We’d still love to have you back! If this problem can be remedied, please sign up again through our organization sign up page.
+              </Box>}
+              {!isSeller && <Box>
+                We were unable to register your business’s profile on the Cage-Free Hub, a database and resource centre that 
+                connects buyers and sellers of cage-free eggs from around the world, because the information you provided was incomplete. ${rejectionReason}
+                <br /><br />Finalize your profile today so you can start making connections, improving your market visibility, and sharing 
+                resources and learning with others like you. To reaccess your profile submission, access the button below titled “Finalize profile”.
+              </Box>}  
+            </Box>
+          </Paper>
+          <Box sx={{ display:"flex", justifyContent:"space-between" }}>
+            <Button variant='contained' onClick={() => setRejectMessageBoxOpen(false)}>Cancel</Button>
+            <Button color='megaDanger'  onClick={(e) => handleReject(e)} variant='contained'>Confirm Profile Rejection</Button>
+          </Box>
+        </Box>}
       </Box>}
     </>
   )
