@@ -2,10 +2,11 @@ import { React } from "react";
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
-import { sendEmailVerification } from "firebase/auth";
 import { Box, Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import { useAuth } from '../AuthContext'
+import { httpsCallable } from 'firebase/functions'
+import { functions } from './../firestore';
 
 function ConfirmEmail() {
   const { currentUser } = useAuth();
@@ -14,7 +15,7 @@ function ConfirmEmail() {
     e.preventDefault()
     console.log(currentUser.emailVerified)
     if (!currentUser.emailVerified){
-      sendEmailVerification(currentUser)
+      httpsCallable(functions, 'sendVerificationEmail')({emailTo: currentUser.email }).then((result) => {console.log(result); console.log('sent')})
     }
   }
 

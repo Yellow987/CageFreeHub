@@ -5,7 +5,6 @@ import { Alert, Box, Button, Container, Typography} from '@mui/material'
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 
-
 function Welcome() {
 
   return (

@@ -24,7 +24,7 @@ function Profile() {
   return (
     <PrivateRoute props={{ allowBuyers: true, allowUid:id }}>
       {data && <Box mx='24px' sx={{ marginTop:'56px'}}>
-        <AdminApprovalOptions props={{ data:data, docRef:docRef(), id }}/>
+        <AdminApprovalOptions props={{ data:data, docRef:docRef(), id:id, isSeller:true }}/>
         
         <Grid container justifyContent='center'>
           <Grid item xs={12} md={6}>
