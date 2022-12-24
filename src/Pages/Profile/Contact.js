@@ -3,12 +3,12 @@ import { useEffect, useRef, useState } from 'react';
 import { Box } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
-import { Alert, FormGroup, TextField, Typography, FormControlLabel, Checkbox } from '@mui/material'
+import { Alert, FormGroup, TextField, Typography, FormControlLabel, Checkbox, Button } from '@mui/material'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 
 function Contact() {
-    const [setPage, goToPage, setGoToPage, saveData, data] = useOutletContext();
+    const [setPage, saveData, data] = useOutletContext();
     const nameRef = useRef('')
     const jobTitleRef = useRef('')
     const [contactMethods, setContactMethods] = useState({
@@ -25,12 +25,11 @@ function Contact() {
         setPage('Contact')
         nameRef.current.value = data.name
         jobTitleRef.current.value = data.jobTitle
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    useEffect(() => {
-        if (goToPage === '') {return}
+    }, [data, setPage])
+  
+    function changePage(e, newPage) {
+      e.preventDefault()
+      if (isDataValid()) {
         saveData({name: nameRef.current.value, 
           jobTitle: jobTitleRef.current.value, 
           contactChannels: {
@@ -39,15 +38,13 @@ function Contact() {
             wechat: contactMethods.wechat ? wechat : ''
           }
         })
-        if (goToPage === 'next') {
-            setGoToPage('')
-            navigate('/profile/product-details')
-        } else if (goToPage === 'back') {
-            setGoToPage('')
-            navigate('/profile/locations')
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [goToPage])
+        navigate(newPage)
+      }
+    }
+
+    function isDataValid() {
+        return true
+    }
 
     return(
         <Box sx={{ display:'flex', flexDirection:'column' }}>
@@ -69,6 +66,12 @@ function Contact() {
             <FormControlLabel control={<Checkbox checked={contactMethods.wechat} onClick={() => setContactMethods({...contactMethods, wechat:!contactMethods['wechat']})}/>}label="WeChat" />
             {contactMethods.wechat && <PhoneInput placeholder="Enter wechat number" value={wechat} onChange={setWechat} preferredCountries={['cn','in','id','jp','my','ph','th']} enableSearch/>}
           </FormGroup>
+          <Box align='right' sx={{ marginTop:6, marginBottom:2 }}>
+            <Button><Typography variant='p_default' onClick={(e) => { changePage(e, "/profile/locations") }}>← Back</Typography></Button>
+            <Button variant='contained' onClick={(e) => { changePage(e, "/profile/product-details") }}>
+                Next →
+            </Button>
+          </Box>
         </Box>
     )
 }

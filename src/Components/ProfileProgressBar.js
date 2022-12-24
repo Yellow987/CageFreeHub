@@ -1,6 +1,6 @@
 import React from 'react'
 import { Outlet } from 'react-router'
-import { Box, Button, LinearProgress, Typography } from '@mui/material';
+import { Box, LinearProgress, Typography } from '@mui/material';
 import { useState, useEffect, useCallback  } from 'react';
 import { useAuth } from '../AuthContext'
 import { getFirestore, doc, setDoc, onSnapshot } from 'firebase/firestore'
@@ -8,10 +8,9 @@ import adminUid from '../AdminAccountsConfig'
 
 function ProfileProgressBar() {
   const [page, setPage] = useState('')
-  const [goToPage, setGoToPage] = useState('')
   const pages = ["Basics", "Location(s)", "Contact", "Product details", "Production details", "Imagery"]
   const db = getFirestore();
-  const { currentUser, currentUserInfo } = useAuth();
+  const { currentUser } = useAuth();
   const uid = currentUser.uid === adminUid ? JSON.parse(localStorage.getItem('uidToEdit')) : currentUser.uid
   const docRef = useCallback(() => { return doc(db, "farms", uid) }, [db, uid])
   const [data, setData] = useState(null)
@@ -36,7 +35,7 @@ function ProfileProgressBar() {
         const utcDate = new Date()
         const initialData = {
           //Meta
-          status: 'pending',
+          status: 'incomplete',
           adminLastStatusUpdate: utcDate,
           creationDate: utcDate,
           claimed: adminUid === currentUser.uid ? false : true,
@@ -75,12 +74,6 @@ function ProfileProgressBar() {
     })
   }, [docRef, currentUser])
 
-  function setProfileComplete() {
-    setDoc(doc(db, "users", uid), {...currentUserInfo, isProfileComplete:true }).then(() => {
-      setGoToPage('next') 
-    })
-  }
-
   return (
     <Box align='center' mx={{ sm:'10%', xs:'24px' }} sx={{ marginTop:6 }}>
       {currentUser.uid === adminUid && <Typography variant='h1'>ADMIN IS EDITING {uid}</Typography>}
@@ -93,13 +86,7 @@ function ProfileProgressBar() {
         ))}
       </Box>
       <Box sx={{ marginTop:6, maxWidth:'400px', textAlign:'left', marginBottom:2 }}>
-        { data && <Outlet context={[setPage, goToPage, setGoToPage, saveData, data, uid]} />}
-        <Box align='right' sx={{ marginTop:6, marginBottom:2 }}>
-          <Button><Typography variant='p_default' onClick={() => { setGoToPage('back') }}>← Back</Typography></Button>
-          <Button variant='contained' onClick={() => { if(page==='Imagery'){setProfileComplete()} else {setGoToPage('next') } }}>
-            {page === 'Imagery' ? "Submit for approval" : "Next →"}
-          </Button>
-        </Box>
+        { data && <Outlet context={[setPage, saveData, data, uid]} />}
       </Box>
     </Box>
   )

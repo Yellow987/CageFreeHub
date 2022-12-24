@@ -1,4 +1,4 @@
-import { Alert, Select, TextField, Typography, FormControlLabel, Checkbox, MenuItem, InputLabel, FormControl } from '@mui/material'
+import { Alert, Select, TextField, Typography, FormControlLabel, Checkbox, MenuItem, InputLabel, FormControl, Button } from '@mui/material'
 import React from 'react'
 import { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router'
@@ -7,7 +7,7 @@ import { Box } from '@mui/system'
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 
 function ProductDetails() {
-  const [setPage, goToPage, setGoToPage, saveData, data] = useOutletContext()
+  const [setPage, saveData, data] = useOutletContext()
   const types = ['Shell', 'Frozen', 'Liquid', 'Powder', 'Other']
   const [inputStates, setInputStates] = useState(types.reduce((map, type) => { return {...map, [type]: {isChecked:false, unit:'Eggs', currency:'USD'} }; }, {}))
   const inputRefs = useRef(types.reduce((map, type) => { return {...map, [type]:{capacityRef:'', priceRef:''} }; }, {}))
@@ -25,33 +25,28 @@ function ProductDetails() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  function sendData() {
-    const productDetails = {}
-    for (const [type, value] of Object.entries(inputStates)) {
-      if (value['isChecked']) {
-        productDetails[type] = {
-          capacity : inputRefs.current[type]['capacityRef'].value,
-          unit : inputStates[type]['unit'],
-          price : inputRefs.current[type]['priceRef'].value,
-          currency : inputStates[type]['currency']
+  function changePage(e, newPage) {
+    e.preventDefault()
+    if (isDataValid()) {
+      const productDetails = {}
+      for (const [type, value] of Object.entries(inputStates)) {
+        if (value['isChecked']) {
+          productDetails[type] = {
+            capacity : inputRefs.current[type]['capacityRef'].value,
+            unit : inputStates[type]['unit'],
+            price : inputRefs.current[type]['priceRef'].value,
+            currency : inputStates[type]['currency']
+          }
         }
       }
+      saveData({productDetails: productDetails})
+      navigate(newPage)
     }
-    saveData({productDetails: productDetails})
-    }
+  }
 
-  useEffect(() => {
-    if (goToPage === '') {return}
-    sendData()  
-    if (goToPage === 'next') {
-      setGoToPage('')
-      navigate('/profile/production-details')
-    } else if (goToPage === 'back') {
-      setGoToPage('')
-      navigate('/profile/contact')
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [goToPage])
+  function isDataValid() {
+      return true
+  }
 
   return (
     <Box>
@@ -93,6 +88,12 @@ function ProductDetails() {
           </Box>
         </Box>
       ))}
+      <Box align='right' sx={{ marginTop:6, marginBottom:2 }}>
+        <Button><Typography variant='p_default' onClick={(e) => { changePage(e, "/profile/contact") }}>← Back</Typography></Button>
+        <Button variant='contained' onClick={(e) => { changePage(e, "/profile/production-details") }}>
+            Next →
+        </Button>
+      </Box>
     </Box>
   )
 }

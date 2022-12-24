@@ -7,7 +7,7 @@ import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 
 function ProductionDetails() {
-  const [setPage, goToPage, setGoToPage, saveData, data, uid] = useOutletContext()
+  const [setPage, saveData, data, uid] = useOutletContext()
   const [certification, setCertification] = useState(data.productionDetails.certification)
   const [productionSystem, setProductionSystem] = useState(data.productionDetails.productionSystem)
   const certifyingOrganizationRef = useRef()
@@ -23,29 +23,24 @@ function ProductionDetails() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  function sendData() {
-    const productionDetails = {
-      productionSystem: productionSystem,
-      certification: certification,
-      certifyingOrganization: certification === certificationOpts[2] ? '' : certifyingOrganizationRef.current.value,
-      certificationFile: certification === certificationOpts[0] ? certificationFile : ''
+  function changePage(e, newPage) {
+    e.preventDefault()
+    if (isDataValid()) {
+      const productionDetails = {
+        productionSystem: productionSystem,
+        certification: certification,
+        certifyingOrganization: certification === certificationOpts[2] ? '' : certifyingOrganizationRef.current.value,
+        certificationFile: certification === certificationOpts[0] ? certificationFile : ''
+      }
+  
+      saveData({productionDetails: productionDetails})
+      navigate(newPage)
     }
-
-    saveData({productionDetails: productionDetails})
   }
 
-  useEffect(() => {
-    if (goToPage === '') {return}
-    sendData()
-    if (goToPage === 'next') {
-      setGoToPage('')
-      navigate('/profile/imagery')
-    } else if (goToPage === 'back') {
-      setGoToPage('')
-      navigate('/profile/product-details')
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [goToPage])
+  function isDataValid() {
+      return true
+  }
 
   const certificationOpts = [
     'Yes, we are certified',
@@ -115,6 +110,12 @@ function ProductionDetails() {
           </Typography>}
         </Box>
       }
+      <Box align='right' sx={{ marginTop:6, marginBottom:2 }}>
+        <Button><Typography variant='p_default' onClick={(e) => { changePage(e, "/profile/product-details") }}>← Back</Typography></Button>
+        <Button variant='contained' onClick={(e) => { changePage(e, "/profile/imagery") }}>
+            Next →
+        </Button>
+      </Box>
     </Box>
   )
 }

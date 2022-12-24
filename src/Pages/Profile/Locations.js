@@ -5,12 +5,13 @@ import { useOutletContext } from 'react-router'
 import { Typography, TextField, Box, MenuItem, Select, Button } from '@mui/material';
 
 function Locations() {
-  const [setPage, goToPage, setGoToPage, saveData, data] = useOutletContext()
+  const [setPage, saveData, data] = useOutletContext()
   const navigate = useNavigate()
   const cityRefs = useRef([])
   const [countries, setCountries] = useState(data.locations.reduce((acc, location) => {return [...acc, location.country]}, []))
   const supportedCountries = ["China", "India", "Indonesia", "Japan", "Malaysia", "Philippines", "Thailand"]
   const [distributionCountries, setDistributionCountries] = useState(data.distributionCountries)
+  const [errors, setErrors] = useState(data.locations.reduce((acc, location) => {return [...acc, {city:false, country:true}]}, []))
 
   useEffect(() => {
     setPage('Location(s)')
@@ -18,26 +19,34 @@ function Locations() {
       cityRefs.current[i].value = location.city
     })
   }, [data.locations, setPage])
-  
-  useEffect(() => {
-    if (goToPage === '') {return}
-    const locations = []
+
+  function changePage(e, newPage) {
+    e.preventDefault()
+    if (isDataValid()) {
+      const locations = []
+      for (let i = 0; i < countries.length; i++) {
+        locations.push({
+          city: cityRefs.current[i].value,
+          country: countries[i]
+        })
+      }
+      saveData({ locations: locations, distributionCountries: distributionCountries })
+      navigate(newPage)
+    }
+  }
+
+  function isDataValid() {
+    let errors = false
     for (let i = 0; i < countries.length; i++) {
-      locations.push({
-        city: cityRefs.current[i].value,
-        country: countries[i]
-      })
+      if (cityRefs.current[i].value === "" || countries[i] === "") {
+        errors = true
+      }
     }
-    saveData({ locations: locations, distributionCountries: distributionCountries })
-    if (goToPage === 'next') {
-      setGoToPage('')
-      navigate('/profile/contact')
-    } else if (goToPage === 'back') {
-      setGoToPage('')
-      navigate('/profile/basics')
+    if (errors) {
+      return false
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [goToPage])
+    return true
+  }
 
   function removeLocation(index) {
     for (let i = index; i < countries.length - 1; i++) {
@@ -47,6 +56,9 @@ function Locations() {
     const countryCopy = [...countries]
     countryCopy.splice(index, 1); 
     setCountries(countryCopy)
+    const errorCopy = [...errors];
+    errorCopy.splice(index, 1)
+    setErrors(errorCopy)
   }
   
   return (
@@ -61,14 +73,15 @@ function Locations() {
           </Box>
           <TextField fullWidth sx={{ marginTop:1, marginBottom:2, background:'#FFFFFF' }} inputRef={el => cityRefs.current[i] = el}></TextField>
           <Typography variant="label" >Country</Typography>
-          <Select fullWidth sx={{ marginTop:1, background:'#FFFFFF' }} value={countries[i]} onChange={(e) => {const copy = [...countries]; copy[i] = e.target.value; setCountries(copy) }}>
+          <Select error={errors[i].country} helperText={errors[i].country ? "Please select a country" : ""} fullWidth 
+          sx={{ marginTop:1, background:'#FFFFFF' }} value={countries[i]} onChange={(e) => {const copy = [...countries]; copy[i] = e.target.value; setCountries(copy) }}>
             {supportedCountries.map((supportedCountry) => (
               <MenuItem key={supportedCountry} value={supportedCountry}>{supportedCountry}</MenuItem>
             ))}
           </Select>
         </Box>
       ))}
-      <Button sx={{ marginTop:3 }} onClick={() => {setCountries([...countries, ''])}}>
+      <Button sx={{ marginTop:3 }} onClick={() => {setCountries([...countries, '']); setErrors([...errors, {city:false, country:false}])}}>
         <Typography variant='p_small'>+ I have an additional farm location</Typography>
       </Button>
       <Typography variant="label" sx={{ marginTop:4 }}>Distribution country (countries)</Typography>
@@ -77,6 +90,12 @@ function Locations() {
           <MenuItem key={supportedCountry} value={supportedCountry}>{supportedCountry}</MenuItem>
         ))}
       </Select>
+      <Box align='right' sx={{ marginTop:6, marginBottom:2 }}>
+        <Button><Typography variant='p_default' onClick={(e) => { changePage(e, "/profile/basics") }}>← Back</Typography></Button>
+        <Button variant='contained' onClick={(e) => { changePage(e, "/profile/contact") }}>
+            Next →
+        </Button>
+      </Box>
     </Box>
   )
 }

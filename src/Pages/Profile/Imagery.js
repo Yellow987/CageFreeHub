@@ -11,7 +11,7 @@ import { getStorage, ref, uploadBytes, deleteObject, getDownloadURL } from "fire
 import uuid from 'react-uuid';
 
 function Imagery() {
-  const [setPage, goToPage, setGoToPage, saveData, data, uid] = useOutletContext()
+  const [setPage, saveData, data, uid] = useOutletContext()
   const [images, setImages] = useState(data.images)
   const [logo, setLogo] = useState(data.logos)
   const navigate = useNavigate()
@@ -40,19 +40,6 @@ function Imagery() {
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-
-  useEffect(() => {
-    if (goToPage === '') {return}
-    if (goToPage === 'next') {
-      setGoToPage('')
-      navigate('/profile/' + uid)
-    } else if (goToPage === 'back') {
-      setGoToPage('')
-      navigate('/profile/production-details')
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [goToPage])
 
   async function getImagesUrl(storagePath, uuids) {
     return new Promise((resolve) => {
@@ -85,6 +72,18 @@ function Imagery() {
     callStateSet([...copy])
     saveData({[arrImagesName]: [...copy]})
     deleteObject(ref(storage, folder + '/' + deletedImage[0].uuid))
+  }
+
+  function changePage(e, newPage) {
+    e.preventDefault()
+    if (isDataValid()) {
+      saveData({ status: 'pending' })
+      navigate(newPage)
+    }
+  }
+
+  function isDataValid() {
+    return true
   }
 
   return (
@@ -138,6 +137,12 @@ function Imagery() {
         </Box>
       )}
       </ImageUploading>
+      <Box align='right' sx={{ marginTop:6, marginBottom:2 }}>
+        <Button><Typography variant='p_default' onClick={(e) => { changePage(e, "/profile/production-details") }}>← Back</Typography></Button>
+        <Button variant='contained' onClick={(e) => { changePage(e, "/profile/" + uid) }}>
+            Submit
+        </Button>
+      </Box>
     </Box>
   )
 }
