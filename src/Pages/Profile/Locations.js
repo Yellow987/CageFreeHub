@@ -1,82 +1,107 @@
-import React from 'react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { useOutletContext } from 'react-router'
-import { Typography, TextField, Box, MenuItem, Select, Button } from '@mui/material';
+import { Typography, TextField, Box, MenuItem, Select, Button, FormHelperText } from '@mui/material';
+import { useForm, Controller, useFieldArray } from "react-hook-form";
+import NextBackPage from './../../Components/NextBackPage';
 
 function Locations() {
-  const [setPage, goToPage, setGoToPage, saveData, data] = useOutletContext()
+  const [setPage, saveData, data] = useOutletContext()
   const navigate = useNavigate()
-  const cityRefs = useRef([])
-  const [countries, setCountries] = useState(data.locations.reduce((acc, location) => {return [...acc, location.country]}, []))
   const supportedCountries = ["China", "India", "Indonesia", "Japan", "Malaysia", "Philippines", "Thailand"]
-  const [distributionCountries, setDistributionCountries] = useState(data.distributionCountries)
+  const { handleSubmit, control, getValues, formState: { errors }, register } = useForm({
+    defaultValues: {
+      distributionCountries: data.distributionCountries,
+      locations: data.locations
+    }
+  })
+  const {
+    fields: locationsFields,
+    append: locationsAppend,
+    remove: locationsRemove
+  } = useFieldArray({ control, name: "locations" });
 
   useEffect(() => {
-    setPage('Location(s)')
-    data.locations.forEach((location, i) => {
-      cityRefs.current[i].value = location.city
-    })
-  }, [data.locations, setPage])
-  
-  useEffect(() => {
-    if (goToPage === '') {return}
-    const locations = []
-    for (let i = 0; i < countries.length; i++) {
-      locations.push({
-        city: cityRefs.current[i].value,
-        country: countries[i]
-      })
-    }
-    saveData({ locations: locations, distributionCountries: distributionCountries })
-    if (goToPage === 'next') {
-      setGoToPage('')
-      navigate('/profile/contact')
-    } else if (goToPage === 'back') {
-      setGoToPage('')
-      navigate('/profile/basics')
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [goToPage])
+    setPage("Location(s)")
+  }, [setPage])
 
-  function removeLocation(index) {
-    for (let i = index; i < countries.length - 1; i++) {
-      cityRefs.current[i].value = cityRefs.current[i + 1].value
-    }
-    cityRefs.current.pop()
-    const countryCopy = [...countries]
-    countryCopy.splice(index, 1); 
-    setCountries(countryCopy)
+
+  function changePage(newPage) {
+    saveData({ locations: getValues("locations"), distributionCountries: getValues("distributionCountries") })
+    navigate(newPage)
   }
   
   return (
-    <Box sx={{ display:'flex', flexDirection:'column' }}>
+    <Box sx={{ display:'flex', flexDirection:'column' }} component='form' onSubmit={handleSubmit(() => changePage("/profile/contact"))}>
       <Typography variant="h1_32" >Location(s)</Typography>
       <Typography variant="label" sx={{ marginTop:4 }} >Farm Location</Typography>
-      {countries.map((location, i) => (
-        <Box key={i} sx={{ background:'#F5F7F8', padding:'16px', marginTop:1 }}>
+      {locationsFields.map((location, i) => (
+        <Box key={location.id} sx={{ background:'#F5F7F8', padding:'16px', marginTop:1 }}>
           <Box sx={{ display:'flex', flexDirection:'row', justifyContent:'space-between' }}>
             <Typography variant="label" >City</Typography>
-            {i !== 0 && <Button sx={{ height:'24px' }} color='danger' variant='contained' disableElevation onClick={() => {removeLocation(i)} }>Remove location</Button>}
+            {i !== 0 && <Button sx={{ height:'24px' }} color='danger' variant='contained' disableElevation onClick={() => {locationsRemove(i)} }>Remove location</Button>}
           </Box>
-          <TextField fullWidth sx={{ marginTop:1, marginBottom:2, background:'#FFFFFF' }} inputRef={el => cityRefs.current[i] = el}></TextField>
+          <TextField 
+            fullWidth 
+            sx={{ marginTop:1, marginBottom:2, background:'#FFFFFF' }}
+            {...register(`locations.${i}.city`, { required:"This field is required" })}
+            error={!!errors.locations?.[i]?.city}
+            helperText={errors.locations?.[i]?.city?.message}
+          />
           <Typography variant="label" >Country</Typography>
-          <Select fullWidth sx={{ marginTop:1, background:'#FFFFFF' }} value={countries[i]} onChange={(e) => {const copy = [...countries]; copy[i] = e.target.value; setCountries(copy) }}>
+          <Controller 
+            name={`locations.${i}.country`}
+            control={control}
+            rules={{ required: "This field is required"}}
+            render={({ field }) => (
+              <Select 
+                fullWidth 
+                {...field}
+                error={!!errors.locations?.[i]?.country}
+                sx={{ marginTop:1, background:'#FFFFFF' }}  >
+                {supportedCountries.map((supportedCountry) => (
+                  <MenuItem key={supportedCountry} value={supportedCountry}>{supportedCountry}</MenuItem>
+                ))}
+              </Select>
+            )}
+          />
+          <FormHelperText sx={{ color: "error.main", marginLeft:1 }}>{errors.locations?.[i]?.country?.message}</FormHelperText>
+        </Box>
+      ))}
+      <Button sx={{ marginTop:3 }} onClick={() => { locationsAppend({ city: "", country: "" }) }}>
+        <Typography variant='p_small'>+ I have an additional farm location</Typography>
+      </Button>
+      <Typography variant="label" sx={{ marginTop:4 }}>Distribution country (countries)</Typography>
+      <Controller
+        name="distributionCountries"
+        control={control}
+        rules={{ 
+          validate: (v) => {
+            if (!getValues("distributionCountries") || getValues("distributionCountries").length === 0) {
+              return "This field is required"
+            }
+            return true
+          }
+        }}
+        render={({ field }) => (
+        <>
+          <Select 
+            {...field}
+            multiple
+            style={{ marginTop:'8px' }}
+            renderValue={Opts => Opts.map((opt) => opt = opt.split(':')[0]).join('; ') } 
+            onChange={(e) => field.onChange(e.target.value)}
+            error={!!errors.distributionCountries}
+          >
             {supportedCountries.map((supportedCountry) => (
               <MenuItem key={supportedCountry} value={supportedCountry}>{supportedCountry}</MenuItem>
             ))}
           </Select>
-        </Box>
-      ))}
-      <Button sx={{ marginTop:3 }} onClick={() => {setCountries([...countries, ''])}}>
-        <Typography variant='p_small'>+ I have an additional farm location</Typography>
-      </Button>
-      <Typography variant="label" sx={{ marginTop:4 }}>Distribution country (countries)</Typography>
-      <Select style={{ marginTop:'8px' }} multiple renderValue={Opts => Opts.map((opt) => opt = opt.split(':')[0]).join('; ') } value={distributionCountries} onChange={(e) => setDistributionCountries(e.target.value)}>
-        {supportedCountries.map((supportedCountry) => (
-          <MenuItem key={supportedCountry} value={supportedCountry}>{supportedCountry}</MenuItem>
-        ))}
-      </Select>
+          <FormHelperText sx={{ color: "error.main", marginLeft:1 }}>{errors.distributionCountries?.message}</FormHelperText>
+        </>
+        )}
+      />
+      <NextBackPage props={{ doNextBack:changePage, backPage: "/profile/basics", nextPage:"/profile/contact" }}/>
     </Box>
   )
 }

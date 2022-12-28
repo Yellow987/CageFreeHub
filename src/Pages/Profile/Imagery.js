@@ -2,22 +2,26 @@ import React from 'react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useOutletContext } from 'react-router'
-import { Box, Button, Grid } from '@mui/material'
+import { Box, Button, FormHelperText, Grid } from '@mui/material'
 import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { Alert, Typography, Paper, AlertTitle } from '@mui/material'
 import ImageUploading from "react-images-uploading";
 import { getStorage, ref, uploadBytes, deleteObject, getDownloadURL } from "firebase/storage";
 import uuid from 'react-uuid';
+import NextBackPage from '../../Components/NextBackPage'
+import { useForm } from "react-hook-form";
+import { updateUserInfo } from '../../firestore'
 
 function Imagery() {
-  const [setPage, goToPage, setGoToPage, saveData, data, uid] = useOutletContext()
+  const [setPage, saveData, data, uid] = useOutletContext() // we use uid from outlet as this may be an admin editing a profile
   const [images, setImages] = useState(data.images)
   const [logo, setLogo] = useState(data.logos)
   const navigate = useNavigate()
   const storage = getStorage()
   const imageFolder = uid + '/images'
   const logoFolder = uid + '/logo'
+  const { setError, formState: { errors: imageErrors }, clearErrors, handleSubmit } = useForm({})
 
   function saveImages(images, storagePath) {
     return new Promise((resolve) => {
@@ -40,19 +44,6 @@ function Imagery() {
     
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-
-  useEffect(() => {
-    if (goToPage === '') {return}
-    if (goToPage === 'next') {
-      setGoToPage('')
-      navigate('/profile/' + uid)
-    } else if (goToPage === 'back') {
-      setGoToPage('')
-      navigate('/profile/production-details')
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [goToPage])
 
   async function getImagesUrl(storagePath, uuids) {
     return new Promise((resolve) => {
@@ -87,8 +78,24 @@ function Imagery() {
     deleteObject(ref(storage, folder + '/' + deletedImage[0].uuid))
   }
 
+  function validateChangePage(newPage) {
+    if (images.length < 3) {
+      setError("images", {message: "Please upload at least 3 images"})
+      console.log(imageErrors)
+      return
+    }
+    changePage(newPage)
+  }
+
+  function changePage(newPage) {
+    updateUserInfo(uid, {isProfileComplete: true} )
+    saveData({ status: 'pending' })
+    navigate(newPage)
+  }
+
   return (
-    <Box>
+    <Box component='form' onSubmit={handleSubmit(() => validateChangePage("/profile/" + uid))}>
+      <Button onClick={() => console.log(imageErrors)}>riytfundluy</Button>
       <Typography variant="h1_32" >Imagery</Typography>
       <Alert sx={{  marginTop:4 }} iconMapping={{ success: <AutoAwesomeIcon sx={{ margin:'auto' }}/> }}>
         <Typography variant='p_default' color='#3FAB94'>
@@ -96,12 +103,19 @@ function Imagery() {
         </Typography>
       </Alert>
       <Typography variant='p_default_bold' sx={{ marginTop:4 }}>Photos of farm</Typography>
-      <ImageUploading multiple maxNumber={6} onChange={(imageList) => {handleImageUpload(imageList, imageFolder, setImages, images, 'images')}} dataURLKey="data_url" acceptType={["jpg", "png", "jpeg"]} maxFileSize='8000000'>
+      <ImageUploading multiple maxNumber={6} onChange={(imageList) => {clearErrors(); handleImageUpload(imageList, imageFolder, setImages, images, 'images')}} dataURLKey="data_url" acceptType={["jpg", "png", "jpeg"]} maxFileSize='8000000'>
       {({ imageList, onImageUpload, errors }) => (
         <Box>
-          <Paper sx={{ marginTop:1 }} ><Button color='grey' fullWidth variant='outlined' onClick={(onImageUpload)}>
-            <ImageOutlinedIcon fontSize='small' sx={{ stroke: "#ffffff" }} />Upload photos
-          </Button></Paper>
+          <Paper sx={{ marginTop:1 }} >
+            <Button 
+              color={!!imageErrors?.images ? "red" : "grey"}
+              fullWidth 
+              variant='outlined' 
+              onClick={(onImageUpload)}>
+              <ImageOutlinedIcon fontSize='small' sx={{ stroke: "#ffffff" }} />Upload photos
+            </Button>
+          </Paper>
+          <FormHelperText sx={{ color: "error.main", marginLeft:1 }}>{imageErrors?.images?.message}</FormHelperText>
           
           <Grid container spacing={2} sx={{ marginTop:0 }}>
             {images.map((image, index) => (
@@ -138,6 +152,7 @@ function Imagery() {
         </Box>
       )}
       </ImageUploading>
+      <NextBackPage props={{ doNextBack:changePage, backPage: "/profile/production-details", nextPage:"/profile/" + uid, submit: true }}/>
     </Box>
   )
 }

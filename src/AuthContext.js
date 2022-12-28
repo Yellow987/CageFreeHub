@@ -36,7 +36,6 @@ export function AuthProvider({ children }) {
             if (user) {
                 onSnapshot(doc(getFirestore(), "users", user.uid), (doc) => {
                     if (doc.exists()) {
-                        console.log(doc)
                         setCurrentUserInfo(doc.data())
                         setLoading(false)
                     } else {

@@ -1,16 +1,16 @@
 import { useOutletContext } from 'react-router';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box } from '@mui/system';
 import { useNavigate } from 'react-router-dom';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import { Alert, FormGroup, TextField, Typography, FormControlLabel, Checkbox } from '@mui/material'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
+import { useForm } from "react-hook-form";
+import NextBackPage from '../../Components/NextBackPage';
 
 function Contact() {
-    const [setPage, goToPage, setGoToPage, saveData, data] = useOutletContext();
-    const nameRef = useRef('')
-    const jobTitleRef = useRef('')
+    const [setPage, saveData, data] = useOutletContext();
     const [contactMethods, setContactMethods] = useState({
       phone: data.contactChannels.phone !== '', 
       whatsapp: data.contactChannels.whatsapp !== '', 
@@ -19,46 +19,56 @@ function Contact() {
     const [phone, setPhone] = useState(data.contactChannels.phone)
     const [whatsapp, setWhatsapp] = useState(data.contactChannels.whatsapp)
     const [wechat, setWechat] = useState(data.contactChannels.wechat)
+    const { 
+      handleSubmit, 
+      register, 
+      getValues,
+      formState: { errors }
+    } = useForm({
+      defaultValues: {
+        fullName: data.name,
+        jobTitle:  data.jobTitle,
+        phone: "",
+        whatsapp: "",
+        wechat: ""
+      }
+    })
+  
 
     const navigate = useNavigate()
     useEffect(() => {
         setPage('Contact')
-        nameRef.current.value = data.name
-        jobTitleRef.current.value = data.jobTitle
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    useEffect(() => {
-        if (goToPage === '') {return}
-        saveData({name: nameRef.current.value, 
-          jobTitle: jobTitleRef.current.value, 
-          contactChannels: {
-            phone: contactMethods.phone ? phone : '', 
-            whatsapp: contactMethods.whatsapp ? whatsapp : '', 
-            wechat: contactMethods.wechat ? wechat : ''
-          }
-        })
-        if (goToPage === 'next') {
-            setGoToPage('')
-            navigate('/profile/product-details')
-        } else if (goToPage === 'back') {
-            setGoToPage('')
-            navigate('/profile/locations')
+    }, [data, setPage])
+  
+    function changePage(newPage) {
+      saveData({
+        name: getValues("fullName"), 
+        jobTitle: getValues("jobTitle"), 
+        contactChannels: {
+          phone: contactMethods.phone ? phone : '', 
+          whatsapp: contactMethods.whatsapp ? whatsapp : '', 
+          wechat: contactMethods.wechat ? wechat : ''
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [goToPage])
+      })
+      navigate(newPage)
+    }
 
     return(
-        <Box sx={{ display:'flex', flexDirection:'column' }}>
+        <Box sx={{ display:'flex', flexDirection:'column' }} component='form' onSubmit={handleSubmit(() => changePage("/profile/product-details"))}>
+          {data.distributionCountries}
           <Typography variant="h1_32" >Contact person for purchase inquiries</Typography>
           <Alert sx={{ marginTop:5 }} iconMapping={{success: <WorkOutlineIcon sx={{ margin:'auto'}}/> }}>
             <Typography variant='p_default' color='#3FAB94' >All information provided is completely confidential. We do not share information with third parties, and buyers must be confirmed by us to access profiles</Typography>
           </Alert>
           <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Full Name of Contact</Typography>
-          <TextField variant="outlined" placeholder='E.g. Chung Lui' inputRef={nameRef}/>
+          <TextField 
+            placeholder='E.g. Chung Lui'
+            {...register("fullName", { required:"This field is required" })}
+            error={!!errors.fullName}
+            helperText={errors.fullName?.message}
+          />
           <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Job title of contact (optional)</Typography>
-          <TextField variant="outlined" placeholder='E.g. CEO' inputRef={jobTitleRef}/>
+          <TextField placeholder='E.g. CEO'{...register("jobTitle")}/>
 
           <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Available contact channels</Typography>
           <FormGroup>
@@ -69,6 +79,7 @@ function Contact() {
             <FormControlLabel control={<Checkbox checked={contactMethods.wechat} onClick={() => setContactMethods({...contactMethods, wechat:!contactMethods['wechat']})}/>}label="WeChat" />
             {contactMethods.wechat && <PhoneInput placeholder="Enter wechat number" value={wechat} onChange={setWechat} preferredCountries={['cn','in','id','jp','my','ph','th']} enableSearch/>}
           </FormGroup>
+          <NextBackPage props={{ doNextBack:changePage, backPage: "/profile/locations", nextPage:"/profile/product-details" }}/>
         </Box>
     )
 }
