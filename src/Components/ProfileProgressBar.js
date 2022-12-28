@@ -3,7 +3,7 @@ import { Outlet } from 'react-router'
 import { Box, LinearProgress, Typography } from '@mui/material';
 import { useState, useEffect, useCallback  } from 'react';
 import { useAuth } from '../AuthContext'
-import { getFirestore, doc, setDoc, onSnapshot } from 'firebase/firestore'
+import { getFirestore, doc, setDoc, onSnapshot, updateDoc } from 'firebase/firestore'
 import adminUid from '../AdminAccountsConfig'
 
 function ProfileProgressBar() {
@@ -18,11 +18,10 @@ function ProfileProgressBar() {
 
   async function saveData(values){
     const newData = {
-      ...data,
       ...values,
     }
     if (!isEqual(data, newData)) {
-      await setDoc(docRef(), newData);
+      await updateDoc(docRef(), newData);
     }
   }
 
@@ -31,14 +30,12 @@ function ProfileProgressBar() {
       if (doc.exists()) {
         setData(doc.data())
       } else {
-        console.log('create')
         const utcDate = new Date()
         const initialData = {
           //Meta
           status: 'incomplete',
           adminLastStatusUpdate: utcDate,
           creationDate: utcDate,
-          claimed: adminUid === currentUser.uid ? false : true,
 
           //Basics
           organizationName: '',

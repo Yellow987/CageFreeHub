@@ -27,6 +27,9 @@ const Theme = {
     grey: {
       main: '#788492',
     },
+    red: {
+      main: '#d32f2f',
+    },
     danger: {
       main: '#FCEDED',
       contrastText: '#1B2B3E'
