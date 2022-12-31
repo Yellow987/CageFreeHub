@@ -64,7 +64,6 @@ const Theme = {
       textAlign:'left'
     },
     h2:{
-      fontFamily: 'Roboto',
       fontStyle: "normal",
       fontWeight: 700,
       fontSize: 24,

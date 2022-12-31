@@ -8,6 +8,7 @@ import Carousel from 'react-material-ui-carousel';
 import { useAuth } from '../../AuthContext';
 import adminUid from './../../AdminAccountsConfig';
 import PrivateRoute from './../../Components/PrivateRoute';
+import ProductDetailsDisplay from './../../Components/ProductDetailsDisplay';
 
 function Profile() {
   const { id } = useParams()
@@ -55,52 +56,33 @@ function Profile() {
               return( <Typography variant='p_large_dark' sx={{marginTop:'16px'}} key={index}>{location.city+', '+ location.country}</Typography> )
             })}
                         
+            <Divider light style={{ marginTop:'48px', marginBottom:'48px' }}/>
+            <ProductDetailsDisplay props={{ productDetails:data.productDetails }} />
             <Divider light style={{ marginTop:'48px' }}/>
-            <Box display='flex' flexDirection='column' marginTop='48px'>
-              <Grid container spacing={2}>
-                <Grid item xs={4}>
-                  <Typography variant="label">Cage-free egg type</Typography>
-                </Grid>
-                <Grid item xs={8}>
-                  <Typography variant="label" >Production capacity (year) / Price</Typography>
-                </Grid>
-              </Grid>
-                {Object.keys(data.productDetails).map((productDetail) => {return(
-                  <Grid container spacing={2} key={productDetail} marginTop='8px'>
-                    <Grid item xs={4}>
-                      {productDetail}
-                    </Grid>
-                    <Grid item xs={8}>
-                      {data.productDetails[productDetail].capacity + ' ' + data.productDetails[productDetail].unit + ' / ' + data.productDetails[productDetail].price + ' ' + data.productDetails[productDetail].currency }
-                    </Grid>
-                  </Grid>)
-                })}
-              </Box>
+            <Box>
+              <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>Website</Typography>
+              <Link href={data.website} sx={{display:'block'}}>{data.website}</Link>
+                
               <Divider light style={{ marginTop:'48px' }}/>
-              <Box>
-                <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>Website</Typography>
-                <Link href={data.website} sx={{display:'block'}}>{data.website}</Link>
-                  
-                <Divider light style={{ marginTop:'48px' }}/>
-                
-                <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>Production system of farm(s)</Typography>
-                {data.productionDetails.productionSystem.map((system, index)=>{
-                  return( <Typography variant='p_large_dark' sx={{marginTop:'16px'}} key={index}>{system}</Typography> )
-                })}
-                
-                <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>Certification </Typography>
-                <Box sx={{ marginTop:'16px', marginBottom:'48px', display:'flex', alignItems:'center' }}>
-                  <Typography variant='p_large_dark' sx={{ marginRight:'8px' }}>{data.productionDetails.certifyingOrganization}</Typography>
-                  {<Link href={data.productionDetails.certificationFile.url} target='_blank' rel='noopener noreferrer' sx={{ display:'flex', alignItems:'center' }}>
-                    <VisibilityOutlinedIcon fontSize='small' color='primary'/> 
-                  </Link>}
-                </Box>
-                <Carousel height='500px' autoPlay={false} sx={{ marginBottom:'80px'}} navButtonsAlwaysVisible={true}	>
-                {data.images.map((image, index)=>{
-                  return( <img width='100%' key={index} src={image.data_url} alt=""/> )
-                })}
-                </Carousel>
+              
+              <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>Production system of farm(s)</Typography>
+              {data.productionDetails.productionSystem.map((system, index)=>{
+                return( <Typography variant='p_large_dark' sx={{marginTop:'16px'}} key={index}>{system}</Typography> )
+              })}
+              
+              <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>Certification </Typography>
+              <Box sx={{ marginTop:'16px', marginBottom:'48px', display:'flex', alignItems:'center' }}>
+                <Typography variant='p_large_dark' sx={{ marginRight:'8px' }}>{data.productionDetails.certifyingOrganization}</Typography>
+                {<Link href={data.productionDetails.certificationFile.url} target='_blank' rel='noopener noreferrer' sx={{ display:'flex', alignItems:'center' }}>
+                  <VisibilityOutlinedIcon fontSize='small' color='primary'/> 
+                </Link>}
               </Box>
+              <Carousel height='500px' autoPlay={false} sx={{ marginBottom:'80px'}} navButtonsAlwaysVisible={true}	>
+              {data.images.map((image, index)=>{
+                return( <img width='100%' key={index} src={image.data_url} alt=""/> )
+              })}
+              </Carousel>
+            </Box>
             </Grid>
             <Grid item xs={0} md={1} />
             <Grid item md={3} xs={12} order={{xs:-1, md:3}} marginBottom='24px'>
