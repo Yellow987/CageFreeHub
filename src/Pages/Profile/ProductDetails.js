@@ -47,17 +47,28 @@ function ProductDetails() {
   function changePage(newPage) {
     const productDetails = {}
     const values = getValues("productionDetails")
+    let maxObjectiveCapacity = 0
     for (const [type, checked] of Object.entries(isChecked)) {
       if (checked) {
         productDetails[type] = {
           capacity : values[type].capacity,
           unit : inputStates[type]['unit'],
           price : values[type].price,
-          currency : inputStates[type]['currency']
+          currency : inputStates[type]['currency'] 
         }
+        let objectiveCapacity = 0
+        if (productDetails[type].unit === "Eggs") {
+          objectiveCapacity = productDetails[type].capacity
+        } else if (productDetails[type].unit === "Kilograms") { 
+          objectiveCapacity = productDetails[type].capacity * 22.7272682178 //Conversion factor for ordering on seller page
+        } else if (productDetails[type].unit === "Tons") {
+          objectiveCapacity = productDetails[type].capacity * 20617.83 //Conversion factor for ordering on seller page
+        }
+        productDetails[type]['objectiveCapacity'] = objectiveCapacity
+        maxObjectiveCapacity = maxObjectiveCapacity < objectiveCapacity ? objectiveCapacity : maxObjectiveCapacity
       }
     }
-    saveData({productDetails: productDetails})
+    saveData({productDetails: productDetails, maxObjectiveCapacity: parseFloat(maxObjectiveCapacity)})
     navigate(newPage)
   }
 

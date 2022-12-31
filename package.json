@@ -30,6 +30,7 @@
     "react-scripts": "^5.0.1",
     "react-select-country-list": "^2.2.3",
     "react-uuid": "^2.0.0",
+    "react-viewport-list": "^6.3.0",
     "styled-components": "^5.3.5",
     "web-vitals": "^2.1.4"
   },
