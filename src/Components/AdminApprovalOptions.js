@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Box, Button, Paper, TextField } from '@mui/material';
 import { setDoc } from 'firebase/firestore'
-import adminUid from '../AdminAccountsConfig'
+import { isAdmin } from '../AdminAccountsConfig'
 import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { functions } from './../firestore';
@@ -39,7 +39,8 @@ function AdminApprovalOptions(props) {
   }
 
   function sendEmail(isApproved, emailRejectionReason = "") {
-    const data = {
+    if (test.claimed === 'unclaimed') { return }
+    const emailData = {
       isSeller: isSeller, //needed for all
       isApproved: isApproved, //needed for all
       emailTo: "daryldsouza123@gmail.com",//needed for all
@@ -47,13 +48,13 @@ function AdminApprovalOptions(props) {
       rejectionReason: emailRejectionReason, //needed when denied
       userUid: isSeller && isApproved ? id : "" //needed for approved sellers
     }
-    httpsCallable(functions, 'adminActionOnStatus')(data)
+    httpsCallable(functions, 'adminActionOnStatus')(emailData)
     .then((result) => {console.log(result)})
   }
 
   return (
     <>
-      {currentUser?.uid === adminUid && <Box sx={{ marginBottom:4 }}>
+      {isAdmin(currentUser.uid) && <Box sx={{ marginBottom:4 }}>
         <Button variant='contained' onClick={(e) => handleApprove(e)}>Approve Profile</Button>
         <Button color='megaDanger' sx={{ marginLeft:5 }} onClick={(e) => setRejectMessageBoxOpen(true)} variant='contained'>Reject Profile</Button>
         <Button variant='outlined' sx={{ marginLeft:5 }} onClick={(e) => handleEdit(e)} >Edit Profile</Button>

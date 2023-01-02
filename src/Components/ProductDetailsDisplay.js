@@ -1,12 +1,13 @@
 import React from 'react'
-import { Box, Typography, Grid  } from '@mui/material';
+import { Box, Typography, Grid, Divider } from '@mui/material';
 
 function ProductDetailsDisplay(props) {
-  const { productDetails } = props.props
+  const { productDetails, divs = false } = props.props
   const types = ['Shell', 'Frozen', 'Liquid', 'Powder', 'Other']
-  const productTypes = Object.keys(productDetails)
+  const presentTypes = types.filter(isPresentType)
 
   function isPresentType(type) {
+    const productTypes = Object.keys(productDetails)
     return productTypes.includes(type)
   }
 
@@ -20,15 +21,23 @@ function ProductDetailsDisplay(props) {
           <Typography variant="label" >Production capacity (year) / Price</Typography>
         </Grid>
       </Grid>
-      {types.filter(isPresentType).map((type) => {
+      {presentTypes.map((type, index) => {
         return(
-          <Grid container spacing={2} key={type} marginTop='8px'>
+          <Grid container spacing={divs ? 1 : 2} key={type} marginTop='8px'>
             <Grid item xs={4}>
               {type}
             </Grid>
             <Grid item xs={8}>
-              {productDetails[type].capacity + ' ' + productDetails[type].unit + ' / $' + productDetails[type].price + " per " + productDetails[type].unit.slice(0, productDetails[type].unit.length - 1).toLowerCase()}
+              {productDetails[type].capacity + 
+              ' ' + productDetails[type].unit + 
+              ' / $' + productDetails[type].price + 
+              " per " + productDetails[type].unit.slice(0, productDetails[type].unit.length - 1).toLowerCase()}
             </Grid>
+            {index !== presentTypes.length - 1 && 
+              <Grid item xs={12}>
+                <Divider />
+              </Grid>
+            }
           </Grid>
         )
       })}
