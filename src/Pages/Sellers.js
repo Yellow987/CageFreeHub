@@ -1,8 +1,9 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
-import { Box, Typography, Link, Paper, Button  } from '@mui/material';
+import { Box, Typography, Link, Paper, Button, Divider } from '@mui/material';
 import { collection, getFirestore, query, orderBy, where, limit, getDocs, startAfter } from 'firebase/firestore';
 import ProductDetailsDisplay from '../Components/ProductDetailsDisplay';
 import { ViewportList } from 'react-viewport-list';
+import ClaimedPopup from '../Components/ClaimedPopup';
 
 function Sellers(){
   const [data, setData] = useState([])
@@ -10,7 +11,7 @@ function Sellers(){
   const lastDocRef = useRef(null)
   const [isMoreData, setIsMoreData] = useState(true)
   const viewRef = useRef(null)
-  const farmsPerPage = 2
+  const farmsPerPage = 5
 
   const getMoreData = useCallback((value = -10) => {
 
@@ -76,8 +77,8 @@ function Sellers(){
   }, [getMoreData]);
 
   return(
-  <Box sx={{ maxWidth:"920px", margin:{xs:"24px", md:"auto"} }}>
-    <Typography variant='h1' style={{ marginTop:"48px", marginBottom:"48px" }}>Cage-free egg seller directory</Typography>
+  <Box sx={{ maxWidth:"920px", margin:{xs:"0px", md:"auto"} }}>
+    <Typography variant='h1' sx={{ marginTop:"48px", marginBottom:"48px", display:{xs: 'none', md:'block'} }}>Cage-free egg seller directory</Typography>
     {data && 
       <div ref={viewRef}>
         <ViewportList
@@ -88,18 +89,26 @@ function Sellers(){
         >
           {(farm, index) => (
             <Link key={index} href={'/profile/'+ farm.userID} sx={{textDecoration:'none'}}>
-              <Paper elevation={3} style={{ marginBottom:"48px", padding:"40px" }}>
-                <Typography variant='h2' sx={{color:'black'}}>{farm.organizationName}</Typography>
+              <Divider sx={{ display:{xs: 'block', md:'none'} }}/>
+              <Paper sx={{ 
+                marginBottom:{xs:"0px", md:"48px"}, 
+                padding:"8px 8px 40px 40px",
+                boxShadow:{xs:'none', md:"0px 3px 3px -2px rgba(0,0,0,0.2),0px 3px 4px 0px rgba(0,0,0,0.14),0px 1px 8px 0px rgba(0,0,0,0.12)"} 
+              }}>
+                <Box display='flex' justifyContent='flex-end'>
+                  <ClaimedPopup props={{ isClaimed:farm.claimed }} />
+                </Box>
+                <Typography variant='h2' sx={{ color:'black', marginTop:1 }}>{farm.organizationName}</Typography>
                 <Box sx={{height:"20px", width:'80px'}}></Box>
                 <Box sx={{display:'flex', flexDirection: {xs: 'column', md: 'row'}}}>
                   <Box>
                     <Typography variant='label'>Distribution Country (countries)</Typography>
                     {farm.locations.map((location, index)=>{
-                      return( <Typography variant='p_large' sx={{marginTop:'16px'}} key={index}>{location.city+', '+ location.country}</Typography> )
+                      return( <Typography variant='p_large' sx={{ marginTop:'16px', color:"#1B2B3E" }} key={index}>{location.city.trim()+', '+ location.country}</Typography> )
                     })}
                   </Box>
                   <Box sx={{height:"20px", width:'80px'}}></Box>
-                  <ProductDetailsDisplay props={{ productDetails:farm.productDetails }} />
+                  <ProductDetailsDisplay props={{ productDetails:farm.productDetails, divs:true }} />
                 </Box>
               </Paper>
             </Link>
@@ -112,6 +121,7 @@ function Sellers(){
       justifyContent="center"
       display="flex"
       marginBottom='40px'
+      marginTop='48px'
     >
       {isMoreData && 
         <Button 

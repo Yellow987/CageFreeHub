@@ -21,6 +21,10 @@ const Theme = {
       main: '#3FAB94',
       contrastText: '#FFFFFF',
     },
+    greyOut: {
+      main:'#F5F7F8',
+      contrastText:'#596676'
+    },
     secondary: {
       main: '#FFFFFF',
     },
@@ -53,6 +57,7 @@ const Theme = {
       letterSpacing: "-0.01rem",
       color: "#1B2B3E",
       display: 'block',
+      wordBreak: "break-word"
     },
     h1_32: {
       fontWeight: 700,
@@ -61,19 +66,22 @@ const Theme = {
       letterSpacing: "-0.01rem",
       color: "#1B2B3E",
       display: 'block',
-      textAlign:'left'
+      textAlign:'left',
+      wordBreak: "break-word"
     },
     h2:{
       fontStyle: "normal",
       fontWeight: 700,
       fontSize: 24,
       lineHeight: "137%",
+      wordBreak: "break-word"
     },
     label: {
       fontWeight: 700,
       fontSize: 14,
       display: 'block',
       color: '#1B2B3E',
+      wordBreak: "break-word"
     },
     support_icon:{
       fontSize: 12
@@ -84,6 +92,7 @@ const Theme = {
       lineHeight: "150%",
       color: "#596676",
       display: 'block',
+      wordBreak: "break-word"
     },
     p_large_dark: {
       fontWeight: 400,
@@ -91,6 +100,7 @@ const Theme = {
       lineHeight: "150%",
       color: "#1B2B3E",
       display: 'block',
+      wordBreak: "break-word"
     },
     p_default: {
       fontWeight: 400,
@@ -98,6 +108,7 @@ const Theme = {
       lineHeight: "150%",
       color: "#596676",
       display: 'block',
+      wordBreak: "break-word"
     },
     p_default_bold: {
       fontWeight: 700,
@@ -105,7 +116,8 @@ const Theme = {
       lineHeight: "150%",
       color: "#1B2B3E",
       display: 'block',
-      textAlign:'left'
+      textAlign:'left',
+      wordBreak: "break-word"
     },
     
     p_small: {
@@ -114,6 +126,7 @@ const Theme = {
       lineHeight: "150%",
       color: "#596676",
       display: 'block',
+      wordBreak: "break-word"
     },
   },
 };

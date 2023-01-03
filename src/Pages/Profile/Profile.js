@@ -9,6 +9,7 @@ import { useAuth } from '../../AuthContext';
 import adminUid from './../../AdminAccountsConfig';
 import PrivateRoute from './../../Components/PrivateRoute';
 import ProductDetailsDisplay from './../../Components/ProductDetailsDisplay';
+import ClaimedPopup from './../../Components/ClaimedPopup';
 
 function Profile() {
   const { id } = useParams()
@@ -39,8 +40,13 @@ function Profile() {
           <Grid item xs={4}></Grid>
           <Grid item xs={12} md={6}>
             <Box sx={{display:'flex', justifyContent:'space-between', marginBottom:'54px', marginTop:'48px', alignItems:'center'}}>
-              <Typography variant="h1_32" >{data.organizationName}</Typography>
-              {data.logos.length === 1 && <img src={data.logos[0].data_url}  style={{width:'30px', height:'30px'}} alt="" />}
+              <Box sx={{ display:"flex", flexDirection:'row', alignItems:"center" }}>
+                <Typography variant="h1_32" >bob and jens beautiful chicken farm</Typography>
+                <ClaimedPopup props={{ isClaimed: data.claimed }} />
+              </Box>
+              {data.logos.length === 1 && 
+                <Box src={{ md: data.logos[0].data_url, xs:"" }}  sx={{width:{md:'30px', xs:"0px" }, height:{md:'30px', xs:"0px" } }} alt="" />
+              }
             </Box>
           </Grid>
           <Grid item xs={4}></Grid>

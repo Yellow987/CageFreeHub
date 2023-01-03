@@ -4,6 +4,8 @@ import { getFirestore, doc, updateDoc, getDoc, getCountFromServer, collection, q
 import { getAuth } from 'firebase/auth'
 import { getFunctions } from 'firebase/functions';
 import { getPerformance } from "firebase/performance";
+import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
+
 
 // Initialize Firebase
 const app = initializeApp({
@@ -20,6 +22,13 @@ export const db = getFirestore();
 export const auth = getAuth(app);
 export const functions = getFunctions(app);
 export const perf = getPerformance(app);
+export const appCheck = initializeAppCheck(app, {
+  provider: new ReCaptchaV3Provider('6LdvAsAjAAAAAIdzKR1hpgWpePmJIXoYbdaO7tTL'),
+
+  // Optional argument. If true, the SDK automatically refreshes App Check
+  // tokens as needed.
+  isTokenAutoRefreshEnabled: true
+});
 
 //functions
 export async function updateUserInfo(uid, data) {

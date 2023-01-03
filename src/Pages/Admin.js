@@ -1,15 +1,17 @@
-import { Box, Button, TextField, Typography } from '@mui/material'
+import { Box, Button, TextField, Typography, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material'
 import React from 'react'
 import { useState, useRef } from 'react';
 import MUIDataTable from "mui-datatables";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { collection, getFirestore, query, orderBy, where, limit, getDocs } from "firebase/firestore";
+import uuid from 'react-uuid';
 
 function Admin() {
   const db = getFirestore();
-  const [queryParams, setQueryParams] = useState({whom:'sellers', status:'pending'})
+  const [queryParams, setQueryParams] = useState({ userType:'sellers', status:'pending', claimed:'any'})
   const [data, setData] = useState([])
   const limitRef = useRef(null)
+  const navigate = useNavigate()
 
   const columns = [
     "name", 
@@ -39,9 +41,16 @@ function Admin() {
     selectableRows: 'none'
   }
 
-  function getData(collectionName, status) {
+  function getData(collectionName, queryParams) {
     setData([])
-    const dataQuery = query(collection(db, collectionName), orderBy('adminLastStatusUpdate'), where('status', '==', status), limit(limitRef.current.value))
+    const params = [collection(db, collectionName), orderBy('adminLastStatusUpdate', 'desc'), limit(limitRef.current.value)]
+    if (queryParams.status !== 'any') {
+      params.push(where('status', '==', queryParams.status))
+    }
+    if (queryParams.claimed !== 'any') {
+      params.push(where('claimed', '==', queryParams.claimed === 'claimed' ? true : false))
+    }
+    const dataQuery = query(...params)
     getDocs(dataQuery).then((docs) => {
       const newData = docs.docs.reduce((acc, doc) => {
         const docData = doc.data()
@@ -56,40 +65,74 @@ function Admin() {
     })
   }
 
+  function createSkeletonAccount(e) {
+    e.preventDefault()
+    const newProfileUUID = uuid()
+    localStorage.setItem('uidToEdit', JSON.stringify(newProfileUUID))
+    navigate('/profile/basics')
+  }
+
   return (
     <Box sx={{ margin:'auto', marginLeft:2, marginRight:2 }}>
-      <Button variant='contained' sx={{ marginBottom:2 }}>
-        Create new account
+      <Button 
+        variant='contained' 
+        sx={{ marginBottom:2 }}
+        onClick={(e) => {createSkeletonAccount(e)}}  
+      >
+        Create skeleton account
       </Button>
       <MUIDataTable
         title="datatable"
         data={data}
         columns={columns}
         options={options}
-        onChangePage={(e) => {console.log('ho')}}
       />
       <Box sx={{ display:'flex', alignItems: 'center', marginBottom:8 }}>
         <Box sx={{ width:'40%'}}>
-          <Box sx={{ marginTop:2 }}>
-            <Button variant='contained' color={queryParams.whom === "sellers" ? 'primary' : 'megaDanger'} onClick={() => setQueryParams({...queryParams, whom:'sellers'})}>sellers</Button>
-            <Button variant='contained' color={queryParams.whom === "buyers" ? 'primary' : 'megaDanger'} onClick={() => setQueryParams({...queryParams, whom:'buyers'})}>buyers</Button>
-          </Box>
-          <Box sx={{ marginTop:2 }}>
-            <Button variant='contained' color={queryParams.status === "approved" ? 'primary' : 'megaDanger'} onClick={() => setQueryParams({...queryParams, status:'approved'})}>Approved</Button>
-            <Button variant='contained' color={queryParams.status === "pending" ? 'primary' : 'megaDanger'} onClick={() => setQueryParams({...queryParams, status:'pending'})}>Pending</Button>
-            <Button variant='contained' color={queryParams.status === "rejected" ? 'primary' : 'megaDanger'} onClick={() => setQueryParams({...queryParams, status:'rejected'})}>Rejected</Button>
-            <Button variant='contained' color={queryParams.status === "unclaimed" ? 'primary' : 'megaDanger'} onClick={() => setQueryParams({...queryParams, status:'unclaimed'})}>Unclaimed</Button>
-          </Box>
+          <FormControl style={{ marginTop:'16px', width:'100%' }}>
+            <FormLabel>User Type</FormLabel>
+            <RadioGroup
+              row
+              value={queryParams.userType}
+              onChange={(e) => setQueryParams({ ...queryParams, userType:e.target.value })}
+            >
+              <FormControlLabel control={<Radio/>} label='Sellers' value='sellers' />
+              <FormControlLabel control={<Radio/>} label='Buyers' value='buyers' />
+            </RadioGroup>
+          </FormControl>
+          <FormControl style={{ marginTop:'16px' }}>
+            <FormLabel>Displayed in Directory Status</FormLabel>
+            <RadioGroup
+              row
+              value={queryParams.status}
+              onChange={(e) => setQueryParams({ ...queryParams, status:e.target.value })}
+            >
+              <FormControlLabel control={<Radio/>} label='Approved' value='approved' />
+              <FormControlLabel control={<Radio/>} label='Pending' value='pending' />
+              <FormControlLabel control={<Radio/>} label='Rejected' value='rejected' />
+              <FormControlLabel control={<Radio/>} label='Incomplete' value='incomplete' />
+              <FormControlLabel control={<Radio/>} label='Any' value='any' />
+            </RadioGroup>
+          </FormControl>
+          <FormControl style={{ marginTop:'16px' }}>
+            <FormLabel>Profile Claim Status</FormLabel>
+            <RadioGroup
+              row
+              value={queryParams.claimed}
+              onChange={(e) => setQueryParams({ ...queryParams, claimed:e.target.value })}
+            >
+              <FormControlLabel control={<Radio/>} label='Claimed' value='claimed' />
+              <FormControlLabel control={<Radio/>} label='Unclaimed' value='unclaimed' />
+              <FormControlLabel control={<Radio/>} label='Any' value='any' />
+            </RadioGroup>
+          </FormControl>
           <Box sx={{ marginTop:2 }}>
             <Typography>query how many buyers/sellers?:</Typography>
             <TextField  size="small" type="number" inputRef={limitRef} defaultValue={10}/>
           </Box>
         </Box>
-        <Box sx={{ width:'40%' }}>
-          <Typography>{JSON.stringify(queryParams)}</Typography>
-        </Box>
         <Box sx={{ width:'20%'}}>
-          <Button fullWidth variant='contained' onClick={() => getData(queryParams.whom === 'sellers' ? 'farms' : 'buyers', queryParams.status)}>SEARCH</Button>
+          <Button fullWidth variant='contained' onClick={() => getData(queryParams.userType === 'sellers' ? 'farms' : 'buyers', queryParams)}>SEARCH</Button>
         </Box>
       </Box>
     </Box>

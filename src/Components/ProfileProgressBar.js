@@ -4,14 +4,14 @@ import { Box, LinearProgress, Typography } from '@mui/material';
 import { useState, useEffect, useCallback  } from 'react';
 import { useAuth } from '../AuthContext'
 import { getFirestore, doc, setDoc, onSnapshot, updateDoc } from 'firebase/firestore'
-import adminUid from '../AdminAccountsConfig'
+import { isAdmin } from '../AdminAccountsConfig';
 
 function ProfileProgressBar() {
   const [page, setPage] = useState('')
   const pages = ["Basics", "Location(s)", "Contact", "Product details", "Production details", "Imagery"]
   const db = getFirestore();
   const { currentUser } = useAuth();
-  const uid = currentUser.uid === adminUid ? JSON.parse(localStorage.getItem('uidToEdit')) : currentUser.uid
+  const uid = isAdmin(currentUser.uid) ? JSON.parse(localStorage.getItem('uidToEdit')) : currentUser.uid
   const docRef = useCallback(() => { return doc(db, "farms", uid) }, [db, uid])
   const [data, setData] = useState(null)
   const isEqual = require('lodash.isequal');
@@ -36,6 +36,7 @@ function ProfileProgressBar() {
           status: 'incomplete',
           adminLastStatusUpdate: utcDate,
           creationDate: utcDate,
+          claimed: isAdmin(currentUser.uid) ? false : true, //if admin touches ID that doesn't exist, it is a skeleton account
 
           //Basics
           organizationName: '',
@@ -73,7 +74,7 @@ function ProfileProgressBar() {
 
   return (
     <Box align='center' mx={{ sm:'10%', xs:'24px' }} sx={{ marginTop:6 }}>
-      {currentUser.uid === adminUid && <Typography variant='h1'>ADMIN IS EDITING {uid}</Typography>}
+      {isAdmin(currentUser.uid) && <Typography variant='h1'>ADMIN IS EDITING {uid}</Typography>}
       <Box sx={{ display:'flex', flexDirection:'row', justifyContent: 'center' }} >
         {pages.map((pageName) => (
           <Box key={pageName} sx={{ width:'16.66%', marginRight:'2px' }}>

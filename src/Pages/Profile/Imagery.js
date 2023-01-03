@@ -12,7 +12,6 @@ import uuid from 'react-uuid';
 import NextBackPage from '../../Components/NextBackPage'
 import { useForm } from "react-hook-form";
 import { updateUserInfo } from '../../firestore'
-import { getUserInfo } from '../../firestore'
 
 function Imagery() {
   const [setPage, saveData, data, uid] = useOutletContext() // we use uid from outlet as this may be an admin editing a profile
@@ -89,14 +88,18 @@ function Imagery() {
   }
 
   function changePage(newPage) {
-    updateUserInfo(uid, {isProfileComplete: true} )
-    getUserInfo(uid).then((info) => {
-      if (info.status === 'rejected' || info.status === 'incomplete') {
-        saveData({ status: 'pending' })
+    if (data.claimed) {
+      updateUserInfo(uid, {isProfileComplete: true} )
+    }
+    if (data.status === 'rejected' || data.status === 'incomplete') {
+      if (!data.claimed) { //unclaimed profiles(which only admins can edit) should always be approved
+        saveData({ status: 'approved' })
       } else {
-        navigate(newPage)
+        saveData({ status: 'pending' })
       }
-    })
+    } else {
+      navigate(newPage)
+    }
   }
 
   return (
