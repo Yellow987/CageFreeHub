@@ -12,7 +12,6 @@ import uuid from 'react-uuid';
 import NextBackPage from '../../Components/NextBackPage'
 import { useForm } from "react-hook-form";
 import { updateUserInfo } from '../../firestore'
-import { getUserInfo } from '../../firestore'
 
 function Imagery() {
   const [setPage, saveData, data, uid] = useOutletContext() // we use uid from outlet as this may be an admin editing a profile
