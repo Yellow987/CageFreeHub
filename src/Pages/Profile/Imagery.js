@@ -89,14 +89,18 @@ function Imagery() {
   }
 
   function changePage(newPage) {
-    updateUserInfo(uid, {isProfileComplete: true} )
-    getUserInfo(uid).then((info) => {
-      if (info.status === 'rejected' || info.status === 'incomplete') {
-        saveData({ status: 'pending' })
+    if (data.claimed) {
+      updateUserInfo(uid, {isProfileComplete: true} )
+    }
+    if (data.status === 'rejected' || data.status === 'incomplete') {
+      if (!data.claimed) { //unclaimed profiles(which only admins can edit) should always be approved
+        saveData({ status: 'approved' })
       } else {
-        navigate(newPage)
+        saveData({ status: 'pending' })
       }
-    })
+    } else {
+      navigate(newPage)
+    }
   }
 
   return (

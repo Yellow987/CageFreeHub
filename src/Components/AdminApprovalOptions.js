@@ -13,6 +13,7 @@ function AdminApprovalOptions(props) {
   const navigate = useNavigate()
   const [rejectMessageBoxOpen, setRejectMessageBoxOpen] = useState(false)
   const [rejectionReason, setRejectionReason] = useState("")
+  const URL = (process.env.REACT_APP_STAGE === 'preprod' ? 'https://freerangeeggfarm-26736.web.app/' : 'TODO' )+ "seller-signup/claim-profile/" + id
 
   function changeProfileStatus(status) {
     setDoc(docRef, {...data, status:status})
@@ -20,7 +21,7 @@ function AdminApprovalOptions(props) {
 
   function handleApprove(e) {
     e.preventDefault()
-    window.confirm('Are you sure you want to **APPROVE** this profile?')
+    if (!window.confirm('Are you sure you want to **APPROVE** this profile?')) { return }
     sendEmail(true)
     changeProfileStatus('approved')
   }
@@ -33,6 +34,7 @@ function AdminApprovalOptions(props) {
   }
 
   function handleEdit(e) {
+    console.log(id)
     e.preventDefault()
     localStorage.setItem('uidToEdit', JSON.stringify(id))
     navigate('/profile/basics')
@@ -58,8 +60,14 @@ function AdminApprovalOptions(props) {
         <Button variant='contained' onClick={(e) => handleApprove(e)}>Approve Profile</Button>
         <Button color='megaDanger' sx={{ marginLeft:5 }} onClick={(e) => setRejectMessageBoxOpen(true)} variant='contained'>Reject Profile</Button>
         <Button variant='outlined' sx={{ marginLeft:5 }} onClick={(e) => handleEdit(e)} >Edit Profile</Button>
+        {!data.claimed && 
+          <Box>
+            This profile is unclaimed. Send this link to someone to claim it: 
+            <a href={URL} >{URL}</a>
+          </Box>
+        }
         {rejectMessageBoxOpen && <Box>
-          <Paper sx={{ margin:2, display:'flex', flexDirection:'column' }}>
+          <Paper sx={{ margin:2, display:'flex', flexDirection:'column', padding: 1 }}>
             Reason for rejection:
             <TextField value={rejectionReason} onChange={(e) => setRejectionReason(e.target.value)}></TextField>
             <Box sx={{ margin:2 }}>

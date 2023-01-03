@@ -8,7 +8,7 @@ import uuid from 'react-uuid';
 
 function Admin() {
   const db = getFirestore();
-  const [queryParams, setQueryParams] = useState({ userType:'sellers', status:'pending', claimed:'both'})
+  const [queryParams, setQueryParams] = useState({ userType:'sellers', status:'pending', claimed:'any'})
   const [data, setData] = useState([])
   const limitRef = useRef(null)
   const navigate = useNavigate()
@@ -43,9 +43,12 @@ function Admin() {
 
   function getData(collectionName, queryParams) {
     setData([])
-    const params = [collection(db, collectionName), orderBy('adminLastStatusUpdate', 'desc'), where('status', '==', queryParams.status), limit(limitRef.current.value)]
-    if (queryParams.claimed !== 'both') {
-      params.push(where('claimed', '==', queryParams.claimed))
+    const params = [collection(db, collectionName), orderBy('adminLastStatusUpdate', 'desc'), limit(limitRef.current.value)]
+    if (queryParams.status !== 'any') {
+      params.push(where('status', '==', queryParams.status))
+    }
+    if (queryParams.claimed !== 'any') {
+      params.push(where('claimed', '==', queryParams.claimed === 'claimed' ? true : false))
     }
     const dataQuery = query(...params)
     getDocs(dataQuery).then((docs) => {
@@ -108,6 +111,7 @@ function Admin() {
               <FormControlLabel control={<Radio/>} label='Pending' value='pending' />
               <FormControlLabel control={<Radio/>} label='Rejected' value='rejected' />
               <FormControlLabel control={<Radio/>} label='Incomplete' value='incomplete' />
+              <FormControlLabel control={<Radio/>} label='Any' value='any' />
             </RadioGroup>
           </FormControl>
           <FormControl style={{ marginTop:'16px' }}>
@@ -119,7 +123,7 @@ function Admin() {
             >
               <FormControlLabel control={<Radio/>} label='Claimed' value='claimed' />
               <FormControlLabel control={<Radio/>} label='Unclaimed' value='unclaimed' />
-              <FormControlLabel control={<Radio/>} label='Any' value='both' />
+              <FormControlLabel control={<Radio/>} label='Any' value='any' />
             </RadioGroup>
           </FormControl>
           <Box sx={{ marginTop:2 }}>
