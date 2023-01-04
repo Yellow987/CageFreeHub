@@ -41,7 +41,7 @@ function Profile() {
           <Grid item xs={12} md={6}>
             <Box sx={{display:'flex', justifyContent:'space-between', marginBottom:'54px', marginTop:'48px', alignItems:'center'}}>
               <Box sx={{ display:"flex", flexDirection:'row', alignItems:"center" }}>
-                <Typography variant="h1_32" >bob and jens beautiful chicken farm</Typography>
+                <Typography variant="h1_32" >{data.organizationName}</Typography>
                 <ClaimedPopup props={{ isClaimed: data.claimed }} />
               </Box>
               {data.logos.length === 1 && 

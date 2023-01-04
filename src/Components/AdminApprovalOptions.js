@@ -13,7 +13,8 @@ function AdminApprovalOptions(props) {
   const navigate = useNavigate()
   const [rejectMessageBoxOpen, setRejectMessageBoxOpen] = useState(false)
   const [rejectionReason, setRejectionReason] = useState("")
-  const URL = (process.env.REACT_APP_STAGE === 'preprod' ? 'https://freerangeeggfarm-26736.web.app/' : 'TODO' )+ "seller-signup/claim-profile/" + id
+  const websiteUrl = {dev:"http://localhost:3000/", preprod:'https://freerangeeggfarm-26736.web.app/', prod:'TODO'}
+  const URL = websiteUrl[process.env.REACT_APP_STAGE] + "seller-signup/claim-profile/" + id
 
   function changeProfileStatus(status) {
     setDoc(docRef, {...data, status:status})
@@ -61,8 +62,8 @@ function AdminApprovalOptions(props) {
         <Button color='megaDanger' sx={{ marginLeft:5 }} onClick={(e) => setRejectMessageBoxOpen(true)} variant='contained'>Reject Profile</Button>
         <Button variant='outlined' sx={{ marginLeft:5 }} onClick={(e) => handleEdit(e)} >Edit Profile</Button>
         {!data.claimed && 
-          <Box>
-            This profile is unclaimed. Send this link to someone to claim it: 
+          <Box marginTop={2}>
+            This profile is unclaimed. Send this link to someone to claim it:&nbsp;
             <a href={URL} >{URL}</a>
           </Box>
         }

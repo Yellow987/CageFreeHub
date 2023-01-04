@@ -1,15 +1,16 @@
 import { React, useState, useRef } from 'react'
 import { Box, Typography, TextField, Checkbox, FormControlLabel } from '@mui/material'
 import { Button } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from './../AuthContext';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import { useTranslation, Trans } from 'react-i18next';
 import tosPDF from '../Media/terms_of_service.pdf'
+import { copyOverClaimedProfile } from '../firestore';
 
 function Signup(props) {
-  const { hereTo } = props.props
+  const { hereTo, claimProfile = false } = props.props
   const format = {
     marginTop:4, 
   }
@@ -35,6 +36,8 @@ function Signup(props) {
       isCheckBoxValid: true
     }
   )
+  let { claimProfileID } = useParams()
+  const navigate = useNavigate()
 
   const isEmailInvalid = (email) => {
     const isInvalid = !(/^[\w-.]+@([\w-]+\.)+[\w-]{2,6}$/).test(email)
@@ -90,7 +93,13 @@ function Signup(props) {
           isSeller: hereTo === "SellerSignup",
           isProfileComplete: false
         }
-        signup(emailRef.current.value, passwordRef.current.value, data)
+        signup(emailRef.current.value, passwordRef.current.value, data).then((user) => {
+          if (claimProfile) {
+            copyOverClaimedProfile(claimProfileID, user.uid).then(() => {
+              navigate('profile')
+            })
+          }
+        })
       } catch {
         setAuthError({ isAuthError:true, errorDetails:"Create account error"})
       }

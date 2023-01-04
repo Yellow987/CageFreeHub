@@ -104,7 +104,6 @@ function Imagery() {
 
   return (
     <Box component='form' onSubmit={handleSubmit(() => validateChangePage("/profile/" + uid))}>
-      <Button onClick={() => console.log(imageErrors)}>riytfundluy</Button>
       <Typography variant="h1_32" >Imagery</Typography>
       <Alert sx={{  marginTop:4 }} iconMapping={{ success: <AutoAwesomeIcon sx={{ margin:'auto' }}/> }}>
         <Typography variant='p_default' color='#3FAB94'>

@@ -101,7 +101,7 @@ function Admin() {
             </RadioGroup>
           </FormControl>
           <FormControl style={{ marginTop:'16px' }}>
-            <FormLabel>Displayed in Directory Status</FormLabel>
+            <FormLabel>Displayed in Directory Status(only approved are shown)</FormLabel>
             <RadioGroup
               row
               value={queryParams.status}
@@ -111,6 +111,7 @@ function Admin() {
               <FormControlLabel control={<Radio/>} label='Pending' value='pending' />
               <FormControlLabel control={<Radio/>} label='Rejected' value='rejected' />
               <FormControlLabel control={<Radio/>} label='Incomplete' value='incomplete' />
+              <FormControlLabel control={<Radio/>} label='Claimed Skeleton Account' value='claimedSkeletonAccount' />
               <FormControlLabel control={<Radio/>} label='Any' value='any' />
             </RadioGroup>
           </FormControl>
