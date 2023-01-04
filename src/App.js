@@ -35,6 +35,7 @@ function App() {
             <Route path="/admin" element={<PrivateRoute><Admin/></PrivateRoute>} />
             <Route path="/buyer-signup" element={<PrivateRoute props={{ onPublicPage: true }}><Signup props={{ hereTo: 'BuyerSignup' }}/></PrivateRoute>} />
             <Route path="/seller-signup" element={<PrivateRoute props={{ onPublicPage: true }}><Signup props={{ hereTo: 'SellerSignup' }}/></PrivateRoute>} />
+            <Route path="/seller-signup/claim-profile/:claimProfileID" element={<PrivateRoute props={{ onPublicPage: true, redirect:false }}><Signup props={{ hereTo: 'SellerSignup', claimProfile:true }}/></PrivateRoute>} />
             <Route path="/login" element={<PrivateRoute props={{ onPublicPage: true}}><Signup props={{ hereTo: 'Login' }}/> </PrivateRoute>}/>
             <Route path="/confirm-email" element={<PrivateRoute><ConfirmEmail/></PrivateRoute>} />
             <Route path="/verified" element={<PrivateRoute><Verified/></PrivateRoute>} />
@@ -50,7 +51,7 @@ function App() {
             <Route path="/buyer-setup" element={<PrivateRoute props={{ allowBuyers: true }}><BuyerSetup/></PrivateRoute>} />
             <Route path="profile/:id" element={<Profile />}/> {/* //privated in the page */}
             <Route path="sellers" element={<PrivateRoute props={{ allowBuyers: true }}><Sellers /></PrivateRoute>}/>
-            <Route path="*" element={<>404</>} />
+            <Route path="*" element={<PrivateRoute><>404</></PrivateRoute>} />
           </Routes>
         </AuthProvider>
       </Suspense>

@@ -14,10 +14,13 @@ export function AuthProvider({ children }) {
     const [currentUserInfo, setCurrentUserInfo] = useState({})
     const [loading, setLoading] = useState(true)
 
-    function signup(email, password, data) {
-        createUserWithEmailAndPassword(auth, email, password).then((user) => {
-            setDoc(doc(getFirestore(), "users", user.user.uid), data).then(() => {
-                setCurrentUserInfo(data)
+    async function signup(email, password, data) {
+        return new Promise((resolve) => {
+            createUserWithEmailAndPassword(auth, email, password).then((user) => {
+                setDoc(doc(getFirestore(), "users", user.user.uid), data).then(() => {
+                    setCurrentUserInfo(data)
+                    resolve(user.user)
+                })
             })
         })
     }
