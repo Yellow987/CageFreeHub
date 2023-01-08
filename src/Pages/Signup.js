@@ -8,6 +8,7 @@ import Alert from '@mui/material/Alert';
 import { useTranslation, Trans } from 'react-i18next';
 import tosPDF from '../Media/terms_of_service.pdf'
 import { copyOverClaimedProfile } from '../firestore';
+import { isAdmin } from '../AdminAccountsConfig';
 
 function Signup(props) {
   const { hereTo, claimProfile = false } = props.props
@@ -83,7 +84,11 @@ function Signup(props) {
     setLoading(true)
     if (hereTo === "Login") {
       try{
-        login(emailRef.current.value, passwordRef.current.value)
+        login(emailRef.current.value, passwordRef.current.value).then((user) => {
+          if (isAdmin(user.user.uid)) {
+            navigate('/admin')
+          }
+        })
       } catch {
         setAuthError({ isAuthError:true, errorDetails:"Invalid Username/Email or Password"})
       }

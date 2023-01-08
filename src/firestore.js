@@ -73,7 +73,7 @@ export async function copyOverClaimedProfile(copiedProfileID, copyToProfileID) {
   })
 }
 
-async function updateFarm(profileID, data) { 
+export async function updateFarm(profileID, data) { 
   return new Promise((resolve) => {
     updateDoc(doc(db, "farms", profileID), data).then(() => {
       resolve()
