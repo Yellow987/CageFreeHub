@@ -41,7 +41,7 @@ function ProductDetails() {
       }
     }
 
-    setError("selectedOne", { message: "Please select at least one type"})
+    setError("selectedOne", { message: "Please select at least one option"})
   }
 
   function changePage(newPage) {

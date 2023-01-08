@@ -14,6 +14,7 @@ function Admin() {
   const navigate = useNavigate()
 
   const columns = [
+    "organizationName",
     "name", 
     "adminLastStatusUpdate",
     {
@@ -28,7 +29,7 @@ function Admin() {
           )
         }
       }
-    }, 
+    },
   ];
 
   const options = {

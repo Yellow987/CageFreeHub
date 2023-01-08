@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { Box, Button, Paper, TextField } from '@mui/material';
-import { setDoc } from 'firebase/firestore'
 import { isAdmin } from '../AdminAccountsConfig'
 import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { functions } from './../firestore';
 import { httpsCallable } from 'firebase/functions'
+import { updateFarm } from './../firestore';
 
 function AdminApprovalOptions(props) {
-  const { data, docRef, id, isSeller } = props.props
+  const { data, id, isSeller } = props.props
   const { currentUser } = useAuth();
   const navigate = useNavigate()
   const [rejectMessageBoxOpen, setRejectMessageBoxOpen] = useState(false)
@@ -16,22 +16,22 @@ function AdminApprovalOptions(props) {
   const websiteUrl = {dev:"http://localhost:3000/", preprod:'https://freerangeeggfarm-26736.web.app/', prod:'TODO'}
   const URL = websiteUrl[process.env.REACT_APP_STAGE] + "seller-signup/claim-profile/" + id
 
-  function changeProfileStatus(status) {
-    setDoc(docRef, {...data, status:status})
-  }
-
   function handleApprove(e) {
     e.preventDefault()
     if (!window.confirm('Are you sure you want to **APPROVE** this profile?')) { return }
     sendEmail(true)
-    changeProfileStatus('approved')
+    updateFarm(id, { status:'approved' }).then(() => {
+      window.location.reload();
+    })
   }
 
   function handleReject(e) {
     e.preventDefault()
     sendEmail(false, rejectionReason)
-    changeProfileStatus('rejected')
     setRejectMessageBoxOpen(false)
+    updateFarm(id, { status:'rejected' }).then(() => {
+      window.location.reload();
+    })
   }
 
   function handleEdit(e) {
@@ -42,7 +42,10 @@ function AdminApprovalOptions(props) {
   }
 
   function sendEmail(isApproved, emailRejectionReason = "") {
-    if (test.claimed === 'unclaimed') { return }
+    if (data.claimed !== 'claimed') { 
+      alert("failed to send email due to unclaimed profile")
+      return false
+    }
     const emailData = {
       isSeller: isSeller, //needed for all
       isApproved: isApproved, //needed for all
@@ -53,6 +56,7 @@ function AdminApprovalOptions(props) {
     }
     httpsCallable(functions, 'adminActionOnStatus')(emailData)
     .then((result) => {console.log(result)})
+    return true
   }
 
   return (
