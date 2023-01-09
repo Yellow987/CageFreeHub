@@ -49,7 +49,7 @@ function AdminApprovalOptions(props) {
     const emailData = {
       isSeller: isSeller, //needed for all
       isApproved: isApproved, //needed for all
-      emailTo: "daryldsouza123@gmail.com",//needed for all
+      emailToUid: id,
       name: "TEST NAME", //needed for all
       rejectionReason: emailRejectionReason, //needed when denied
       userUid: isSeller && isApproved ? id : "" //needed for approved sellers
