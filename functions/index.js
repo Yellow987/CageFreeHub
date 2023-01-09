@@ -1,10 +1,11 @@
 // The Cloud Functions for Firebase SDK to create Cloud Functions and
 // setup triggers.
 const functions = require("firebase-functions");
-let appIsInitialized = false;
 const adminUid = "7ZQ36Lt4N2QeLB2f0e9eMtDdmrx1";
-
+const { initializeApp } = require('firebase-admin/app');
+const { getAuth } = require('firebase-admin/auth');
 require("firebase-functions/logger/compat");
+
 // Nodemailer
 const nodemailer = require("nodemailer");
 const ses = require("nodemailer-ses-transport");
@@ -17,6 +18,8 @@ const transporter = nodemailer.createTransport(ses({
 }));
 
 const website = "http://localhost:3000";
+initializeApp();
+const admin = getAuth();
 
 function sendEmailToUser(emailData) {
   let body = emailData.intro ? emailData.intro + "<br/><br/>" : "";
@@ -55,14 +58,16 @@ function sendEmailToUser(emailData) {
   // SEND EMAIL
   transporter.sendMail({
     from: "daryldsouza123@gmail.com",
-    to: emailData.emailTo,
+    to: "daryldsouza123@gmail.com", // emailData.emailTo,
     subject: emailData.emailSubject,
     html: emailHtml,
   },
   function(err, data) {
     if (err) console.log(err);
     console.log("Email %s sent to %s", "test", "daryldsouza123@gmail.com");
+    return null;
   });
+  console.log("sent email to: " + emailData.emailTo);
   return null;
 }
 
@@ -82,18 +87,11 @@ exports.sendVerificationEmail = functions.runWith({
     // dynamicLinkDomain: 'freerangeeggfarm-26736.web.applink',
   };
 
-  const { initializeApp } = require('firebase-admin/app');
-  const { getAuth } = require('firebase-admin/auth');
-  if (!appIsInitialized) {
-    initializeApp();
-    appIsInitialized = true;
-  }
-
   const userEmail = data.emailTo;
-  getAuth().generateEmailVerificationLink(userEmail, actionCodeSettings)
+  admin.generateEmailVerificationLink(userEmail, actionCodeSettings)
   .then((link) => {
     const emailData = {
-      emailTo: "daryldsouza123@gmail.com",
+      emailTo: context.auth.token.email,
       emailSubject: "You’re almost ready to join the Cage-Free Hub!",
       intro: "",
       body: "Thank you for registering a profile on Global Food Partners’ Cage-Free Hub. To complete your registration, simply click on the button below to verify your email address, and get ready to connect with cage-free buyers and sellers around the globe!",
@@ -123,8 +121,13 @@ exports.adminActionOnStatus = functions.runWith({
   //   userUid: //needed for approved sellers
   // }
 
+  let emailTo = "";
+  admin.getUser(data.emailToUid).then((user) => {
+    emailTo = user.email;
+  });
+
   const emailData = {
-    emailTo: data.emailTo,
+    emailTo: emailTo,
     emailSubject: "",
     intro: "",
     body: "",

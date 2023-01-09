@@ -15,6 +15,7 @@ REACT_APP_APP_CHECK_DEBUG_TOKEN="{create one in firebase console}"
 run "firebase init firestore" to pull rules and indexes of firestore
 run "firebase init storage" to pull rules of firebase storage
 run "firebase deploy --only functions" to deploy the firebase cloud function
+(You can fix linting errors auto with "npm run lint -- --fix")
 I forget how you can deploy the rules but there be a command
 
 # Contact:

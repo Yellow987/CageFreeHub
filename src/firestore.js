@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, updateDoc, getDoc, getCountFromServer, collection, query, where } from 'firebase/firestore'
 import { getAuth } from 'firebase/auth'
-import { getFunctions } from 'firebase/functions';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import { getPerformance } from "firebase/performance";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 import { setDoc } from 'firebase/firestore';
@@ -95,4 +95,8 @@ async function getFarm(profileID) {
       resolve(doc.data())
     })
   })
+}
+
+export function sendVerificationEmail() {
+  httpsCallable(functions, 'sendVerificationEmail')({}).then((result) => {console.log(result); console.log('sent')})
 }
