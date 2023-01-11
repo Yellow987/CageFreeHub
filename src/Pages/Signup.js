@@ -83,31 +83,34 @@ function Signup(props) {
 
     setLoading(true)
     if (hereTo === "Login") {
-      try{
-        login(emailRef.current.value, passwordRef.current.value).then((user) => {
-          if (isAdmin(user.user.uid)) {
-            navigate('/admin')
-          }
-        })
-      } catch {
-        setAuthError({ isAuthError:true, errorDetails:"Invalid Username/Email or Password"})
-      }
-    } else {
-      try {
-        let data = {
-          isSeller: hereTo === "SellerSignup",
-          isProfileComplete: false
+      login(emailRef.current.value, passwordRef.current.value).then((user) => {
+        if (isAdmin(user.user.uid)) {
+          navigate('/admin')
         }
-        signup(emailRef.current.value, passwordRef.current.value, data).then((user) => {
-          if (claimProfile) {
-            copyOverClaimedProfile(claimProfileID, user.uid).then(() => {
-              navigate('profile')
-            })
-          }
-        })
-      } catch {
-        setAuthError({ isAuthError:true, errorDetails:"Create account error"})
+      })
+      .catch((error) => {
+        if (error.code === "auth/user-not-found") {
+          setAuthError({ isAuthError:true, errorDetails:"Invalid username or password."})
+        }
+      })
+    } else {
+      let data = {
+        isSeller: hereTo === "SellerSignup",
+        isProfileComplete: false
       }
+      signup(emailRef.current.value, passwordRef.current.value, data)
+      .then((user) => {
+        if (claimProfile) {
+          copyOverClaimedProfile(claimProfileID, user.uid).then(() => {
+            navigate('profile')
+          })
+        }
+      })
+      .catch((error) => {
+        if (error.code === "auth/email-already-in-use") {
+          setAuthError({ isAuthError:true, errorDetails:"This email is already taken"})
+        }
+      })
     }
     setLoading(false)
   }
@@ -130,7 +133,7 @@ function Signup(props) {
       <Typography variant='h1'>
         {getTitle(hereTo)}
       </Typography>
-      <Alert severity='error' style={{display: authError.isAuthError ? "flex" : "none"}}>
+      <Alert severity='error' style={{display: authError.isAuthError ? "flex" : "none", marginTop:'16px' }}>
         <Typography>{authError.errorDetails}</Typography>
       </Alert>
       <form onSubmit={handleSubmit}>

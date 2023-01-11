@@ -12,16 +12,24 @@ service cloud.firestore {
     	//allow user to read own document
       allow read: if isAuthed() && request.auth.uid == userID
       
-      //allow buyers to read all farm documents
-      allow read: if isAuthed() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isSeller == false
+      //allow user to get any uncliamed account
+      allow get: if isAuthed() && resource.data.claimed == false
+      
+      //allow user to claim any unclaimed account
+      allow update: if isAuthed() && resource.data.claimed == false && request.resource.data.status == "claimedSkeletonAccount"
       
       //allow user to create their own profile
       allow create: if isAuthed() && request.auth.uid == userID && 
-      	request.resource.data.status == 'pending'
+      	(request.resource.data.status == resource.data.status ||
+        request.resource.data.status == "pending" ||
+        request.resource.data.status == "incomplete")
       
       //allow user to edit own profile
       allow update: if isAuthed() && request.auth.uid == userID && 
       	request.resource.data.status == resource.data.status;
+        
+      //allow buyers to read all farm documents
+      allow read: if isAuthed() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isSeller == false
     }
     
     match /buyers/{userID} {
@@ -37,7 +45,9 @@ service cloud.firestore {
       
       //allow user to edit own profile
       allow update: if isAuthed() && request.auth.uid == userID && 
-      	request.resource.data.status == resource.data.status;
+      	(request.resource.data.status == resource.data.status ||
+        request.resource.data.status == "pending" ||
+        request.resource.data.status == "incomplete")
     }
     
     match /users/{userID} {

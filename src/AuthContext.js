@@ -15,18 +15,30 @@ export function AuthProvider({ children }) {
     const [loading, setLoading] = useState(true)
 
     async function signup(email, password, data) {
-        return new Promise((resolve) => {
-            createUserWithEmailAndPassword(auth, email, password).then((user) => {
+        return new Promise((resolve, reject) => {
+            createUserWithEmailAndPassword(auth, email, password)
+            .then((user) => {
                 setDoc(doc(getFirestore(), "users", user.user.uid), data).then(() => {
                     setCurrentUserInfo(data)
                     resolve(user.user)
                 })
             })
+            .catch((error) => {
+                reject(error)
+            })
         })
     }
 
     async function login(email, password) {
-        return await signInWithEmailAndPassword(auth, email, password)
+        return new Promise((resolve, reject) => {
+            signInWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                resolve()
+            })
+            .catch((error) => {
+                reject(error)
+            })
+        })
     }
 
     function logout(){
