@@ -82,15 +82,19 @@ function ProductDetails() {
       {types.map((type) => (
         <Box key={type}>
           <FormControlLabel sx={{ marginTop:2, display:'flex', flexDirection:'row' }} control={
-            <Checkbox checked={isChecked[type]} 
-            onClick={() => { setIsChecked({...isChecked, [type]:!isChecked[type]}); clearErrors()} } 
-          />} label={type} />
+            <Checkbox 
+              checked={isChecked[type]} 
+              onClick={() => { setIsChecked({...isChecked, [type]:!isChecked[type]}); clearErrors()} } 
+              />} 
+            label={type} 
+          />
           <Box sx={{ display:isChecked[type] ? 'block' : 'none' }}>
             <Box >
               <Typography variant='p_default_bold' color='#596676;' sx={{ marginTop:2 }}>Total production capacity (per year)</Typography>
               <Box sx={{ marginTop:1 }}>
                 <TextField 
                   {...register(`productionDetails.${type}.capacity`, { 
+                    valueAsNumber: true,
                     validate: (v) => {
                       if (isChecked[type] && v === "") {
                         return "This field is required"
@@ -99,7 +103,7 @@ function ProductDetails() {
                     }
                    })}
                   type='number'
-                  placeholder='E.g. 10,000' 
+                  inputProps={{ min: "0", step: "any" }}
                   sx={{ marginRight:'5%', width:'47.5%' }}
                   error={!!errors.productionDetails?.[type]?.capacity}
                   helperText={errors.productionDetails?.[type]?.capacity?.message}
@@ -128,6 +132,7 @@ function ProductDetails() {
                     }
                    })}
                   type='number'
+                  inputProps={{ min: "0", step: "0.01" }}
                   error={!!errors.productionDetails?.[type]?.price}
                   helperText={errors.productionDetails?.[type]?.price?.message}
                 />

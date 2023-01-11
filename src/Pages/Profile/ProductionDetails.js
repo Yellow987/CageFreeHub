@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router'
 import { useOutletContext } from 'react-router'
-import { Box, Select, Typography, MenuItem, TextField, Button, Link,FormHelperText } from '@mui/material'
+import { Box, Select, Typography, MenuItem, TextField, Button, Link,FormHelperText, Checkbox } from '@mui/material'
 import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useForm, Controller } from "react-hook-form";
@@ -101,11 +101,14 @@ function ProductionDetails() {
               multiple 
               renderValue={Opts => Opts.map((opt) => opt = opt.split(':')[0]).join('; ') }
               {...field}
-              onChange={(e) => field.onChange(e.target.value)}
+              onChange={(e) => { field.onChange(e.target.value); console.log(field.value.join("").includes('Aviary'))}}
               error={!!errors.productionSystem}
             >
               {productionSystemOpts.map((productionSystem, i) => (
-                <MenuItem key={i} value={productionSystem}>{productionSystem}</MenuItem>
+                <MenuItem key={i} value={productionSystem}>
+                  <Checkbox checked={field.value.join("").includes(productionSystem)}/>
+                  {productionSystem}
+                </MenuItem>
               ))}
             </Select>
             <FormHelperText sx={{ color: "error.main", marginLeft:1 }}>{errors.productionSystem?.message}</FormHelperText>
