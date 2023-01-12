@@ -1,13 +1,17 @@
 rules_version = '2';
 service cloud.firestore {  
   match /databases/{database}/documents {  
-  	function isAuthed(){
+  	function isAuthed() {
     	return request.auth != null
+    }
+
+    function isAdmin() {
+      return request.auth.uid == 'LKOVbOpgp1S8wdfyhh95azx5FvO2'
     }
 
     match /farms/{userID} {
     	//Allow admin
-    	allow read, create, update: if isAuthed() && request.auth.uid == '7ZQ36Lt4N2QeLB2f0e9eMtDdmrx1'
+    	allow read, create, update: if isAuthed() && isAdmin()
     
     	//allow user to read own document
       allow read: if isAuthed() && request.auth.uid == userID
@@ -34,7 +38,7 @@ service cloud.firestore {
     
     match /buyers/{userID} {
     	//allow admin
-    	allow read, create, update: if isAuthed() && request.auth.uid == '7ZQ36Lt4N2QeLB2f0e9eMtDdmrx1'
+    	allow read, create, update: if isAuthed() && isAdmin()
       
     	//allow user to read own document
       allow read: if isAuthed() && request.auth.uid == userID
@@ -52,7 +56,7 @@ service cloud.firestore {
     
     match /users/{userID} {
     	//allow admin
-    	allow read, create, update: if isAuthed() && request.auth.uid == '7ZQ36Lt4N2QeLB2f0e9eMtDdmrx1'
+    	allow read, create, update: if isAuthed() && isAdmin()
     	
 			//allow user to read own document
       allow read: if isAuthed() && request.auth.uid == userID
