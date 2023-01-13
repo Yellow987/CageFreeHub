@@ -13,11 +13,7 @@ function Verified() {
 
   useEffect(() => {
     setTimeout(function() {
-      if (currentUserInfo.isSeller) {
-        Navigate('/profile/welcome')
-      } else  {
-        Navigate('/buyer-setup')
-      }
+      Navigate('/sellers')
     }, 1000 * 3);
   }, [Navigate, currentUserInfo])
 

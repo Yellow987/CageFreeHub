@@ -5,7 +5,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 export default function PrivateRoute({ children, props = {} }) {
   const { currentUser, currentUserInfo } = useAuth();
   const location = useLocation()
-  const { onPublicPage = false, allowSellers = false, allowBuyers = false, allowUid = '', redirect = true } = props
+  const { onPublicPage = false, allowSellers = false, allowBuyers = false, allowUid = '', redirect = true, needVerifiedEmail = false } = props
 
   function navigate(route) {
     if (route === location.pathname) { console.log('correct page'); return children }
@@ -39,7 +39,7 @@ export default function PrivateRoute({ children, props = {} }) {
       return navigate((currentUserInfo.isSeller ? '/profile/welcome' : '/buyer-setup'))
     }
 
-    if (!currentUserInfo.isSeller && !currentUser.isEmailVerified) { //buyers must verify their email
+    if (!currentUserInfo.isSeller && (needVerifiedEmail && !currentUser.isEmailVerified) ) { //buyers must verify their email
       console.log('buyers must verify their email')
       return navigate('/confirm-email')
     }
