@@ -17,11 +17,16 @@ const transporter = nodemailer.createTransport(ses({
   region: "us-east-1",
 }));
 
-const website = "http://localhost:3000";
+const websiteMap = {
+  dev: "https://freerangeeggfarm-26736.web.app",
+  preprod: "https://freerangeeggfarm-26736.web.app",
+  prod: "",
+};
+
 initializeApp();
 const admin = getAuth();
 
-function sendEmailToUser(emailData) {
+function sendEmailToUser(emailData, stage = "prod") {
   let body = emailData.intro ? emailData.intro + "<br/><br/>" : "";
   body += emailData.body;
 
@@ -57,8 +62,8 @@ function sendEmailToUser(emailData) {
 
   // SEND EMAIL
   transporter.sendMail({
-    from: "daryldsouza123@gmail.com",
-    to: "daryldsouza123@gmail.com", // emailData.emailTo,
+    from: "noreply@globalfoodpartners.com",
+    to: emailData.emailTo,
     subject: emailData.emailSubject,
     html: emailHtml,
   },
@@ -68,7 +73,7 @@ function sendEmailToUser(emailData) {
     return null;
   });
   console.log("sent email to: " + emailData.emailTo);
-  return null;
+  return "email sent";
 }
 
 exports.sendVerificationEmail = functions.runWith({
@@ -80,15 +85,14 @@ exports.sendVerificationEmail = functions.runWith({
   const actionCodeSettings = {
     // URL you want to redirect back to. The domain (www.example.com) for
     // this URL must be whitelisted in the Firebase Console.
-    url: "https://freerangeeggfarm-26736.web.app/verified",
+    url: websiteMap[data.stage] + "/verified",
     // This must be true for email link sign-in.
     handleCodeInApp: true,
     // FDL custom domain.
     // dynamicLinkDomain: 'freerangeeggfarm-26736.web.applink',
   };
 
-  const userEmail = data.emailTo;
-  admin.generateEmailVerificationLink(userEmail, actionCodeSettings)
+  admin.generateEmailVerificationLink(context.auth.token.email, actionCodeSettings)
   .then((link) => {
     const emailData = {
       emailTo: context.auth.token.email,
@@ -99,8 +103,7 @@ exports.sendVerificationEmail = functions.runWith({
       buttonText: "Verify email address",
     };
 
-    sendEmailToUser(emailData);
-    return "email sent!";
+    return sendEmailToUser(emailData, data.stage);
   })
   .catch((error) => {
     throw new Error(`error generating verification email: ${error}`);
@@ -135,6 +138,7 @@ exports.adminActionOnStatus = functions.runWith({
     buttonText: "",
   };
 
+  const website = websiteMap[data.stage];
   if (data.isSeller && data.isApproved) { // SELLER APPROVED
     emailData.emailSubject = "Your Cage-Free Hub Profile has been Accepted!";
     emailData.intro = `Dear ${data.name}, Congratulations!`;
@@ -167,5 +171,5 @@ exports.adminActionOnStatus = functions.runWith({
     emailData.buttonText = "Access organization sign up page";
   }
 
-  sendEmailToUser(emailData);
+  return sendEmailToUser(emailData, data.stage);
 });

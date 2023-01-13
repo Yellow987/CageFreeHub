@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -9,7 +9,7 @@ import { sendVerificationEmail } from './../firestore';
 
 function ConfirmEmail() {
   const { currentUser } = useAuth();
-  const { sentEmail, setSentEmail } = useState(false)
+  const [ hasSentEmail, setHasSentEmail ] = useState(false)
 
   function sendEmail(e) {
     e.preventDefault()
@@ -17,7 +17,13 @@ function ConfirmEmail() {
     if (!currentUser.emailVerified){
       sendVerificationEmail()
     }
+    setHasSentEmail(true)
   }
+
+  useEffect(() => {
+    console.log(currentUser.emailVerified)
+
+  }, [currentUser])
 
   return (
     <Box mx={{ sm:'auto', xs:'24px' }} sx={{ maxWidth:'620px', mt:{ sm:'128px', xs:'24px'} }} align='center'>
@@ -29,10 +35,10 @@ function ConfirmEmail() {
           our directory of cage-free egg sellers.
         </Typography>
       </Alert>
-      <Button variant="outlined" style={{ marginTop:'60px', align:'center'}} onClick={(e) => { sendEmail(e); setSentEmail(true)} }>
+      <Button variant="outlined" style={{ marginTop:'60px', align:'center'}} onClick={(e) => { sendEmail(e);} }>
         Resend Confirmation Email
       </Button>
-      {sentEmail && <Alert sx={{ marginTop:'16px' }}>
+      {hasSentEmail && <Alert sx={{ marginTop:'16px' }}>
         <Typography color='primary.main'>Email verification sent!</Typography>
       </Alert>}
     </Box>

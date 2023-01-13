@@ -8,6 +8,12 @@ service cloud.firestore {
     function isAdmin() {
       return request.auth.uid == 'LKOVbOpgp1S8wdfyhh95azx5FvO2'
     }
+    
+    function validStatusToSetByOwningUser(request, resource) {
+			return request.resource.data.status == resource.data.status ||
+        request.resource.data.status == "pending" ||
+        request.resource.data.status == "incomplete"
+		}
 
     match /farms/{userID} {
     	//Allow admin
@@ -24,13 +30,11 @@ service cloud.firestore {
       
       //allow user to create their own profile
       allow create: if isAuthed() && request.auth.uid == userID && 
-      	(request.resource.data.status == resource.data.status ||
-        request.resource.data.status == "pending" ||
-        request.resource.data.status == "incomplete")
+      	validStatusToSetByOwningUser(request, resource)
       
       //allow user to edit own profile
       allow update: if isAuthed() && request.auth.uid == userID && 
-      	request.resource.data.status == resource.data.status;
+      	validStatusToSetByOwningUser(request, resource)
         
       //allow buyers to read all farm documents
       allow read: if isAuthed() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isSeller == false
@@ -45,13 +49,11 @@ service cloud.firestore {
          
       //allow user to create their own profile
       allow create: if isAuthed() && request.auth.uid == userID && 
-      	request.resource.data.status == 'pending'
+      	validStatusToSetByOwningUser(request, resource)
       
       //allow user to edit own profile
       allow update: if isAuthed() && request.auth.uid == userID && 
-      	(request.resource.data.status == resource.data.status ||
-        request.resource.data.status == "pending" ||
-        request.resource.data.status == "incomplete")
+      	validStatusToSetByOwningUser(request, resource)
     }
     
     match /users/{userID} {

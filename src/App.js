@@ -51,7 +51,7 @@ function App() {
             <Route path="/buyer-setup" element={<PrivateRoute props={{ allowBuyers: true }}><BuyerSetup/></PrivateRoute>} />
             <Route path="profile/:id" element={<Profile />}/> {/* //privated in the page */}
             <Route path="sellers" element={<PrivateRoute props={{ allowBuyers: true }}><Sellers /></PrivateRoute>}/>
-            <Route path="*" element={<PrivateRoute><>404</></PrivateRoute>} />
+            <Route path="*" element={<>404</>} />
           </Routes>
         </AuthProvider>
       </Suspense>

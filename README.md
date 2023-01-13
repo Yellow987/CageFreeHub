@@ -28,6 +28,8 @@ run "firebase deploy --only functions" to deploy the firebase cloud function
 firebase deploy --only firestore:rules
 firebase deploy --only firestore:indexes
 
+Stages:
+dev, preprod, prod
 
 # Contact:
 Contact the developer: Daryl D'Souza https://www.linkedin.com/in/daryl-d-souza-68048b16a/ 

@@ -3,9 +3,8 @@ import { Box, Button, Paper, TextField } from '@mui/material';
 import { isAdmin } from '../AdminAccountsConfig'
 import { useAuth } from '../AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { functions } from './../firestore';
-import { httpsCallable } from 'firebase/functions'
 import { updateFarm } from './../firestore';
+import { adminActionOnStatus } from './../firestore';
 
 function AdminApprovalOptions(props) {
   const { data, id, isSeller } = props.props
@@ -54,8 +53,7 @@ function AdminApprovalOptions(props) {
       rejectionReason: emailRejectionReason, //needed when denied
       userUid: isSeller && isApproved ? id : "" //needed for approved sellers
     }
-    httpsCallable(functions, 'adminActionOnStatus')(emailData)
-    .then((result) => {console.log(result)})
+    adminActionOnStatus(emailData)
     return true
   }
 

@@ -98,5 +98,10 @@ async function getFarm(profileID) {
 }
 
 export function sendVerificationEmail() {
-  httpsCallable(functions, 'sendVerificationEmail')({}).then((result) => {console.log(result); console.log('sent')})
+  httpsCallable(functions, 'sendVerificationEmail')({ stage:process.env.REACT_APP_STAGE }).then((result) => {console.log(result); })
+}
+
+export function adminActionOnStatus(emailData) {
+  httpsCallable(functions, 'adminActionOnStatus')({ ...emailData, stage:process.env.REACT_APP_STAGE })
+  .then((result) => {console.log(result)})
 }
