@@ -9,34 +9,40 @@ service cloud.firestore {
       return request.auth.uid == 'LKOVbOpgp1S8wdfyhh95azx5FvO2'
     }
     
-    function validStatusToSetByOwningUser(request, resource) {
-			return request.resource.data.status == resource.data.status ||
-        request.resource.data.status == "pending" ||
-        request.resource.data.status == "incomplete"
+    function validValueToSetOrUnchanged(value, validOptions) {
+			return (resource != null
+				&& value in resource.data 
+      	&& request.resource.data[value] == resource.data[value]) ||
+        (request.resource.data[value] in validOptions)
 		}
+    
+    function isOwnDoc(userID) {
+    	return isAuthed() && request.auth.uid == userID
+    }
 
     match /farms/{userID} {
     	//Allow admin
     	allow read, create, update: if isAuthed() && isAdmin()
     
     	//allow user to read own document
-      allow read: if isAuthed() && request.auth.uid == userID
+      allow read: if isOwnDoc(userID)
       
       //allow user to get any uncliamed account
       allow get: if isAuthed() && resource.data.claimed == false
       
       //allow user to claim any unclaimed account
-      allow update: if isAuthed() && resource.data.claimed == false && request.resource.data.status == "claimedSkeletonAccount"
+      allow update: if isAuthed() && resource.data.claimed == false 
+      	&& request.resource.data.status == "claimedSkeletonAccount"
       
       //allow user to create their own profile
-      allow create: if isAuthed() && request.auth.uid == userID && 
-      	validStatusToSetByOwningUser(request, resource)
+      allow create: if isOwnDoc(userID)
+      	&& validValueToSetOrUnchanged("status", ["pending", "incomplete"])
       
       //allow user to edit own profile
-      allow update: if isAuthed() && request.auth.uid == userID && 
-      	validStatusToSetByOwningUser(request, resource)
+      allow update: if isOwnDoc(userID)
+      	&& validValueToSetOrUnchanged("status", ["pending", "incomplete"])
         
-      //allow buyers to read all farm documents
+      //allow buyers approved to see sellers to read all farm documents
       allow read: if isAuthed() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isSeller == false
     }
     
@@ -45,15 +51,15 @@ service cloud.firestore {
     	allow read, create, update: if isAuthed() && isAdmin()
       
     	//allow user to read own document
-      allow read: if isAuthed() && request.auth.uid == userID
+      allow read: if isOwnDoc(userID)
          
       //allow user to create their own profile
-      allow create: if isAuthed() && request.auth.uid == userID && 
-      	validStatusToSetByOwningUser(request, resource)
+      allow create: if isOwnDoc(userID)
+      	&& validValueToSetOrUnchanged("status", ["pending", "incomplete"])
       
       //allow user to edit own profile
-      allow update: if isAuthed() && request.auth.uid == userID && 
-      	validStatusToSetByOwningUser(request, resource)
+      allow update: if isOwnDoc(userID)
+      	&& validValueToSetOrUnchanged("status", ["pending", "incomplete"])
     }
     
     match /users/{userID} {
@@ -61,10 +67,11 @@ service cloud.firestore {
     	allow read, create, update: if isAuthed() && isAdmin()
     	
 			//allow user to read own document
-      allow read: if isAuthed() && request.auth.uid == userID
+      allow read: if isOwnDoc(userID)
          
       //allow user to create & update their own profile
-      allow create, update: if isAuthed() && request.auth.uid == userID
+      allow create, update: if isOwnDoc(userID)
+      	&& validValueToSetOrUnchanged("isApprovedToViewSellers", [false])
     }
   }
 }

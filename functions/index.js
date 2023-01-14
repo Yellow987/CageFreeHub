@@ -1,7 +1,7 @@
 // The Cloud Functions for Firebase SDK to create Cloud Functions and
 // setup triggers.
 const functions = require("firebase-functions");
-const adminUid = "7ZQ36Lt4N2QeLB2f0e9eMtDdmrx1";
+const adminUid = "LKOVbOpgp1S8wdfyhh95azx5FvO2";
 const { initializeApp } = require('firebase-admin/app');
 const { getAuth } = require('firebase-admin/auth');
 require("firebase-functions/logger/compat");
@@ -69,15 +69,14 @@ function sendEmailToUser(emailData, stage = "prod") {
   },
   function(err, data) {
     if (err) console.log(err);
-    console.log("Email %s sent to %s", "test", "daryldsouza123@gmail.com");
-    return null;
+    return false;
   });
   console.log("sent email to: " + emailData.emailTo);
-  return "email sent";
+  return true;
 }
 
 exports.sendVerificationEmail = functions.runWith({
-  maxInstances: 2,
+  maxInstances: 1,
 }).https.onCall((data, context) => {
   // CHECK NOT ALREADY EMAIL VERIFIED && TO OWN EMAIL
 
@@ -124,52 +123,64 @@ exports.adminActionOnStatus = functions.runWith({
   //   userUid: //needed for approved sellers
   // }
 
-  let emailTo = "";
   admin.getUser(data.emailToUid).then((user) => {
-    emailTo = user.email;
+    const emailTo = user.email;
+    console.log(user);
+
+    const emailData = {
+      emailTo: emailTo,
+      emailSubject: "",
+      intro: "",
+      body: "",
+      link: "",
+      buttonText: "",
+    };
+
+    const website = websiteMap[data.stage];
+    if (data.isSeller && data.isApproved) { // SELLER APPROVED
+      emailData.emailSubject = "Your Cage-Free Hub Profile has been Accepted!";
+      emailData.intro = `Dear ${data.name}, Congratulations!`;
+      emailData.body = `You have successfully registered your business’s profile on the Cage-Free Hub, a database and resource centre that connects buyers and sellers of cage-free eggs from around the world. Your profile is now to buyers to view. Log in to the Hub today to start making connections, improving your market visibility, and sharing resources and learning with others like you. Thank you for being a part of our global, cage-free community.`;
+      emailData.link = `${website}/profile/${data.userUid}`;
+      emailData.buttonText = "Access Cage Free Hub";
+    }
+
+    if (data.isSeller && !data.isApproved) { // SELLER DENIED
+      emailData.emailSubject = "Your Cage-Free Hub profile needs a few fixes";
+      emailData.intro = `Dear ${data.name},`;
+      emailData.body = `We were unable to register your business’s profile on the Cage-Free Hub, a database and resource centre that connects buyers and sellers of cage-free eggs from around the world, because the information you provided was incomplete. ${data.rejectionReason}<br/><br/>Finalize your profile today so you can start making connections, improving your market visibility, and sharing resources and learning with others like you. To reaccess your profile submission, access the button below titled “Finalize profile”.`;
+      emailData.link = `${website}/profile/welcome`;
+      emailData.buttonText = "Finalize profile";
+    }
+
+    if (!data.isSeller && data.isApproved) { // BUYER APPROVED
+      emailData.emailSubject = "Your Organization has been Approved for Cage-Free Hub!";
+      emailData.intro = `Dear ${data.name}, Congratulations!`;
+      emailData.body = `You have successfully registered your organization on the Cage-Free Hub, a database and resource centre that connects buyers and sellers of cage-free eggs from around the world. You are now free to explore our directory of cage-free egg sellers. Thank you for being a part of our global, cage-free community.`;
+      emailData.link = `${website}/sellers`;
+      emailData.buttonText = "Explore the directory";
+    }
+
+    if (!data.isSeller && !data.isApproved) { // BUYER DENIED
+      emailData.emailSubject = "Your Organization was Denied from Cage-Free Hub (But Please Try Again!)";
+      emailData.intro = `Dear ${data.name},`;
+      emailData.body = `We were unable to register your organization on the Cage-Free Hub, a database and resource centre that connects buyers and sellers of cage-free eggs from around the world. ${data.rejectionReason}<br/><br/>We’d still love to have you back! If this problem can be remedied, please sign up again through our organization sign up page.`;
+      emailData.link = `${website}/buyer-signup`;
+      emailData.buttonText = "Access organization sign up page";
+    }
+
+    const sent = sendEmailToUser(emailData, data.stage);
+    if (sent) {
+      if (!data.isSeller && !data.isApproved) { // delete buyer account if denied
+        admin.deleteUser(data.userUid).then(() => {
+          console.log('deleted user %s', data.userUid);
+        }).catch((error) => {
+          console.log('error deleting user %s with error: %s', data.userUid, error);
+        });
+      }
+      return "sent email";
+    } else {
+      return "failed to send";
+    }
   });
-
-  const emailData = {
-    emailTo: emailTo,
-    emailSubject: "",
-    intro: "",
-    body: "",
-    link: "",
-    buttonText: "",
-  };
-
-  const website = websiteMap[data.stage];
-  if (data.isSeller && data.isApproved) { // SELLER APPROVED
-    emailData.emailSubject = "Your Cage-Free Hub Profile has been Accepted!";
-    emailData.intro = `Dear ${data.name}, Congratulations!`;
-    emailData.body = `You have successfully registered your business’s profile on the Cage-Free Hub, a database and resource centre that connects buyers and sellers of cage-free eggs from around the world. Your profile is now to buyers to view. Log in to the Hub today to start making connections, improving your market visibility, and sharing resources and learning with others like you. Thank you for being a part of our global, cage-free community.`;
-    emailData.link = `${website}/profile/${data.userUid}`;
-    emailData.buttonText = "Access Cage Free Hub";
-  }
-
-  if (data.isSeller && !data.isApproved) { // SELLER DENIED
-    emailData.emailSubject = "Your Cage-Free Hub profile needs a few fixes";
-    emailData.intro = `Dear ${data.name},`;
-    emailData.body = `We were unable to register your business’s profile on the Cage-Free Hub, a database and resource centre that connects buyers and sellers of cage-free eggs from around the world, because the information you provided was incomplete. ${data.rejectionReason}<br/><br/>Finalize your profile today so you can start making connections, improving your market visibility, and sharing resources and learning with others like you. To reaccess your profile submission, access the button below titled “Finalize profile”.`;
-    emailData.link = `${website}/profile/welcome`;
-    emailData.buttonText = "Finalize profile";
-  }
-
-  if (!data.isSeller && data.isApproved) { // BUYER APPROVED
-    emailData.emailSubject = "Your Organization has been Approved for Cage-Free Hub!";
-    emailData.intro = `Dear ${data.name}, Congratulations!`;
-    emailData.body = `You have successfully registered your organization on the Cage-Free Hub, a database and resource centre that connects buyers and sellers of cage-free eggs from around the world. You are now free to explore our directory of cage-free egg sellers. Thank you for being a part of our global, cage-free community.`;
-    emailData.link = `${website}/sellers`;
-    emailData.buttonText = "Explore the directory";
-  }
-
-  if (!data.isSeller && !data.isApproved) { // BUYER DENIED
-    emailData.emailSubject = "Your Organization was Denied from Cage-Free Hub (But Please Try Again!)";
-    emailData.intro = `Dear ${data.name},`;
-    emailData.body = `We were unable to register your organization on the Cage-Free Hub, a database and resource centre that connects buyers and sellers of cage-free eggs from around the world. ${data.rejectionReason}<br/><br/>We’d still love to have you back! If this problem can be remedied, please sign up again through our organization sign up page.`;
-    emailData.link = `${website}/buyer-signup`;
-    emailData.buttonText = "Access organization sign up page";
-  }
-
-  return sendEmailToUser(emailData, data.stage);
 });

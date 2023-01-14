@@ -23,7 +23,12 @@ function Admin() {
         customBodyRenderLite: (dataIndex) => {
           const id = data[dataIndex]['userID']
           return (
-            <Typography color='primary.main' fontWeight='bold' component={Link} to={"/profile/" + id} target="_blank">
+            <Typography 
+              color='primary.main' 
+              fontWeight='bold' 
+              component={Link} 
+              to={(queryParams.userType === 'sellers' ? "/profile/" : "/buyer-profile/")+ id} 
+              target="_blank">
               {id}
             </Typography>
           )
