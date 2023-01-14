@@ -39,9 +39,14 @@ export default function PrivateRoute({ children, props = {} }) {
       return navigate((currentUserInfo.isSeller ? '/profile/welcome' : '/buyer-setup'))
     }
 
-    if (!currentUserInfo.isSeller && (needVerifiedEmail && !currentUser.isEmailVerified) ) { //buyers must verify their email
+    if (!currentUserInfo.isSeller && (needVerifiedEmail && !currentUser.emailVerified) ) { //buyers must verify their email
       console.log('buyers must verify their email')
       return navigate('/confirm-email')
+    }
+
+    if (!currentUserInfo.isSeller && location.pathname === "/confirm-email" && currentUser.emailVerified) { //verified buyers cannot be on verify email page
+      console.log('buyers must verify their email')
+      return navigate('/sellers')
     }
 
     if (allowUid === currentUser.uid) { //allow user with completed profile to page(usually buyer for their own page)

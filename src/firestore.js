@@ -1,7 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getFirestore, doc, updateDoc, getDoc, getCountFromServer, collection, query, where } from 'firebase/firestore'
-import { getAuth } from 'firebase/auth'
+import { getAuth, applyActionCode } from 'firebase/auth'
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { getPerformance } from "firebase/performance";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
@@ -32,6 +32,11 @@ export const appCheck = initializeAppCheck(app, {
   // tokens as needed.
   isTokenAutoRefreshEnabled: true
 });
+
+//Hide comments on production
+if (process.env.REACT_APP_STAGE === "prod") {
+  console.log = function() {};
+}
 
 //functions
 export async function updateUserInfo(uid, data) {
@@ -104,4 +109,15 @@ export function sendVerificationEmail() {
 export function adminActionOnStatus(emailData) {
   httpsCallable(functions, 'adminActionOnStatus')({ ...emailData, stage:process.env.REACT_APP_STAGE })
   .then((result) => {console.log(result)})
+}
+
+export async function verifyEmailViaActionCode(actionCode) {
+  return new Promise((resolve, reject) => {
+    applyActionCode(auth, actionCode).then((resp) => {
+      resolve()
+    })
+    .catch((error) => {
+      reject(error)
+    })
+  })
 }

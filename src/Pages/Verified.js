@@ -6,6 +6,7 @@ import { Box, Typography } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../AuthContext";
 import CircularProgress from '@mui/material/CircularProgress';
+import { verifyEmailViaActionCode } from "../firestore";
 
 function Verified() {
   const Navigate = useNavigate()
@@ -16,6 +17,27 @@ function Verified() {
       Navigate('/sellers')
     }, 1000 * 3);
   }, [Navigate, currentUserInfo])
+
+  
+  function getParameterByName( name ){
+    name = name.replace(/[[]/,"\\[").replace(/[\]]/,"\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec( window.location.href );
+    if( results == null )
+      return "";
+    else
+      return decodeURIComponent(results[1].replace(/\+/g, " "));
+  }
+
+  useEffect(() => {
+    console.log('hi')
+    const actionCode = getParameterByName("oobCode")
+    //const continueUrl = getParameterByName('continueUrl')
+    console.log(actionCode)
+    verifyEmailViaActionCode(actionCode)
+
+  }, [])
 
   return (
     <Box mx={{ sm:'auto', xs:'24px' }} sx={{ maxWidth:'620px', mt:{ sm:'128px', xs:'24px'} }} align='center'>

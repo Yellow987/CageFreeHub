@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -16,14 +16,9 @@ function ConfirmEmail() {
     console.log(currentUser.emailVerified)
     if (!currentUser.emailVerified){
       sendVerificationEmail()
+      setHasSentEmail(true)
     }
-    setHasSentEmail(true)
   }
-
-  useEffect(() => {
-    console.log(currentUser.emailVerified)
-
-  }, [currentUser])
 
   return (
     <Box mx={{ sm:'auto', xs:'24px' }} sx={{ maxWidth:'620px', mt:{ sm:'128px', xs:'24px'} }} align='center'>
