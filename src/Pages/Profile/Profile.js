@@ -31,8 +31,9 @@ function Profile() {
       setData(doc.data())
     })
   }, [docRef])
+  
   return (
-    <PrivateRoute props={{ allowBuyers: true, allowUid:id }}>
+    <PrivateRoute props={{ allowBuyers: true, allowUid:id, BuyerNeedsApprovalToSeeSellers:true }}>
       {data && 
       <Box mx='24px' sx={{ marginTop:'56px'}}>
         <AdminApprovalOptions props={{ data:data, id:id, isSeller:true }}/>
@@ -47,7 +48,7 @@ function Profile() {
                 marginTop={1} 
                 marginBottom={1}
                 display="flex"
-                alignContent='center'
+                alignItems='center' 
               >
                 {data.status.charAt(0).toUpperCase() + data.status.slice(1)}
                 <CheckCircleOutlineIcon sx={{ marginLeft:1, display:data.status === 'approved' ? 'block' : 'none' }} fontSize='large'/>

@@ -22,6 +22,7 @@ const Imagery = lazy(() => import('./Pages/Profile/Imagery'));
 const Profile = lazy(() => import('./Pages/Profile/Profile'));
 const Admin = lazy(() => import('./Pages/Admin'));
 const Sellers = lazy(() => import('./Pages/Sellers'));
+const BuyerProfile = lazy(() => import('./Pages/BuyerProfile'));
 
 function App() {
   return (
@@ -49,8 +50,9 @@ function App() {
               <Route path="/profile/imagery" element={<Imagery />} />
             </Route>
             <Route path="/buyer-setup" element={<PrivateRoute props={{ allowBuyers: true }}><BuyerSetup/></PrivateRoute>} />
+            <Route path="/buyer-profile/:id" element={<PrivateRoute><BuyerProfile/></PrivateRoute>} />
             <Route path="profile/:id" element={<Profile />}/> {/* //privated in the page */}
-            <Route path="sellers" element={<PrivateRoute props={{ allowBuyers: true, needVerifiedEmail: true }}><Sellers /></PrivateRoute>}/>
+            <Route path="sellers" element={<PrivateRoute props={{ allowBuyers: true, BuyerNeedsApprovalToSeeSellers: true }}><Sellers /></PrivateRoute>}/>
             <Route path="*" element={<>404</>} />
           </Routes>
         </AuthProvider>

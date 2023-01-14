@@ -5,7 +5,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 export default function PrivateRoute({ children, props = {} }) {
   const { currentUser, currentUserInfo } = useAuth();
   const location = useLocation()
-  const { onPublicPage = false, allowSellers = false, allowBuyers = false, allowUid = '', redirect = true, needVerifiedEmail = false } = props
+  const { onPublicPage = false, allowSellers = false, allowBuyers = false, allowUid = '', redirect = true, BuyerNeedsApprovalToSeeSellers = false } = props
 
   function navigate(route) {
     if (route === location.pathname) { console.log('correct page'); return children }
@@ -39,14 +39,17 @@ export default function PrivateRoute({ children, props = {} }) {
       return navigate((currentUserInfo.isSeller ? '/profile/welcome' : '/buyer-setup'))
     }
 
-    if (!currentUserInfo.isSeller && (needVerifiedEmail && !currentUser.emailVerified) ) { //buyers must verify their email
-      console.log('buyers must verify their email')
+    if (!currentUserInfo.isSeller && BuyerNeedsApprovalToSeeSellers && !currentUserInfo.isApprovedToViewSellers) { //buyers must verify their email and be approved to see directory
+      console.log('buyers must verify their email and be approved to see directory')
+      if (currentUser.emailVerified) {
+        return navigate('/verified')
+      }
       return navigate('/confirm-email')
     }
 
-    if (!currentUserInfo.isSeller && location.pathname === "/confirm-email" && currentUser.emailVerified) { //verified buyers cannot be on verify email page
-      console.log('buyers must verify their email')
-      return navigate('/sellers')
+    if (!currentUserInfo.isSeller && location.pathname === "/confirm-email" && currentUser.emailVerified) { //verified email users cannot be on verify email page
+      console.log('verified buyers cannot be on verify email page')
+      return navigate('/verified')
     }
 
     if (allowUid === currentUser.uid) { //allow user with completed profile to page(usually buyer for their own page)

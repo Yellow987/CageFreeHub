@@ -9,6 +9,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import tosPDF from '../Media/terms_of_service.pdf'
 import { copyOverClaimedProfile } from '../firestore';
 import { isAdmin } from '../AdminAccountsConfig';
+import { sendVerificationEmail } from './../firestore';
 
 function Signup(props) {
   const { hereTo, claimProfile = false } = props.props
@@ -96,7 +97,8 @@ function Signup(props) {
     } else {
       let data = {
         isSeller: hereTo === "SellerSignup",
-        isProfileComplete: false
+        isProfileComplete: false,
+        isApprovedToViewSellers: false
       }
       signup(emailRef.current.value, passwordRef.current.value, data)
       .then((user) => {
@@ -104,6 +106,9 @@ function Signup(props) {
           copyOverClaimedProfile(claimProfileID, user.uid).then(() => {
             navigate('profile')
           })
+        }
+        if (hereTo === "BuyerSignup") {
+          sendVerificationEmail()
         }
       })
       .catch((error) => {

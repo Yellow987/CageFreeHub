@@ -32,8 +32,8 @@ export function AuthProvider({ children }) {
     async function login(email, password) {
         return new Promise((resolve, reject) => {
             signInWithEmailAndPassword(auth, email, password)
-            .then(() => {
-                resolve()
+            .then((user) => {
+                resolve(user)
             })
             .catch((error) => {
                 reject(error)

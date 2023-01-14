@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getFirestore, doc, updateDoc, getDoc, getCountFromServer, collection, query, where } from 'firebase/firestore'
+import { getFirestore, doc, updateDoc, getDoc, getCountFromServer, collection, query, where, deleteDoc } from 'firebase/firestore'
 import { getAuth, applyActionCode } from 'firebase/auth'
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { getPerformance } from "firebase/performance";
@@ -59,6 +59,26 @@ export async function getUserInfo(uid) {
   })
 }
 
+export async function getBuyer(uid) {
+  return new Promise((resolve) => {
+    getDoc(doc(db, "buyers", uid)).then((doc) => {
+      if (doc.exists()) {
+        resolve(doc.data())
+      } else {
+        resolve({})
+      }
+    })
+  })
+}
+
+export async function updateBuyer(uid, updateData) {
+  return new Promise((resolve) => {
+    updateDoc(doc(db, "buyers", uid), updateData).then(() => {
+      resolve()
+    })
+  })
+}
+
 export async function getCountOfFarmsToDisplay() {
     const coll = collection(db, "farms")
     const query_ = query(coll, where('status', '==', 'approved'))
@@ -106,18 +126,23 @@ export function sendVerificationEmail() {
   httpsCallable(functions, 'sendVerificationEmail')({ stage:process.env.REACT_APP_STAGE }).then((result) => {console.log(result); })
 }
 
-export function adminActionOnStatus(emailData) {
-  httpsCallable(functions, 'adminActionOnStatus')({ ...emailData, stage:process.env.REACT_APP_STAGE })
+export async function sendEmailAboutApprovalOrRejection(emailData) {
+  await httpsCallable(functions, 'adminActionOnStatus')({ ...emailData, stage:process.env.REACT_APP_STAGE })
   .then((result) => {console.log(result)})
 }
 
 export async function verifyEmailViaActionCode(actionCode) {
   return new Promise((resolve, reject) => {
     applyActionCode(auth, actionCode).then((resp) => {
-      resolve()
+      resolve(resp)
     })
     .catch((error) => {
       reject(error)
     })
   })
+}
+
+export async function deleteBuyerAccount(uid) {
+  await deleteDoc(doc(db, "buyers", uid))
+  await deleteDoc(doc(db, "users", uid))
 }
