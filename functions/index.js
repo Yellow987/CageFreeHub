@@ -125,7 +125,6 @@ exports.adminActionOnStatus = functions.runWith({
 
   admin.getUser(data.emailToUid).then((user) => {
     const emailTo = user.email;
-    console.log(user);
 
     const emailData = {
       emailTo: emailTo,

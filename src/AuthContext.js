@@ -11,7 +11,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }) {
     const [currentUser, setCurrentUser] = useState()
-    const [currentUserInfo, setCurrentUserInfo] = useState({})
+    const [currentUserInfo, setCurrentUserInfo] = useState(null)
     const [loading, setLoading] = useState(true)
 
     async function signup(email, password, data) {
