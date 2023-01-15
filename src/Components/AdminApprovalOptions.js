@@ -59,7 +59,7 @@ function AdminApprovalOptions(props) {
   }
 
   async function sendEmail(isApproved, emailRejectionReason = "") {
-    if (isSeller && data.claimed !== 'claimed') { 
+    if (isSeller && !data.claimed) { 
       alert("failed to send email due to unclaimed profile")
       return false
     }
