@@ -3,11 +3,9 @@ import Button from '@mui/material/Button';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { Accordion, AccordionSummary, Box, List, ListItem, MenuItem, Divider } from '@mui/material';
+import { Accordion, AccordionSummary, Box, List, ListItem, MenuItem, Divider, Popover } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import Menu from '@mui/material/Menu';
-import Popover from '@mui/material/Popover';
-import PopupState, { bindTrigger, bindPopover } from 'material-ui-popup-state';
 import SupportPopup from './SupportPopup';
 import MenuIcon from '@mui/icons-material/Menu';
 import IconButton from '@mui/material/IconButton';
@@ -37,6 +35,7 @@ function GlobalNavBar() {
   const [isAccordionExpanded, setIsAccordionExpanded] = useState(false)
   const [accordionIconIsClose, setAccordionIconIsClose] = useState(false)
   const [editProfileLink, setEditProfileLink] = useState('')
+  const [supportPopupAnchorEl, setSupportPopupAnchorEl] = useState(null);
   const navigate = useNavigate()
 
   const languages = [
@@ -176,34 +175,28 @@ function GlobalNavBar() {
         <Box sx={{ flexGrow: 1 }}/>
         <Box sx={{ display:{xs:'none', sm:'flex'}}} >
           <Box sx={{ marginRight:2}}>
-            <PopupState variant="popover" >
-              {(popupState) => (
-                <div>
-                  <Button variant="outlined" 
-                  style={{
-                    backgroundColor:'#EFFAF9', 
-                    color:'#3FAB94',  
-                    border:'0'
-                  }} {...bindTrigger(popupState)}>
-                    <HelpOutlineIcon fontSize='small' style={{ marginRight:6}}/>
-                    {t('support')}
-                  </Button>
-                  <Popover
-                    {...bindPopover(popupState)}
-                    anchorOrigin={{
-                      vertical: 'bottom',
-                      horizontal: 'center',
-                    }}
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'center',
-                    }}
-                  >
-                    <SupportPopup/>
-                  </Popover>
-                </div>
-              )}
-            </PopupState>
+            <Button variant="outlined" 
+              style={{
+                backgroundColor:'#EFFAF9', 
+                color:'#3FAB94',  
+                border:'0'
+              }}
+              onClick={(e) => setSupportPopupAnchorEl(e.currentTarget)}
+            >
+              <HelpOutlineIcon fontSize='small' style={{ marginRight:6}}/>
+              {t('support')}
+            </Button>
+            <Popover
+              open={Boolean(supportPopupAnchorEl)}
+              anchorEl={supportPopupAnchorEl}
+              onClose={() => setSupportPopupAnchorEl(null)}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+              }}
+            >
+              <SupportPopup/>
+            </Popover>
           </Box>
           <Box>
             <Button variant='contained' sx={{ display:currentUser?.uid === adminUid ? 'block' : 'none' }} onClick={() => {navigate('/admin')}} >ADMIN PORTAL</Button>

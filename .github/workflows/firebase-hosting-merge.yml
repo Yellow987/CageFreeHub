@@ -21,7 +21,7 @@ jobs:
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_CHICKENS_ARE_MY_FRIENDS }}'
           channelId: live
           projectId: chickens-are-my-friends
-  build_and_deploy_on_DEV:
+  build_and_deploy_on_PREPROD:
     runs-on: ubuntu-latest
     environment: env
     steps:
