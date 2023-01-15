@@ -63,7 +63,7 @@ function sendEmailToUser(emailData, stage = "prod") {
   // SEND EMAIL
   transporter.sendMail({
     from: "noreply@globalfoodpartners.com",
-    to: emailData.emailTo,
+    to: stage === "dev" ? "daryldsouza123@gmail.com" : emailData.emailTo,
     subject: emailData.emailSubject,
     html: emailHtml,
   },
