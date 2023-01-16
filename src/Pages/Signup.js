@@ -1,5 +1,5 @@
-import { React, useState, useRef } from 'react'
-import { Box, Typography, TextField, Checkbox, FormControlLabel } from '@mui/material'
+import { React, useState } from 'react'
+import { Box, Typography, TextField, Checkbox, FormControlLabel, FormHelperText } from '@mui/material'
 import { Button } from '@mui/material';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from './../AuthContext';
@@ -10,6 +10,9 @@ import tosPDF from '../Media/terms_of_service.pdf'
 import { copyOverClaimedProfile } from '../firestore';
 import { isAdmin } from '../AdminAccountsConfig';
 import { sendVerificationEmail } from './../firestore';
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 function Signup(props) {
   const { hereTo, claimProfile = false } = props.props
@@ -26,65 +29,29 @@ function Signup(props) {
   const { t } = useTranslation(['signup']);
   const { signup, login } = useAuth()
   const [loading, setLoading] = useState(false)
-  const emailRef = useRef("");
-  const passwordRef = useRef("")
-  const buttonRef = useRef(null)
-  const checkboxRef = useRef(false)
   const [authError, setAuthError] = useState({ isAuthError:false, errorDetails:""})
-  const [errors, setErrors] = useState(
-    { 
-      emailErrorText:"", isEmailValid: true, 
-      passwordErrorText:"", isPasswordValid: true,
-      isCheckBoxValid: true
-    }
-  )
+  const schema = yup.object().shape({
+    email: yup.string().email().required(),
+    password: yup.string().min(6).required(),
+    ...(hereTo !== 'Login' ? {tosCheckbox: yup.bool().required("Please accept the terms of service.").oneOf([true], "Please accept the terms of service.")} : {})
+  });
+  const { 
+    handleSubmit, 
+    register, 
+    getValues,
+    formState: { errors },
+    control
+  } = useForm({
+    resolver: yupResolver(schema),
+  })
   let { claimProfileID } = useParams()
   const navigate = useNavigate()
 
-  const isEmailInvalid = (email) => {
-    const isInvalid = !(/^[\w-.]+@([\w-]+\.)+[\w-]{2,6}$/).test(email)
-    return isInvalid;
-  };
-
-  function areValidationErrors() {
-    let temp = {}
-    let errors = false
-    if (isEmailInvalid(emailRef.current.value)) {
-      temp.emailErrorText = t('errorEmail')
-      temp.isEmailValid = false 
-      errors = true
-    } else {
-      temp.emailErrorText = "" 
-      temp.isEmailValid = true
-    }
-
-    if (passwordRef.current.value.length < 6) {
-      temp.passwordErrorText = t('errorPassword')
-      temp.isPasswordValid = false 
-      errors = true
-    } else {
-      temp.passwordErrorText = "" 
-      temp.isPasswordValid = true
-    }
-    if (!checkboxRef.current.checked && hereTo !== "Login") {
-      errors = true
-      temp.isCheckBoxValid = false
-    } else {
-      temp.isCheckBoxValid = true
-    }
-
-
-    setErrors(temp)
-    return errors ? true : false
-  }
-
-  function handleSubmit(event) {
+  function handleAuth(event) {
     event.preventDefault()
-    if (areValidationErrors()) {return}
-
     setLoading(true)
     if (hereTo === "Login") {
-      login(emailRef.current.value, passwordRef.current.value).then((user) => {
+      login(getValues('email'), getValues('password')).then((user) => {
         if (isAdmin(user.user.uid)) {
           navigate('/admin')
         }
@@ -100,7 +67,7 @@ function Signup(props) {
         isProfileComplete: false,
         isApprovedToViewSellers: false
       }
-      signup(emailRef.current.value, passwordRef.current.value, data)
+      signup(getValues('email'), getValues('password'), data)
       .then((user) => {
         if (claimProfile) {
           copyOverClaimedProfile(claimProfileID, user.uid).then(() => {
@@ -134,29 +101,78 @@ function Signup(props) {
   }
 
   return (
-    <Box align='center' mx={{ sm:'auto', xs:'24px' }} sx={{ maxWidth:'430px', mt:{ sm:'116px', xs:'24px'} }}>
+    <Box 
+      align='center' 
+      mx={{ sm:'auto', xs:'24px' }} 
+      sx={{ maxWidth:'430px', mt:{ sm:'116px', xs:'24px'} }}
+      component='form' 
+      onSubmit={handleSubmit((data, e) => handleAuth(e))}
+    >
       <Typography variant='h1'>
         {getTitle(hereTo)}
       </Typography>
       <Alert severity='error' style={{display: authError.isAuthError ? "flex" : "none", marginTop:'16px' }}>
         <Typography>{authError.errorDetails}</Typography>
       </Alert>
-      <form onSubmit={handleSubmit}>
-        <TextField error={!errors.isEmailValid} helperText={errors.emailErrorText} fullWidth label={t('email')} variant="outlined" sx={{ ...format }} inputRef={emailRef}/>
-        <TextField error={!errors.isPasswordValid} helperText={errors.passwordErrorText} fullWidth label={t('password')} type="password" autoComplete="on" variant="outlined" sx={{ ...format }} inputRef={passwordRef} />
-        <FormControlLabel sx={{ ...format, display: hereTo === 'Login' ? 'none' : 'block', lineHeight:0 }}
-        label={
-          <Typography variant='p_small' display="inline" sx={{ lineHeight: 0 }}>
-            <Trans i18nKey='ToS' t={t} components={[<a href={tosPDF} target='_blank' rel='noopener noreferrer'><Box sx={{...hyperlink}} /></a>]} />
-          </Typography>
-        } control={
-          <Checkbox sx={{color: errors.isCheckBoxValid ? '' : '#FF0000'}} inputRef={checkboxRef}/>
-        }/>
-        <Button type="submit" disabled={loading} fullWidth  variant='contained' sx={{ ...format, fontWeight:700 }} ref={buttonRef}>
-          <CircularProgress size="1.5rem" sx={{ display: loading ? 'block' : 'none' }}/>
-          {!loading ? hereTo === 'Login' ? t('login') : t('createAccount') : ""}
-        </Button>
-      </form>
+      <TextField 
+        error={!!errors.email} 
+        helperText={errors.email?.message} 
+        fullWidth 
+        label={t('email')} 
+        variant="outlined" 
+        sx={{ ...format }} 
+        {...register("email", { required:"Please enter a valid email" })}
+      />
+      <TextField 
+        error={!!errors.password} 
+        helperText={errors.password?.message} 
+        fullWidth 
+        label={t('password')} 
+        type="password" 
+        autoComplete="on" 
+        variant="outlined" 
+        sx={{ ...format }} 
+        {...register("password", { required:"password must be at least 6 characters" })}
+      />
+      <Controller
+        name="tosCheckbox"
+        control={control}
+        rules={{ 
+          validate: (checked) => {
+            if (!checked && hereTo !== "Login") {
+              return "Please accept the terms of service"
+            }
+            return true
+          }
+        }}
+        render={({ field }) => (
+          <Box sx={{ display: hereTo === 'Login' ? 'none' : 'block' }}>
+            <FormControlLabel sx={{ ...format, lineHeight:0 }}
+              label={
+                <Typography variant='p_small' display="inline" sx={{ lineHeight: 0 }}>
+                  <Trans i18nKey='ToS' t={t} components={[<a href={tosPDF} target='_blank' rel='noopener noreferrer'><Box sx={{...hyperlink}} /></a>]} />
+                </Typography>
+              } control={
+                <Checkbox 
+                  {...field}
+                  onChange={() => { field.onChange(!getValues("tosCheckbox")); } }
+                />
+              }
+            />
+            <FormHelperText sx={{ color: "error.main", marginLeft:1 }}>{errors.tosCheckbox?.message}</FormHelperText>
+          </Box>
+        )}
+      />
+      <Button 
+        type="submit" 
+        disabled={loading} 
+        fullWidth 
+        variant='contained' 
+        sx={{ ...format, fontWeight:700 }} 
+      >
+        <CircularProgress size="1.5rem" sx={{ display: loading ? 'block' : 'none' }}/>
+        {!loading ? hereTo === 'Login' ? t('login') : t('createAccount') : ""}
+      </Button>
       <Typography variant='p_default' sx={{marginTop: 5, display: hereTo === 'Login' ? 'none' : 'block' }}>
         <Trans i18nKey='haveAccount' t={t} components={[<Box sx={{...hyperlink}} component={Link} to="/Login" />]} />
       </Typography>

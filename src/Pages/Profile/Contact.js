@@ -72,7 +72,7 @@ function Contact() {
       for (const communicationChannel of communicationChannels) {
         if (communicationChannel.isSelected) {
           oneSelected = true
-                                            if (!isPossiblePhoneNumber('+' + communicationChannel.number)) {
+          if (!isPossiblePhoneNumber('+' + communicationChannel.number)) {
             existErrors = true
             setError(communicationChannel.label, { message: "Please enter a valid phone number"})
           } 
