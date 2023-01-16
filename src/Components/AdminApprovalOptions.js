@@ -14,6 +14,7 @@ function AdminApprovalOptions(props) {
   const [rejectionReason, setRejectionReason] = useState("")
   const websiteUrl = {dev:"http://localhost:3000/", preprod:'https://freerangeeggfarm-26736.web.app/', prod:'TODO'}
   const URL = websiteUrl[process.env.REACT_APP_STAGE] + "seller-signup/claim-profile/" + id
+  const utcDate = new Date()
 
   function handleApprove(e) {
     e.preventDefault()
@@ -21,12 +22,12 @@ function AdminApprovalOptions(props) {
     sendEmail(true).then((emailSent) => {
       if (!emailSent) return
       if (isSeller) {
-        updateFarm(id, { status:'approved' }).then(() => {
+        updateFarm(id, { adminLastStatusUpdate: utcDate, status:'approved' }).then(() => {
           window.location.reload();
         }) 
       } else {
         updateUserInfo(id, {isApprovedToViewSellers: true}).then(() => {
-          updateBuyer(id, { status:'approved' }).then(() => {
+          updateBuyer(id, { adminLastStatusUpdate: utcDate, status:'approved' }).then(() => {
             window.location.reload();
           })
         })
@@ -40,7 +41,7 @@ function AdminApprovalOptions(props) {
       if (!emailSent) return
       setRejectMessageBoxOpen(false)
       if (isSeller) {
-        updateFarm(id, { status:'rejected' }).then(() => {
+        updateFarm(id, { adminLastStatusUpdate: utcDate, status:'rejected' }).then(() => {
           window.location.reload();
         })
       } else {
@@ -59,7 +60,7 @@ function AdminApprovalOptions(props) {
   }
 
   async function sendEmail(isApproved, emailRejectionReason = "") {
-    if (isSeller && data.claimed !== 'claimed') { 
+    if (isSeller && !data.claimed) { 
       alert("failed to send email due to unclaimed profile")
       return false
     }

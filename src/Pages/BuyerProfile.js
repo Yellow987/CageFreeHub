@@ -20,6 +20,7 @@ function BuyerProfile() {
       {data && 
         <Box mx='24px' sx={{ marginTop:'56px'}}>
           <AdminApprovalOptions props={{ data:data, id:id, isSeller:false }} />
+          <Box marginTop={2}>Account Email: <Typography variant='h2'>{data.accountEmail}</Typography></Box>
           <Box marginTop={2}>status: <Typography variant='h2'>{data.status}</Typography></Box>
           <Box marginTop={2}>Organization: <Typography variant='h2'>{data.organization}</Typography></Box>
           <Box marginTop={2}>Name: <Typography variant='h2'>{data.name}</Typography></Box>

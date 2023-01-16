@@ -1,0 +1,25 @@
+[debug] [2023-01-16T06:03:20.875Z] ----------------------------------------------------------------------
+[debug] [2023-01-16T06:03:20.877Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\daryl\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only functions
+[debug] [2023-01-16T06:03:20.877Z] CLI Version:   11.20.0
+[debug] [2023-01-16T06:03:20.877Z] Platform:      win32
+[debug] [2023-01-16T06:03:20.877Z] Node Version:  v16.17.1
+[debug] [2023-01-16T06:03:20.878Z] Time:          Sun Jan 15 2023 22:03:20 GMT-0800 (Pacific Standard Time)
+[debug] [2023-01-16T06:03:20.878Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-01-16T06:03:20.935Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-01-16T06:03:20.936Z] > authorizing via signed-in user (daryldsouza123@gmail.com)
+[debug] [2023-01-16T06:03:20.936Z] [iam] checking project freerangeeggfarm-26736 for permissions ["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]
+[debug] [2023-01-16T06:03:20.937Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/freerangeeggfarm-26736:testIamPermissions [none]
+[debug] [2023-01-16T06:03:20.938Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/freerangeeggfarm-26736:testIamPermissions x-goog-quota-user=projects/freerangeeggfarm-26736
+[debug] [2023-01-16T06:03:20.938Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/freerangeeggfarm-26736:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2023-01-16T06:03:21.079Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/freerangeeggfarm-26736:testIamPermissions 200
+[debug] [2023-01-16T06:03:21.079Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/freerangeeggfarm-26736:testIamPermissions {"permissions":["cloudfunctions.functions.create","cloudfunctions.functions.delete","cloudfunctions.functions.get","cloudfunctions.functions.list","cloudfunctions.functions.update","cloudfunctions.operations.get","firebase.projects.get"]}
+[debug] [2023-01-16T06:03:21.079Z] >>> [apiv2][query] POST https://iam.googleapis.com/v1/projects/freerangeeggfarm-26736/serviceAccounts/freerangeeggfarm-26736@appspot.gserviceaccount.com:testIamPermissions [none]
+[debug] [2023-01-16T06:03:21.079Z] >>> [apiv2][body] POST https://iam.googleapis.com/v1/projects/freerangeeggfarm-26736/serviceAccounts/freerangeeggfarm-26736@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[debug] [2023-01-16T06:03:21.193Z] <<< [apiv2][status] POST https://iam.googleapis.com/v1/projects/freerangeeggfarm-26736/serviceAccounts/freerangeeggfarm-26736@appspot.gserviceaccount.com:testIamPermissions 200
+[debug] [2023-01-16T06:03:21.194Z] <<< [apiv2][body] POST https://iam.googleapis.com/v1/projects/freerangeeggfarm-26736/serviceAccounts/freerangeeggfarm-26736@appspot.gserviceaccount.com:testIamPermissions {"permissions":["iam.serviceAccounts.actAs"]}
+[info] 
+[info] === Deploying to 'freerangeeggfarm-26736'...
+[info] 
+[info] i  deploying functions 
+[info] Running command: npm --prefix "$RESOURCE_DIR" run lint
