@@ -27,10 +27,10 @@ const BuyerProfile = lazy(() => import('./Pages/BuyerProfile'));
 function App() {
   return (
     <ThemeProvider theme={createTheme(Theme)}>
-        <Suspense fallback={<div>loading...</div>}>
+      <AuthProvider> 
         <CssBaseline/>
-        <AuthProvider> 
-          <GlobalNavBar />
+        <GlobalNavBar />
+        <Suspense fallback={<div>loading...</div>}>
           <Routes>
             <Route path="/" element={<PrivateRoute props={{ onPublicPage: true }}><Home/></PrivateRoute>} />
             <Route path="/admin" element={<PrivateRoute><Admin/></PrivateRoute>} />
@@ -55,8 +55,8 @@ function App() {
             <Route path="sellers" element={<PrivateRoute props={{ allowBuyers: true, BuyerNeedsApprovalToSeeSellers: true }}><Sellers /></PrivateRoute>}/>
             <Route path="*" element={<>404</>} />
           </Routes>
-        </AuthProvider>
-      </Suspense>
+        </Suspense>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
