@@ -4,7 +4,7 @@ import { useAuth } from '../AuthContext';
 import adminUid from '../AdminAccountsConfig';
 
 function NextBackPage( props ) {
-  const { doNextBack, backPage, nextPage, submit = false } = props.props
+  const { doNextBack, backPage, nextPage, submit = false, isUploading = false } = props.props
   const { currentUser } = useAuth()
 
   return (
@@ -12,12 +12,19 @@ function NextBackPage( props ) {
       <Button onClick={() => { doNextBack(backPage) }}>
         <Typography variant='p_default'>← Back</Typography>
       </Button>
-      <Button variant='contained' type='submit' style={{ marginLeft:"8px" }}>
-          {submit ? "Submit" : "Next →"}
+      <Button 
+        variant='contained' 
+        type='submit' 
+        style={{ marginLeft:"8px" }}
+        disabled={isUploading}
+      >
+        {isUploading ? "Uploading" : (submit ? "Submit" : "Next →")}
       </Button>
-      {currentUser.uid === adminUid && <Button variant='contained' style={{ marginLeft:"8px" }} onClick={() => { doNextBack(nextPage) }}>
+      {currentUser.uid === adminUid && 
+        <Button variant='contained' style={{ marginLeft:"8px" }} onClick={() => { doNextBack(nextPage) }}>
           ADMIN skip validation Next →
-      </Button>}
+        </Button>
+      }
     </Box>
   )
 }

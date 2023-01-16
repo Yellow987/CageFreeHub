@@ -17,6 +17,7 @@ function Imagery() {
   const [setPage, saveData, data, uid] = useOutletContext() // we use uid from outlet as this may be an admin editing a profile
   const [images, setImages] = useState(data.images)
   const [logo, setLogo] = useState(data.logos)
+  const [isUploading, setIsUploading] = useState(false)
   const navigate = useNavigate()
   const storage = getStorage()
   const imageFolder = uid + '/images'
@@ -62,8 +63,10 @@ function Imagery() {
   }
 
   function handleImageUpload(imageList, folder, callStateSet, originalImages, arrImagesName){
+    setIsUploading(true)
     saveImages(imageList, folder).then((uuids) => {
       getImagesUrl(folder, uuids).then((uuids) => {
+        setIsUploading(false)
         callStateSet([...originalImages, ...uuids])
         saveData({[arrImagesName]: [...originalImages, ...uuids]})
       })
@@ -111,7 +114,14 @@ function Imagery() {
         </Typography>
       </Alert>
       <Typography variant='p_default_bold' sx={{ marginTop:4 }}>Photos of farm</Typography>
-      <ImageUploading multiple maxNumber={6} onChange={(imageList) => {clearErrors(); handleImageUpload(imageList, imageFolder, setImages, images, 'images')}} dataURLKey="data_url" acceptType={["jpg", "png", "jpeg"]} maxFileSize='8000000'>
+      <ImageUploading 
+        multiple 
+        maxNumber={6} 
+        onChange={(imageList) => {clearErrors(); handleImageUpload(imageList, imageFolder, setImages, images, 'images')}} 
+        dataURLKey="data_url" 
+        acceptType={["jpg", "png", "jpeg"]} 
+        maxFileSize='8000000'
+      >
       {({ imageList, onImageUpload, errors }) => (
         <Box>
           <Paper sx={{ marginTop:1 }} >
@@ -142,7 +152,14 @@ function Imagery() {
       )}
       </ImageUploading>
       <Typography variant='p_default_bold' sx={{ marginTop:4 }}>Logo (optional)</Typography>
-      <ImageUploading maxNumber={1} value={logo} onChange={(uploadedLogo) => {handleImageUpload(uploadedLogo, logoFolder, setLogo, logo, 'logos')}} dataURLKey="data_url" acceptType={["jpg", "png", "jpeg"]} maxFileSize='8000000'>
+      <ImageUploading 
+        maxNumber={1} 
+        value={logo} 
+        onChange={(uploadedLogo) => {handleImageUpload(uploadedLogo, logoFolder, setLogo, logo, 'logos')}} 
+        dataURLKey="data_url" 
+        acceptType={["jpg", "png", "jpeg"]} 
+        maxFileSize='8000000'
+      >
       {({ imageList, onImageUpload, errors }) => (
         <Box>
           <Paper sx={{ marginTop:1 }} ><Button color='grey' fullWidth variant='outlined' onClick={(onImageUpload)}>
@@ -160,7 +177,7 @@ function Imagery() {
         </Box>
       )}
       </ImageUploading>
-      <NextBackPage props={{ doNextBack:changePage, backPage: "/profile/production-details", nextPage:"/profile/" + uid, submit: true }}/>
+      <NextBackPage props={{ doNextBack:changePage, backPage: "/profile/production-details", nextPage:"/profile/" + uid, submit: true, isUploading: isUploading }}/>
     </Box>
   )
 }
