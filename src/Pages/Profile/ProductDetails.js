@@ -104,7 +104,17 @@ function ProductDetails() {
                    })}
                   type='number'
                   inputProps={{ min: "0", step: "any" }}
-                  sx={{ marginRight:'5%', width:'47.5%' }}
+                  sx={{ 
+                    marginRight:'5%', 
+                    width:'47.5%',
+                    "input::-webkit-outer-spin-button, input::-webkit-inner-spin-button": {
+                      WebkitAppearance: "none",
+                      margin: 0,
+                    },
+                    "input[type=number]": {
+                      MozAppearance: "textfield",
+                    },
+                  }}
                   error={!!errors.productionDetails?.[type]?.capacity}
                   helperText={errors.productionDetails?.[type]?.capacity?.message}
                 />
@@ -122,7 +132,17 @@ function ProductDetails() {
               <Typography variant='p_default_bold' color='#596676;' sx={{ marginTop:2 }}>Price per unit (egg, ton, or kilogram)</Typography>
               <Box sx={{ marginTop:1 }}>
                 <TextField 
-                  sx={{ marginRight:'5%', width:'47.5%' }} 
+                  sx={{ 
+                    marginRight:'5%', 
+                    width:'47.5%',
+                    "input::-webkit-outer-spin-button, input::-webkit-inner-spin-button": {
+                      WebkitAppearance: "none",
+                      margin: 0,
+                    },
+                    "input[type=number]": {
+                      MozAppearance: "textfield",
+                    }, 
+                  }} 
                   {...register(`productionDetails.${type}.price`, { 
                     validate: (v) => {
                       if (isChecked[type] && v === "") {

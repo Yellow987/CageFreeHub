@@ -49,6 +49,7 @@ function BuyerSetup() {
           creationDate: utcDate,
     
           //Data
+          accountEmail: currentUser.email,
           name: '',
           organization: '',
           role: '',
@@ -59,7 +60,7 @@ function BuyerSetup() {
         })
       }
     })
-  }, [docRef, setValue])
+  }, [docRef, setValue, currentUser])
 
   function submitBuyerProfile() {
     setSaving(true)
