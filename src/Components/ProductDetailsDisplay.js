@@ -18,7 +18,7 @@ function ProductDetailsDisplay(props) {
           <Typography variant="label">Cage-free egg type</Typography>
         </Grid>
         <Grid item xs={8}>
-          <Typography variant="label" >Production capacity (year) / Price</Typography>
+          <Typography variant="label" >Production capacity (year)</Typography>
         </Grid>
       </Grid>
       {presentTypes.map((type, index) => {
@@ -29,9 +29,7 @@ function ProductDetailsDisplay(props) {
             </Grid>
             <Grid item xs={8}>
               {productDetails[type].capacity + 
-              ' ' + productDetails[type].unit + 
-              ' / $' + productDetails[type].price + 
-              " per " + productDetails[type].unit.slice(0, productDetails[type].unit.length - 1).toLowerCase()}
+              ' ' + productDetails[type].unit }
             </Grid>
             {index !== presentTypes.length - 1 && 
               <Grid item xs={12}>

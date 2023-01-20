@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import Alert from "@mui/material/Alert";
 import AlertTitle from "@mui/material/AlertTitle";
@@ -6,10 +6,22 @@ import { Box, Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import { useAuth } from '../AuthContext'
 import { sendVerificationEmail } from './../firestore';
+import { useNavigate } from 'react-router';
 
 function ConfirmEmail() {
   const { currentUser } = useAuth();
   const [ hasSentEmail, setHasSentEmail ] = useState(false)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    const checkVerified = setInterval(function() {
+      currentUser.reload();
+      if (currentUser.emailVerified) {
+        clearInterval(checkVerified)
+        navigate('/verified')
+      }
+    }, 5000);
+  }, [currentUser, navigate])
 
   function sendEmail(e) {
     e.preventDefault()

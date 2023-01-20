@@ -149,8 +149,8 @@ function Signup(props) {
           <Box sx={{ display: hereTo === 'Login' ? 'none' : 'block' }}>
             <FormControlLabel sx={{ ...format, lineHeight:0 }}
               label={
-                <Typography variant='p_small' display="inline" sx={{ lineHeight: 0 }}>
-                  <Trans i18nKey='ToS' t={t} components={[<a href={tosPDF} target='_blank' rel='noopener noreferrer'><Box sx={{...hyperlink}} /></a>]} />
+                <Typography variant='p_small' display="inline">
+                  <Trans i18nKey='ToS' t={t} components={[<a href={tosPDF} target='_blank' rel='noopener noreferrer'><Box sx={{...hyperlink, wordBreak:"normal"}} /></a>]} />
                 </Typography>
               } control={
                 <Checkbox 

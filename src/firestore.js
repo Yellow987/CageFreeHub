@@ -133,8 +133,8 @@ export async function sendEmailAboutApprovalOrRejection(emailData) {
 
 export async function verifyEmailViaActionCode(actionCode) {
   return new Promise((resolve, reject) => {
-    applyActionCode(auth, actionCode).then((resp) => {
-      resolve(resp)
+    applyActionCode(auth, actionCode).then(() => {
+      resolve()
     })
     .catch((error) => {
       reject(error)

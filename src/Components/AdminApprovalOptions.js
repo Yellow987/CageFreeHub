@@ -68,7 +68,7 @@ function AdminApprovalOptions(props) {
       isSeller: isSeller, //needed for all
       isApproved: isApproved, //needed for all
       emailToUid: id,
-      name: data.name, //needed for all
+      name: isSeller ? data.organization : data.name, //needed for all
       rejectionReason: emailRejectionReason, //needed when denied
       userUid: id //needed for approved sellers, and deleted buyers
     }
