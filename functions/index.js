@@ -63,7 +63,7 @@ function sendEmailToUser(emailData, stage = "prod") {
   // SEND EMAIL
   transporter.sendMail({
     from: "noreply@globalfoodpartners.com",
-    to: stage === "dev" ? "daryldsouza123@gmail.com" : emailData.emailTo,
+    to: emailData.emailTo,
     subject: emailData.emailSubject,
     html: emailHtml,
   },
@@ -83,8 +83,8 @@ exports.sendVerificationEmail = functions.runWith({
   // GET CUSTOM URL
   const actionCodeSettings = {
     // URL you want to redirect back to. The domain (www.example.com) for
-    // this URL must be whitelisted in the Firebase Console.
-    url: websiteMap[data.stage] + "/verified",
+    // this URL must be whitelisted in the Firebase Console. verify page
+    url: websiteMap[data.stage] + "/verifywfluetrhrlupthn",
     // This must be true for email link sign-in.
     handleCodeInApp: true,
     // FDL custom domain.
@@ -139,7 +139,7 @@ exports.adminActionOnStatus = functions.runWith({
     if (data.isSeller && data.isApproved) { // SELLER APPROVED
       emailData.emailSubject = "Your Cage-Free Hub Profile has been Accepted!";
       emailData.intro = `Dear ${data.name}, Congratulations!`;
-      emailData.body = `You have successfully registered your business’s profile on the Cage-Free Hub, a database and resource centre that connects buyers and sellers of cage-free eggs from around the world. Your profile is now to buyers to view. Log in to the Hub today to start making connections, improving your market visibility, and sharing resources and learning with others like you. Thank you for being a part of our global, cage-free community.`;
+      emailData.body = `You have successfully registered your business’s profile on the Cage-Free Hub, a database and resource centre that connects buyers and sellers of cage-free eggs from around the world. Your profile is now live to buyers to view. Log in to the Hub today to start making connections, improving your market visibility, and sharing resources and learning with others like you. Thank you for being a part of our global, cage-free community.`;
       emailData.link = `${website}/profile/${data.userUid}`;
       emailData.buttonText = "Access Cage Free Hub";
     }
