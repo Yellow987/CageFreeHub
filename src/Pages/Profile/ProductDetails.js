@@ -11,13 +11,15 @@ import NextBackPage from '../../Components/NextBackPage'
 function ProductDetails() {
   const [setPage, saveData, data] = useOutletContext()
   const types = ['Shell', 'Frozen', 'Liquid', 'Powder', 'Other']
-  const [inputStates, setInputStates] = useState(types.reduce((map, type) => { return {...map, [type]: {unit:'Eggs', currency:'USD'} }; }, {}))
+  const [inputStates, setInputStates] = useState(types.reduce((map, type) => { return {...map, [type]: {unit:'Eggs'} }; }, {}))
   const navigate = useNavigate()
   const [isChecked, setIsChecked] = useState(types.reduce((map, type) => { return {...map, [type]: [type] in data.productDetails }; }, {}))
   const { handleSubmit, setError, getValues, formState: { errors }, register, clearErrors } = useForm({
     defaultValues: {
       productionDetails: { 
-        ...types.reduce((map, type) => { return {...map, [type]: {} }; }, {}),
+        ...types.reduce((map, type) => { 
+          return {...map, [type]: {} }; 
+        }, {}),
         ...data.productDetails
       }
     }
@@ -27,7 +29,7 @@ function ProductDetails() {
     setPage('Product details')
     let temp = {}
     Object.entries(data.productDetails).forEach(([product, details]) => {
-      temp = {...temp, [product]: { isChecked:true, unit:details.unit, currency:details.currency } }
+      temp = {...temp, [product]: { isChecked:true, unit:details.unit } }
     })
     setInputStates({...inputStates, ...temp})
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -53,8 +55,6 @@ function ProductDetails() {
         productDetails[type] = {
           capacity : values[type].capacity,
           unit : inputStates[type]['unit'],
-          price : values[type].price,
-          currency : inputStates[type]['currency'] 
         }
         let objectiveCapacity = 0
         if (productDetails[type].unit === "Eggs") {
@@ -124,42 +124,6 @@ function ProductDetails() {
                     <MenuItem value='Eggs'>Eggs</MenuItem>
                     <MenuItem value='Tons'>Tons</MenuItem>
                     <MenuItem value='Kilograms'>Kilograms</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-            </Box>
-            <Box>
-              <Typography variant='p_default_bold' color='#596676;' sx={{ marginTop:2 }}>Price per unit (egg, ton, or kilogram)</Typography>
-              <Box sx={{ marginTop:1 }}>
-                <TextField 
-                  sx={{ 
-                    marginRight:'5%', 
-                    width:'47.5%',
-                    "input::-webkit-outer-spin-button, input::-webkit-inner-spin-button": {
-                      WebkitAppearance: "none",
-                      margin: 0,
-                    },
-                    "input[type=number]": {
-                      MozAppearance: "textfield",
-                    }, 
-                  }} 
-                  {...register(`productionDetails.${type}.price`, { 
-                    validate: (v) => {
-                      if (isChecked[type] && v === "") {
-                        return "This field is required"
-                      }
-                      return true
-                    }
-                   })}
-                  type='number'
-                  inputProps={{ min: "0", step: "0.01" }}
-                  error={!!errors.productionDetails?.[type]?.price}
-                  helperText={errors.productionDetails?.[type]?.price?.message}
-                />
-                <FormControl sx={{ width:'47.5%' }}>
-                  <InputLabel id='currency' >currency</InputLabel>
-                  <Select value={inputStates[type]['currency']} onChange={(e) => {setInputStates({...inputStates, [type]:{...inputStates[type], currency:e.target.value} })}} label='currency' labelId='currency'>
-                    <MenuItem value='USD'>USD</MenuItem>
                   </Select>
                 </FormControl>
               </Box>

@@ -16,6 +16,7 @@ import { formatPhoneNumberIntl } from 'react-phone-number-input'
 function Profile() {
   const { id } = useParams()
   const [data, setData] = useState(null)
+  const [IsImagePreloaded, setIsImagePreloaded] = useState(false)
   const db = getFirestore()
   const docRef = useCallback(() => { return doc(db, "farms", id) }, [db, id])
   const { currentUser } = useAuth();
@@ -29,8 +30,26 @@ function Profile() {
   useEffect(() => {
     getDoc(docRef()).then((doc) => {
       setData(doc.data())
+      if (doc.data().images.length >= 0) {
+        preloadImage(doc.data().images[0].data_url).then(() => {
+          setIsImagePreloaded(true)
+        })
+      }
     })
   }, [docRef])
+
+  function preloadImage(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image()
+      img.onload = function() {
+        resolve(img)
+      }
+      img.onerror = img.onabort = function() {
+        reject(src)
+      }
+      img.src = src
+    })
+  }
   
   return (
     <PrivateRoute props={{ allowBuyers: true, allowUid:id, BuyerNeedsApprovalToSeeSellers:true }}>
@@ -107,11 +126,12 @@ function Profile() {
                 </Link>}
               </Box>
 
-              <Carousel
+              {IsImagePreloaded && <Carousel
                 autoPlay={false} 
                 sx={{ 
                   marginBottom:'80px',
                   width:'100%',
+                  height:'100%'
                 }} 
                 navButtonsAlwaysVisible={true}
               >
@@ -122,7 +142,7 @@ function Profile() {
                     )
                   })
                 }
-              </Carousel>
+              </Carousel>}
             </Box>
           </Grid>
           

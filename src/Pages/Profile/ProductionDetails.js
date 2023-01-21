@@ -15,6 +15,7 @@ function ProductionDetails() {
   const navigate = useNavigate()
   const storage = getStorage()
   const certificateRef = ref(storage, uid + '/certification/certificate')
+  const [isUploading, setIsUploading] = useState(false)
   const { handleSubmit, setError, getValues, formState: { errors }, register, control, clearErrors } = useForm({
     defaultValues: {
       productionSystem: data.productionDetails.productionSystem,
@@ -69,9 +70,11 @@ function ProductionDetails() {
       return
     }
 
+    setIsUploading(true)
     uploadBytes(certificateRef, certification).then(() => {
       getDownloadURL(certificateRef).then((url) => {
         setCertificationFile({name: e.target.files[0].name, url: url})
+        setIsUploading(false)
       })
     })
   }
@@ -180,7 +183,7 @@ function ProductionDetails() {
           </>
         )}
       />
-      <NextBackPage props={{ doNextBack:changePage, backPage: "/profile/product-details", nextPage:"/profile/imagery" }}/>
+      <NextBackPage props={{ doNextBack:changePage, backPage: "/profile/product-details", nextPage:"/profile/imagery", isUploading: isUploading }}/>
     </Box>
   )
 }

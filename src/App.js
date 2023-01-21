@@ -23,14 +23,15 @@ const Profile = lazy(() => import('./Pages/Profile/Profile'));
 const Admin = lazy(() => import('./Pages/Admin'));
 const Sellers = lazy(() => import('./Pages/Sellers'));
 const BuyerProfile = lazy(() => import('./Pages/BuyerProfile'));
+const Verify = lazy(() => import('./Pages/Verify'));
 
 function App() {
   return (
     <ThemeProvider theme={createTheme(Theme)}>
-        <Suspense fallback={<div>loading...</div>}>
+      <AuthProvider> 
         <CssBaseline/>
-        <AuthProvider> 
-          <GlobalNavBar />
+        <GlobalNavBar />
+        <Suspense fallback={<div>loading...</div>}>
           <Routes>
             <Route path="/" element={<PrivateRoute props={{ onPublicPage: true }}><Home/></PrivateRoute>} />
             <Route path="/admin" element={<PrivateRoute><Admin/></PrivateRoute>} />
@@ -40,6 +41,7 @@ function App() {
             <Route path="/login" element={<PrivateRoute props={{ onPublicPage: true}}><Signup props={{ hereTo: 'Login' }}/> </PrivateRoute>}/>
             <Route path="/confirm-email" element={<PrivateRoute props={{ allowBuyers: true }}><ConfirmEmail/></PrivateRoute>} />
             <Route path="/verified" element={<PrivateRoute props={{ allowBuyers: true }}><Verified/></PrivateRoute>} />
+            <Route path="/verify" element={<Verify/>} />
             <Route path='/profile/welcome' element={<PrivateRoute props={{ allowSellers: true }}><Welcome /></PrivateRoute>} />
             <Route element={<PrivateRoute props={{ allowSellers: true }}><ProfileProgressBar /></PrivateRoute>}>
               <Route path="/profile/basics" element={<Basics />} />
@@ -55,8 +57,8 @@ function App() {
             <Route path="sellers" element={<PrivateRoute props={{ allowBuyers: true, BuyerNeedsApprovalToSeeSellers: true }}><Sellers /></PrivateRoute>}/>
             <Route path="*" element={<>404</>} />
           </Routes>
-        </AuthProvider>
-      </Suspense>
+        </Suspense>
+      </AuthProvider>
     </ThemeProvider>
   );
 }
