@@ -30,11 +30,10 @@ function ProductionDetails() {
   }, [])
 
   function validateChangePage(newPage) {
-    if (certificationFile) {
-      changePage(newPage)
-      return
+    if (!certificationFile && getValues('certification') === 'Yes, we are certified') {
+      setError("certificationFile", { message: "This field is required" })
     }
-    setError("certificationFile", { message: "This field is required" })
+    changePage(newPage)
   }
 
   function changePage(newPage) {
@@ -130,7 +129,7 @@ function ProductionDetails() {
             <Select 
               {...field}
               error={!!errors.certification}
-              onChange={(e) => field.onChange(e.target.value)}>
+              onChange={(e) => { field.onChange(e.target.value); clearErrors() }}>
               {certificationOpts.map((certificationOpt, i) => (
                 <MenuItem key={i} value={certificationOpt}>{certificationOpt}</MenuItem>
               ))}

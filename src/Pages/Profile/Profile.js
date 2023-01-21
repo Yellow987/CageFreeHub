@@ -30,7 +30,7 @@ function Profile() {
   useEffect(() => {
     getDoc(docRef()).then((doc) => {
       setData(doc.data())
-      if (doc.data().images.length >= 0) {
+      if (doc.data().images.length >= 1) {
         preloadImage(doc.data().images[0].data_url).then(() => {
           setIsImagePreloaded(true)
         })
