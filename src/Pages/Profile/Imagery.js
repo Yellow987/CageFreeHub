@@ -22,7 +22,7 @@ function Imagery() {
   const storage = getStorage()
   const imageFolder = uid + '/images'
   const logoFolder = uid + '/logo'
-  const { setError, formState: { errors: imageErrors }, clearErrors, handleSubmit } = useForm({})
+  const { formState: { errors: imageErrors }, clearErrors, handleSubmit } = useForm({})
 
   function saveImages(images, storagePath) {
     return new Promise((resolve) => {
@@ -81,15 +81,6 @@ function Imagery() {
     deleteObject(ref(storage, folder + '/' + deletedImage[0].uuid))
   }
 
-  function validateChangePage(newPage) {
-    if (images.length < 3) {
-      setError("images", {message: "Please upload at least 3 images"})
-      console.log(imageErrors)
-      return
-    }
-    changePage(newPage)
-  }
-
   function changePage(newPage) {
     if (data.claimed) {
       updateUserInfo(uid, {isProfileComplete: true} )
@@ -106,7 +97,7 @@ function Imagery() {
   }
 
   return (
-    <Box component='form' onSubmit={handleSubmit(() => validateChangePage("/profile/" + uid))}>
+    <Box component='form' onSubmit={handleSubmit(() => changePage("/profile/" + uid))}>
       <Typography variant="h1_32" >Imagery</Typography>
       <Alert sx={{  marginTop:4 }} iconMapping={{ success: <AutoAwesomeIcon sx={{ margin:'auto' }}/> }}>
         <Typography variant='p_default' color='#3FAB94'>
