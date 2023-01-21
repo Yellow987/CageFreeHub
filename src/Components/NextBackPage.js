@@ -21,7 +21,11 @@ function NextBackPage( props ) {
         {isUploading ? "Uploading" : (submit ? "Submit" : "Next →")}
       </Button>
       {currentUser.uid === adminUid && 
-        <Button variant='contained' style={{ marginLeft:"8px" }} onClick={() => { doNextBack(nextPage) }}>
+        <Button 
+          variant='contained' 
+          style={{ marginLeft:"8px" }} 
+          onClick={() => {submit ? doNextBack(nextPage, true) : doNextBack(nextPage) }}
+        >
           ADMIN skip validation Next →
         </Button>
       }

@@ -81,23 +81,22 @@ function Imagery() {
     deleteObject(ref(storage, folder + '/' + deletedImage[0].uuid))
   }
 
-  function changePage(newPage) {
-    if (data.claimed) {
-      updateUserInfo(uid, {isProfileComplete: true} )
-    }
+  function changePage(newPage, submit = false) {
+    if (!submit) {navigate(newPage)}
     if (data.status === 'rejected' || data.status === 'incomplete') {
       if (!data.claimed) { //unclaimed profiles(which only admins can edit) should always be approved
         saveData({ status: 'approved' })
       } else {
         saveData({ status: 'pending' })
+        updateUserInfo(uid, {isProfileComplete: true} )
       }
-    } else {
-      navigate(newPage)
     }
+      
+    navigate(newPage)
   }
 
   return (
-    <Box component='form' onSubmit={handleSubmit(() => changePage("/profile/" + uid))}>
+    <Box component='form' onSubmit={handleSubmit(() => changePage("/profile/" + uid, true))}>
       <Typography variant="h1_32" >Imagery</Typography>
       <Alert sx={{  marginTop:4 }} iconMapping={{ success: <AutoAwesomeIcon sx={{ margin:'auto' }}/> }}>
         <Typography variant='p_default' color='#3FAB94'>
