@@ -1,5 +1,5 @@
 import { React, useState } from 'react'
-import { Box, Typography, TextField, Checkbox, FormControlLabel, FormHelperText } from '@mui/material'
+import { Box, Typography, TextField, Checkbox, FormControlLabel, FormHelperText, Link as MuiLink } from '@mui/material'
 import { Button } from '@mui/material';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from './../AuthContext';
@@ -150,7 +150,18 @@ function Signup(props) {
             <FormControlLabel sx={{ ...format, lineHeight:0 }}
               label={
                 <Typography variant='p_small' display="inline">
-                  <Trans i18nKey='ToS' t={t} components={[<a href={tosPDF} target='_blank' rel='noopener noreferrer'><Box sx={{...hyperlink, wordBreak:"normal"}} /></a>]} />
+                  <Trans 
+                    i18nKey='ToS' 
+                    t={t} 
+                    components={[
+                      <MuiLink
+                        sx={{...hyperlink, wordBreak:"normal"}}
+                        href={tosPDF} 
+                        target='_blank' 
+                        rel='noopener noreferrer'
+                      />
+                    ]} 
+                  />
                 </Typography>
               } control={
                 <Checkbox 

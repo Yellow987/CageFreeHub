@@ -78,7 +78,7 @@ function sendEmailToUser(emailData) {
 exports.sendVerificationEmail = functions.runWith({
   maxInstances: 1,
 }).https.onCall((data, context) => {
-  // CHECK NOT ALREADY EMAIL VERIFIED && TO OWN EMAIL
+  // CHECK NOT ALREADY EMAIL VERIFIED
 
   // GET CUSTOM URL
   const actionCodeSettings = {

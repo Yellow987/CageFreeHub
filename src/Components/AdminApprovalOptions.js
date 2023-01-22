@@ -12,7 +12,11 @@ function AdminApprovalOptions(props) {
   const navigate = useNavigate()
   const [rejectMessageBoxOpen, setRejectMessageBoxOpen] = useState(false)
   const [rejectionReason, setRejectionReason] = useState("")
-  const websiteUrl = {dev:"http://localhost:3000/", preprod:'https://freerangeeggfarm-26736.web.app/', prod:'TODO'}
+  const websiteUrl = {
+    dev:"http://localhost:3000/", 
+    preprod:'https://freerangeeggfarm-26736.web.app/', 
+    prod:'https://cagefreehub.globalfoodpartners.com/'
+  }
   const URL = websiteUrl[process.env.REACT_APP_STAGE] + "seller-signup/claim-profile/" + id
   const utcDate = new Date()
 
@@ -68,7 +72,7 @@ function AdminApprovalOptions(props) {
       isSeller: isSeller, //needed for all
       isApproved: isApproved, //needed for all
       emailToUid: id,
-      name: isSeller ? data.organization : data.name, //needed for all
+      name: isSeller ? data.organizationName : data.name, //needed for all
       rejectionReason: emailRejectionReason, //needed when denied
       userUid: id //needed for approved sellers, and deleted buyers
     }
