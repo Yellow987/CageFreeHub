@@ -29,7 +29,8 @@ https://docs.google.com/document/d/1cnZXL82MXrW7FbkgwEexp_J9ve18RfNbFrV5tdtTUyI/
 
 1. Set firebase functions secrets(one time only - create keys for AWS Simple Email Service): 
   `firebase functions:config:set aws.key="[THE_API_KEY]" aws.id="ses_access_key"` && 
-  `firebase functions:config:set aws.key="[THE_API_SECRET_KEY]" aws.id="ses_secret_key"`
+  `firebase functions:config:set aws.key="[THE_API_SECRET_KEY]" aws.id="ses_secret_key"` &&
+  `firebase functions:config:set env.key="[STAGE]" env.id="stage"`
 
 1. `firebase deploy --only functions` (Fix linting with: `npm run lint -- --fix`)
 1. `firebase deploy --only firestore:rules`
@@ -39,6 +40,7 @@ https://docs.google.com/document/d/1cnZXL82MXrW7FbkgwEexp_J9ve18RfNbFrV5tdtTUyI/
 # Other Useful intformation
 - `firebase init firestore` pulls rules/indexs from firebase
 - `firebase init storage` pulls rules from firebase
+- https://stackoverflow.com/questions/45404874/how-to-set-hash-key-option-for-authimport-after-default-authexport-in-firebase For migrating admin account
 
 Stages:
 dev, preprod, prod

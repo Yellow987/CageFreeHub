@@ -1,5 +1,5 @@
 const adminMap = {
-  prod: "",
+  prod: "LKOVbOpgp1S8wdfyhh95azx5FvO2",
   preprod: "LKOVbOpgp1S8wdfyhh95azx5FvO2",
   dev: "LKOVbOpgp1S8wdfyhh95azx5FvO2"
 }

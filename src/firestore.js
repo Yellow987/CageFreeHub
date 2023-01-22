@@ -25,8 +25,13 @@ export const functions = getFunctions(app);
 export const perf = getPerformance(app);
 /* eslint-disable-next-line no-restricted-globals */
 if (process.env.REACT_APP_STAGE === 'dev') { self.FIREBASE_APPCHECK_DEBUG_TOKEN = process.env.REACT_APP_APPCHECK_DEBUG_TOKEN; }
+const reCaptchaV3ProviderKeyMap = {
+  dev: '6LdvAsAjAAAAAIdzKR1hpgWpePmJIXoYbdaO7tTL',
+  preprod: '6LdvAsAjAAAAAIdzKR1hpgWpePmJIXoYbdaO7tTL',
+  prod: '6LcRfxckAAAAALV7tR5ehg14VSTvMHmMzdH_2H-M'
+}
 export const appCheck = initializeAppCheck(app, {
-  provider: new ReCaptchaV3Provider('6LdvAsAjAAAAAIdzKR1hpgWpePmJIXoYbdaO7tTL'),
+  provider: new ReCaptchaV3Provider(reCaptchaV3ProviderKeyMap[process.env.REACT_APP_STAGE]),
 
   // Optional argument. If true, the SDK automatically refreshes App Check
   // tokens as needed.

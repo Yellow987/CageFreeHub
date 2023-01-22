@@ -20,13 +20,13 @@ const transporter = nodemailer.createTransport(ses({
 const websiteMap = {
   dev: "https://freerangeeggfarm-26736.web.app",
   preprod: "https://freerangeeggfarm-26736.web.app",
-  prod: "",
+  prod: "https://cagefreehub.globalfoodpartners.com",
 };
 
 initializeApp();
 const admin = getAuth();
 
-function sendEmailToUser(emailData, stage = "prod") {
+function sendEmailToUser(emailData) {
   let body = emailData.intro ? emailData.intro + "<br/><br/>" : "";
   body += emailData.body;
 
@@ -84,7 +84,7 @@ exports.sendVerificationEmail = functions.runWith({
   const actionCodeSettings = {
     // URL you want to redirect back to. The domain (www.example.com) for
     // this URL must be whitelisted in the Firebase Console. verify page
-    url: websiteMap[data.stage] + "/verifywfluetrhrlupthn",
+    url: websiteMap[functions.config().env.stage] + "/verify",
     // This must be true for email link sign-in.
     handleCodeInApp: true,
     // FDL custom domain.
@@ -102,7 +102,7 @@ exports.sendVerificationEmail = functions.runWith({
       buttonText: "Verify email address",
     };
 
-    return sendEmailToUser(emailData, data.stage);
+    return sendEmailToUser(emailData);
   })
   .catch((error) => {
     throw new Error(`error generating verification email: ${error}`);
@@ -135,7 +135,7 @@ exports.adminActionOnStatus = functions.runWith({
       buttonText: "",
     };
 
-    const website = websiteMap[data.stage];
+    const website = websiteMap[functions.config().env.stage];
     if (data.isSeller && data.isApproved) { // SELLER APPROVED
       emailData.emailSubject = "Your Cage-Free Hub Profile has been Accepted!";
       emailData.intro = `Dear ${data.name}, Congratulations!`;
@@ -168,7 +168,7 @@ exports.adminActionOnStatus = functions.runWith({
       emailData.buttonText = "Access organization sign up page";
     }
 
-    const sent = sendEmailToUser(emailData, data.stage);
+    const sent = sendEmailToUser(emailData);
     if (sent) {
       if (!data.isSeller && !data.isApproved) { // delete buyer account if denied
         admin.deleteUser(data.userUid).then(() => {
