@@ -41,6 +41,7 @@ https://docs.google.com/document/d/1cnZXL82MXrW7FbkgwEexp_J9ve18RfNbFrV5tdtTUyI/
 - `firebase init firestore` pulls rules/indexs from firebase
 - `firebase init storage` pulls rules from firebase
 - https://stackoverflow.com/questions/45404874/how-to-set-hash-key-option-for-authimport-after-default-authexport-in-firebase For migrating admin account
+- Remember to whitelist the domain in Auth, and set verification email to /verify
 
 Stages:
 dev, preprod, prod

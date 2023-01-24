@@ -43,12 +43,12 @@ service cloud.firestore {
       	&& validValueToSetOrUnchanged("status", ["pending", "incomplete"])
         
       //allow buyers approved to see sellers to read all farm documents
-      allow read: if isAuthed() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isSeller == false
+      allow read: if isAuthed() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isApprovedToViewSellers == true
     }
     
     match /buyers/{userID} {
     	//allow admin
-    	allow read, create, update: if isAuthed() && isAdmin()
+    	allow read, write: if isAuthed() && isAdmin()
       
     	//allow user to read own document
       allow read: if isOwnDoc(userID)
@@ -64,7 +64,7 @@ service cloud.firestore {
     
     match /users/{userID} {
     	//allow admin
-    	allow read, create, update: if isAuthed() && isAdmin()
+    	allow read, write: if isAuthed() && isAdmin()
     	
 			//allow user to read own document
       allow read: if isOwnDoc(userID)
