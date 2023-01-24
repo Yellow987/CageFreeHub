@@ -81,14 +81,14 @@ function Imagery() {
     deleteObject(ref(storage, folder + '/' + deletedImage[0].uuid))
   }
 
-  function changePage(newPage, submit = false) {
+  async function changePage(newPage, submit = false) {
     if (!submit) {navigate(newPage)}
     if (data.status === 'rejected' || data.status === 'incomplete') {
       if (!data.claimed) { //unclaimed profiles(which only admins can edit) should always be approved
-        saveData({ status: 'approved' })
+        await saveData({ status: 'approved' })
       } else {
-        saveData({ status: 'pending' })
-        updateUserInfo(uid, {isProfileComplete: true} )
+        await saveData({ status: 'pending' })
+        await updateUserInfo(uid, {isProfileComplete: true} )
       }
     }
       
