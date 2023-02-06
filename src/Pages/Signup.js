@@ -71,7 +71,7 @@ function Signup(props) {
       .then((user) => {
         if (claimProfile) {
           copyOverClaimedProfile(claimProfileID, user.uid).then(() => {
-            navigate('profile')
+            navigate('/profile/welcome')
           })
         }
         if (hereTo === "BuyerSignup") {
