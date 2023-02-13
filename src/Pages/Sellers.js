@@ -103,8 +103,8 @@ function Sellers(){
                 <Box sx={{display:'flex', flexDirection: {xs: 'column', md: 'row'}}}>
                   <Box>
                     <Typography variant='label'>Distribution Country (countries)</Typography>
-                    {farm.locations.map((location, index)=>{
-                      return( <Typography variant='p_large' sx={{ marginTop:'16px', color:"#1B2B3E" }} key={index}>{location.city.trim() + ', '+ location.country.label}</Typography> )
+                    {farm.distributionCountries.map((country, index)=>{
+                      return( <Typography variant='p_large' sx={{ marginTop:'16px', color:"#1B2B3E" }} key={index}>{country.label}</Typography> )
                     })}
                   </Box>
                   <Box sx={{height:"20px", width:'80px'}}></Box>
