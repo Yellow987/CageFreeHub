@@ -74,7 +74,11 @@ function BuyerSetup() {
     setDoc(docRef(), {...data, ...newData}).then(() => {
       updateUserInfo( currentUser.uid, { isProfileComplete:true }).then(() => {
         setSaving(false)
-        Navigate('/confirm-email')
+        if (data.status === 'approved') {
+          Navigate('/sellers')
+        } else {
+          Navigate('/confirm-email')
+        }
       })
     })
   }
