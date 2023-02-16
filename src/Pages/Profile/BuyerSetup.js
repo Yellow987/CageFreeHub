@@ -8,7 +8,7 @@ import { useAuth } from '../../AuthContext';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useNavigate } from "react-router";
 import { useForm, Controller } from "react-hook-form";
-import { updateUserInfo } from "../../firestore";
+import { profilependingAdminNotification, updateUserInfo } from "../../firestore";
 
 function BuyerSetup() {
   const [data, setData] = useState(null)
@@ -73,6 +73,7 @@ function BuyerSetup() {
     }
     setDoc(docRef(), {...data, ...newData}).then(() => {
       updateUserInfo( currentUser.uid, { isProfileComplete:true }).then(() => {
+        profilependingAdminNotification(false, currentUser.uid)
         setSaving(false)
         if (data.status === 'approved') {
           Navigate('/sellers')

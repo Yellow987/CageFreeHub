@@ -136,6 +136,11 @@ export async function sendEmailAboutApprovalOrRejection(emailData) {
   .then((result) => {console.log(result)})
 }
 
+export async function profilependingAdminNotification(isSeller, uid) {
+  await httpsCallable(functions, 'profilependingAdminNotification')({ isSeller, uid })
+  .then((result) => {console.log(result)})
+}
+
 export async function verifyEmailViaActionCode(actionCode) {
   return new Promise((resolve, reject) => {
     applyActionCode(auth, actionCode).then(() => {
