@@ -23,6 +23,12 @@ const websiteMap = {
   prod: "https://cagefreehub.globalfoodpartners.com",
 };
 
+const emailMap = {
+  dev: "daryldsouza123@gmail.com",
+  preprod: "daryldsouza123@gmail.com",
+  prod: "v.bala@globalfoodpartners.com",
+};
+
 initializeApp();
 const admin = getAuth();
 
@@ -182,4 +188,21 @@ exports.adminActionOnStatus = functions.runWith({
       return "failed to send";
     }
   });
+});
+
+exports.profilependingAdminNotification = functions.runWith({
+  maxInstances: 1,
+}).https.onCall((data, context) => {
+  const emailData = {
+    emailTo: emailMap[functions.config().env.stage],
+    emailSubject: "A profile is now pending on cagefreehub!",
+    intro: "",
+    body: "",
+    link: websiteMap[functions.config().env.stage] +
+      (data.isSeller ? "/profile/" : "/buyer-profile/") +
+      data.uid,
+    buttonText: "view profile",
+  };
+
+  return sendEmailToUser(emailData);
 });

@@ -11,7 +11,7 @@ import { getStorage, ref, uploadBytes, deleteObject, getDownloadURL } from "fire
 import uuid from 'react-uuid';
 import NextBackPage from '../../Components/NextBackPage'
 import { useForm } from "react-hook-form";
-import { updateUserInfo } from '../../firestore'
+import { profilependingAdminNotification, updateUserInfo } from '../../firestore'
 
 function Imagery() {
   const [setPage, saveData, data, uid] = useOutletContext() // we use uid from outlet as this may be an admin editing a profile
@@ -87,6 +87,7 @@ function Imagery() {
       if (!data.claimed) { //unclaimed profiles(which only admins can edit) should always be approved
         await saveData({ status: 'approved' })
       } else {
+        profilependingAdminNotification(true, uid)
         await saveData({ status: 'pending' })
         await updateUserInfo(uid, {isProfileComplete: true} )
       }
