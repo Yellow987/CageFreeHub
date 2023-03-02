@@ -1,9 +1,10 @@
+import React from 'react';
 import { lazy, Suspense } from 'react';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Route, Routes } from "react-router-dom"
 import GlobalNavBar from './Components/GlobalNavBar';
 import CssBaseline from '@mui/material/CssBaseline';
-import Theme from './Components/Theme';
+import theme from './Components/Theme';
 import { AuthProvider } from './AuthContext'
 import Home from './Pages/Home';
 import Signup from './Pages/Signup';
@@ -27,7 +28,7 @@ const Verify = lazy(() => import('./Pages/Verify'));
 
 function App() {
   return (
-    <ThemeProvider theme={createTheme(Theme)}>
+    <ThemeProvider theme={createTheme(theme)}>
       <AuthProvider> 
         <CssBaseline/>
         <GlobalNavBar />

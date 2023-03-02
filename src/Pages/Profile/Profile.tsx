@@ -1,44 +1,45 @@
-import { useEffect, useState, useCallback } from 'react'
+import React from 'react';
+import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { Box, Typography, Divider, Link, Grid, Paper } from '@mui/material';
 import AdminApprovalOptions from '../../Components/AdminApprovalOptions';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';                                                                                                               
-import { getFirestore, doc, getDoc } from 'firebase/firestore';
 import Carousel from 'react-material-ui-carousel';
 import { useAuth } from '../../AuthContext';
-import adminUid from './../../AdminAccountsConfig';
-import PrivateRoute from './../../Components/PrivateRoute';
-import ProductDetailsDisplay from './../../Components/ProductDetailsDisplay';
-import ClaimedPopup from './../../Components/ClaimedPopup';
+import adminUid from '../../AdminAccountsConfig';
+import PrivateRoute from '../../Components/PrivateRoute';
+import ProductDetailsDisplay from '../../Components/ProductDetailsDisplay';
+import ClaimedPopup from '../../Components/ClaimedPopup';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { formatPhoneNumberIntl } from 'react-phone-number-input'
+import { getFarm } from '../../firestore';
+import { SellerData } from './../../firestore';
 
 function Profile() {
   const { id } = useParams()
-  const [data, setData] = useState(null)
+  const [data, setData] = useState<SellerData>()
   const [IsImagePreloaded, setIsImagePreloaded] = useState(false)
-  const db = getFirestore()
-  const docRef = useCallback(() => { return doc(db, "farms", id) }, [db, id])
   const { currentUser } = useAuth();
   const colorMap = { approved:'primary.main', pending:'#CDA957', rejected:'red.main' }
-  const approvalStatusTextMap = {
+  const approvalStatusTextMap: Record<string, string> = {
     approved: "Your profile is now live for buyers to view!",
     pending: "You will receive an email when your profile is approved (this will take 48 business hours at most)",
     rejected: "Please check your email for details about how to fix your profile in order for the profile to be visible to buyers!"
   }
 
   useEffect(() => {
-    getDoc(docRef()).then((doc) => {
-      setData(doc.data())
-      if (doc.data().images.length >= 1) {
-        preloadImage(doc.data().images[0].data_url).then(() => {
+    if (!id) return
+    getFarm(id).then((farm: SellerData) => {
+      setData(farm)
+      if (farm.images.length >= 1) {
+        preloadImage(farm.images[0].data_url).then(() => {
           setIsImagePreloaded(true)
         })
       }
     })
-  }, [docRef])
+  }, [currentUser, id])
 
-  function preloadImage(src) {
+  function preloadImage(src: string) {
     return new Promise((resolve, reject) => {
       const img = new Image()
       img.onload = function() {
@@ -63,7 +64,7 @@ function Profile() {
               <Typography variant='label'>Approval status</Typography>
               <Typography 
                 variant='h2' 
-                color={colorMap[data.status]}
+                color={colorMap[data.status as keyof typeof colorMap]}
                 marginTop={1} 
                 marginBottom={1}
                 display="flex"
@@ -99,7 +100,7 @@ function Profile() {
             })}
             <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>Farm location(s)</Typography>
             {data.locations.map((location, index)=>{
-              return( <Typography variant='p_large_dark' sx={{marginTop:'16px'}} key={index}>{location.city+', '+ location.country.label}</Typography> )
+              return( <Typography variant='p_large_dark' sx={{marginTop:'16px'}} key={index}>{location.city + ', ' + location.country.label}</Typography> )
             })}
                         
             <Divider light style={{ marginTop:'48px', marginBottom:'48px' }}/>
@@ -151,6 +152,9 @@ function Profile() {
           <Grid item md={3} xs={12} order={{xs:-1, md:3}} marginBottom='24px'>
             <Paper elevation={3} style={{ padding:'24px'}}>
               <Typography variant="label" sx={{marginBottom:'16px'}}>Contact {data.organizationName}</Typography>
+              {data.contactChannels.email && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>Message {data.name} through email</Typography>
+              <Link href={'mailto:' + data.contactChannels.email} sx={{display:'block'}}>{data.contactChannels.email}</Link></>)}
+
               {data.contactChannels.phone && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>Message {data.name} through phone</Typography>
               <Link href={'tel:' + data.contactChannels.phone} sx={{display:'block'}}>{formatPhoneNumberIntl('+' + data.contactChannels.phone)}</Link></>)}
 
