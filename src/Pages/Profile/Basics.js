@@ -44,7 +44,7 @@ function Basics() {
             <Typography variant="label" sx={{ marginTop:4, marginBottom:1}}>
                 Website (optional)
             </Typography>
-            <TextField fullWidth inputRef={websiteRef} placeholder='E.g. http://marriot.com'/>
+            <TextField fullWidth inputRef={websiteRef} />
             <NextBackPage props={{ doNextBack:changePage, backPage: "/profile/welcome", nextPage:"/profile/locations" }}/>
         </Box>
     )

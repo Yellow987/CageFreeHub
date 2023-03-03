@@ -125,7 +125,7 @@ function Contact() {
           helperText={errors.fullName?.message}
         />
         <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Job title of contact (optional)</Typography>
-        <TextField placeholder='E.g. CEO'{...register("jobTitle")}/>
+        <TextField {...register("jobTitle")}/>
         <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Available contact channels</Typography>
         <FormGroup>
         <Box>
