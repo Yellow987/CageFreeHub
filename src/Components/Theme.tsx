@@ -1,20 +1,78 @@
+import { ThemeOptions } from '@mui/material/styles';
+import { PaletteOptions } from '@mui/material/styles/createPalette';
+import { TypographyOptions } from '@mui/material/styles/createTypography';
+import { PaletteColorOptions } from '@mui/material/styles/createPalette';
 
-const Theme = {
-  components: {
-    MuiButton: {
-      variants: [
-        {
-          props: { size: 'square' },
-          style: {
-            maxWidth: '32px', 
-            maxHeight: '32px', 
-            minWidth: '32px', 
-            minHeight: '32px'
-          },
-        },
-      ],
-    }
-  },
+declare module '@mui/material/styles' {
+  interface Palette {
+    tertiary: Palette["primary"];
+    greyOut: Palette["primary"];
+    greyDefault: Palette["primary"];
+    red: Palette["primary"];
+    danger: Palette["primary"];
+    megaDanger: Palette["primary"];
+    yellow: Palette["primary"];
+  }
+  interface PaletteOptions {
+    tertiary?: PaletteOptions["primary"];
+    greyOut: PaletteOptions["primary"];
+    greyDefault: PaletteOptions["primary"];
+    red: PaletteOptions["primary"];
+    danger: PaletteOptions["primary"];
+    megaDanger: PaletteOptions["primary"];
+    yellow: PaletteOptions["primary"];
+  }
+  interface PaletteColor {
+    lighter?: string;
+    darker?: string;
+  }
+}
+
+interface IPaletteOptions extends PaletteOptions {
+  greyOut: PaletteColorOptions;
+  greyDefault: PaletteColorOptions;
+  red: PaletteColorOptions;
+  danger: PaletteColorOptions;
+  megaDanger: PaletteColorOptions;
+  yellow: PaletteColorOptions;
+}
+
+interface ITypographyOptions extends TypographyOptions {
+  h1_32: React.CSSProperties;
+  support_icon: React.CSSProperties;
+  p_large: React.CSSProperties;
+  p_large_dark: React.CSSProperties;
+  p_default: React.CSSProperties;
+  p_small: React.CSSProperties;
+  label: React.CSSProperties;
+  p_default_bold: React.CSSProperties;
+}
+
+interface IThemeOptions extends ThemeOptions {
+  palette: IPaletteOptions;
+  typography: ITypographyOptions;
+}
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    danger: true;
+  }
+}
+
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    h1_32: true;
+    support_icon: true;
+    p_large: true;
+    p_large_dark: true;
+    p_default: true;
+    p_small: true;
+    label: true;
+    p_default_bold: true;
+  }
+}
+
+const theme: IThemeOptions  = {
   palette: {
     primary: {
       light: '#EFFAF9',
@@ -28,7 +86,7 @@ const Theme = {
     secondary: {
       main: '#FFFFFF',
     },
-    grey: {
+    greyDefault: {
       main: '#788492',
     },
     red: {
@@ -119,7 +177,6 @@ const Theme = {
       textAlign:'left',
       wordBreak: "break-word"
     },
-    
     p_small: {
       fontWeight: 400,
       fontSize: 12,
@@ -131,4 +188,4 @@ const Theme = {
   },
 };
 
-export default Theme
+export default theme

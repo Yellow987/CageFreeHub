@@ -156,7 +156,7 @@ function ProductionDetails() {
             {getValues("certification") === certificationOpts[0] && 
               <Box sx={{ marginTop:4 }}>
                 <Button 
-                  color={!!errors?.certificationFile ? "red" : "grey"}
+                  color={!!errors?.certificationFile ? "red" : "greyDefault"}
                   fullWidth 
                   variant='outlined' 
                   onClick={() => fileInputRef.current.click()}

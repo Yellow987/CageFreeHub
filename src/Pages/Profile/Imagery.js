@@ -117,7 +117,7 @@ function Imagery() {
         <Box>
           <Paper sx={{ marginTop:1 }} >
             <Button 
-              color={!!imageErrors?.images ? "red" : "grey"}
+              color={!!imageErrors?.images ? "red" : "greyDefault"}
               fullWidth 
               variant='outlined' 
               onClick={(onImageUpload)}>
@@ -153,7 +153,7 @@ function Imagery() {
       >
       {({ imageList, onImageUpload, errors }) => (
         <Box>
-          <Paper sx={{ marginTop:1 }} ><Button color='grey' fullWidth variant='outlined' onClick={(onImageUpload)}>
+          <Paper sx={{ marginTop:1 }} ><Button color='greyDefault' fullWidth variant='outlined' onClick={(onImageUpload)}>
             <ImageOutlinedIcon fontSize='small' sx={{ stroke: "#ffffff" }} />Upload Logo
           </Button></Paper>
           {logo.length === 1 && <Box sx={{ marginTop:2, width:'200px' }}>

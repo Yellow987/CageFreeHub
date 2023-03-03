@@ -1,16 +1,37 @@
+import React from 'react';
 import { useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router'
 import { useOutletContext } from 'react-router'
 import { Typography, TextField, Box, Button, FormHelperText } from '@mui/material';
 import { useForm, Controller, useFieldArray } from "react-hook-form";
-import NextBackPage from './../../Components/NextBackPage';
+import NextBackPage from '../../Components/NextBackPage';
 import Select from 'react-select'
 import countryList from 'react-select-country-list'
+import { CSSObjectWithLabel, ControlProps, StylesConfig } from 'react-select';
 
 function Locations() {
-  const [setPage, saveData, data] = useOutletContext()
+  const [setPage, saveData, data] = useOutletContext<Array<any>>();
   const navigate = useNavigate()
-  const { handleSubmit, control, getValues, formState: { errors }, register } = useForm({
+  interface FormErrors {
+    contactMethods?: {
+      message: string
+    }
+  }
+  interface FormValues {
+    distributionCountries: {
+      label: string;
+      value: string;
+    }[],
+    locations: {
+      city: string;
+      country: {
+        label: string;
+        value: string;
+      }
+    }[];
+  }
+
+  const { handleSubmit, control, getValues, formState: { errors }, register } = useForm<FormValues, FormErrors>({
     defaultValues: {
       distributionCountries: data.distributionCountries,
       locations: data.locations
@@ -28,17 +49,18 @@ function Locations() {
   }, [setPage])
 
 
-  function changePage(newPage) {
+  function changePage(newPage: string) {
     saveData({ locations: getValues("locations"), distributionCountries: getValues("distributionCountries") })
     navigate(newPage)
   }
 
-  const customSelectStyle = {
-    control: base => ({
-      ...base,
-      minHeight: 48
-    })
+  const customSelectStyle: StylesConfig = {
+    control: (provided: CSSObjectWithLabel, state: ControlProps) => ({
+      ...provided,
+      minHeight: 48,
+    }),
   };
+  
   
   return (
     <Box sx={{ display:'flex', flexDirection:'column' }} component='form' onSubmit={handleSubmit(() => changePage("/profile/contact"))}>
@@ -50,7 +72,17 @@ function Locations() {
           <Box sx={{ background:'#F5F7F8', padding:'16px', marginTop:1 }}>
             <Box sx={{ display:'flex', flexDirection:'row', justifyContent:'space-between' }}>
               <Typography variant="label" >City</Typography>
-              {i !== 0 && <Button sx={{ height:'24px' }} color='danger' variant='contained' disableElevation onClick={() => {locationsRemove(i)} }>Remove location</Button>}
+              {i !== 0 && 
+                <Button 
+                  sx={{ height:'24px' }} 
+                  color='danger'
+                  variant='contained' 
+                  disableElevation 
+                  onClick={() => {locationsRemove(i)} }
+                >
+                  Remove location
+                </Button>
+              }
             </Box>
             <TextField 
               fullWidth 
@@ -63,7 +95,11 @@ function Locations() {
             <Controller 
               name={`locations.${i}.country`}
               control={control}
-              rules={{ required: "This field is required"}}
+              rules={{ 
+                validate: (v) => {
+                  return (v.value !== '' && v.label !== '') || "This field is required"
+                }
+              }}
               render={({ field }) => (
                 <Select 
                   {...field}
@@ -71,7 +107,7 @@ function Locations() {
                   options={options}
                   onChange={(selectedOption) => field.onChange(selectedOption)}
                   styles={customSelectStyle}
-                  error={!!errors.locations?.[i]?.country}
+                  //error={!!errors.locations?.[i]?.country}
                 />
               )}
             />
@@ -79,7 +115,7 @@ function Locations() {
           </Box>
         </Box>
       ))}
-      <Button sx={{ marginTop:3 }} onClick={() => { locationsAppend({ city: "", country: "" }) }}>
+      <Button sx={{ marginTop:3 }} onClick={() => { locationsAppend({ city: "", country: {label: '', value: '' } }) }}>
         <Typography variant='p_small'>+ I have an additional farm location</Typography>
       </Button>
       <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Distribution country (countries)</Typography>
@@ -103,7 +139,7 @@ function Locations() {
             value={field.value}
             options={options}
             onChange={(selectedOption) => field.onChange(selectedOption)}
-            error={!!errors.distributionCountries}
+            //error={!!errors.distributionCountries}
           />
           <FormHelperText sx={{ color: "error.main", marginLeft:1 }}>{errors.distributionCountries?.message}</FormHelperText>
         </>

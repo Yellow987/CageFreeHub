@@ -5,18 +5,19 @@ import { useState, useEffect, useCallback  } from 'react';
 import { useAuth } from '../AuthContext'
 import { getFirestore, doc, setDoc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { isAdmin } from '../AdminAccountsConfig';
+import { SellerData } from './../firestore';
 
 function ProfileProgressBar() {
   const [page, setPage] = useState('')
   const pages = ["Basics", "Location(s)", "Contact", "Product details", "Production details", "Imagery"]
   const db = getFirestore();
   const { currentUser } = useAuth();
-  const uid = isAdmin(currentUser.uid) ? JSON.parse(localStorage.getItem('uidToEdit')) : currentUser.uid
+  const uid = isAdmin(currentUser.uid) ? JSON.parse(localStorage.getItem('uidToEdit') ?? '') : currentUser.uid
   const docRef = useCallback(() => { return doc(db, "farms", uid) }, [db, uid])
-  const [data, setData] = useState(null)
+  const [data, setData] = useState<SellerData | null>(null)
   const isEqual = require('lodash.isequal');
 
-  async function saveData(values){
+  async function saveData(values: object){
     const newData = {
       ...values,
     }
@@ -28,10 +29,10 @@ function ProfileProgressBar() {
   useEffect(() => {
     onSnapshot(docRef(), (doc) => {
       if (doc.exists()) {
-        setData(doc.data())
+        setData(doc.data() as SellerData)
       } else {
         const utcDate = new Date()
-        const initialData = {
+        const initialData: SellerData = {
           //Meta
           status: 'incomplete',
           adminLastStatusUpdate: utcDate,
@@ -43,7 +44,7 @@ function ProfileProgressBar() {
           website: '',
 
           //locations
-          locations: [{city:'',country:''}],
+          locations: [{city:'', country: {label: '', value: ''}}],
           distributionCountries: [],
 
           //Contact
@@ -53,13 +54,14 @@ function ProfileProgressBar() {
 
           //Product details
           productDetails: {},
+          maxObjectiveCapacity: 0,
 
           //Production details
           productionDetails: {
             productionSystem: [],
             certification: '',
             certifyingOrganization: '',
-            certificationFile: {name: '', url: ''}
+            certificationFile: {name:'', url:''},
           },
 
           //Imagery
@@ -73,7 +75,7 @@ function ProfileProgressBar() {
   }, [docRef, currentUser])
 
   return (
-    <Box align='center' mx={{ sm:'10%', xs:'24px' }} sx={{ marginTop:6 }}>
+    <Box mx={{ sm:'10%', xs:'24px' }} sx={{ marginTop:6 }}>
       {isAdmin(currentUser.uid) && <Typography variant='h1'>ADMIN IS EDITING {uid}</Typography>}
       <Box sx={{ display:'flex', flexDirection:'row', justifyContent: 'center' }} >
         {pages.map((pageName) => (
@@ -83,7 +85,7 @@ function ProfileProgressBar() {
           </Box>
         ))}
       </Box>
-      <Box sx={{ marginTop:6, maxWidth:'400px', textAlign:'left', marginBottom:2 }}>
+      <Box sx={{ marginTop:6, maxWidth:'400px', textAlign:'left', marginBottom:2, marginLeft:'auto', marginRight:'auto' }}>
         { data && <Outlet context={[setPage, saveData, data, uid]} />}
       </Box>
     </Box>
