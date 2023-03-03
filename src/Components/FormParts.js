@@ -19,7 +19,6 @@ export function SelectSingleCountry(props) {
             <Select
             value={country}
             onChange={(e)=>setCountry(e.target.value, index)}
-            placeholder='country'
             >
                 {
                     options.map((country, countryIndex)=>{
@@ -53,7 +52,6 @@ export function SelectMultipleCountries(props) {
             onChange={(e)=>handleChange(e)}
             renderValue={(selected) => selected.join(', ')}
             multiple
-            placeholder={'Select countries to which you distribute'}
             >
                 {
                     options.map((item)=>{

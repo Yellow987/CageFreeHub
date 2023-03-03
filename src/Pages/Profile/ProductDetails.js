@@ -11,7 +11,7 @@ import NextBackPage from '../../Components/NextBackPage'
 function ProductDetails() {
   const [setPage, saveData, data] = useOutletContext()
   const types = ['Shell', 'Frozen', 'Liquid', 'Powder', 'Other']
-  const [inputStates, setInputStates] = useState(types.reduce((map, type) => { return {...map, [type]: {unit:'Eggs'} }; }, {}))
+  const [inputStates, setInputStates] = useState(types.reduce((map, type) => { return {...map, [type]: {unit:'Tons'} }; }, {}))
   const navigate = useNavigate()
   const [isChecked, setIsChecked] = useState(types.reduce((map, type) => { return {...map, [type]: [type] in data.productDetails }; }, {}))
   const { handleSubmit, setError, getValues, formState: { errors }, register, clearErrors } = useForm({
@@ -121,8 +121,8 @@ function ProductDetails() {
                 <FormControl sx={{ width:'47.5%' }}>
                   <InputLabel id='unit' >Unit</InputLabel>
                   <Select value={inputStates[type]['unit']} onChange={(e) => {setInputStates({...inputStates, [type]:{...inputStates[type], unit:e.target.value} })}} label='unit' labelId='unit'>
-                    <MenuItem value='Eggs'>Eggs</MenuItem>
                     <MenuItem value='Tons'>Tons</MenuItem>
+                    <MenuItem value='Eggs'>Eggs</MenuItem>
                     <MenuItem value='Kilograms'>Kilograms</MenuItem>
                   </Select>
                 </FormControl>
