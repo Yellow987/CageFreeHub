@@ -59,9 +59,14 @@ function sendEmailToUser(emailData) {
           ${emailData.buttonText}
         </p>
       </a>
-      <div style="border: 1px solid #DFE3E9;margin-top:40px"></div>
       <p style="margin-top:40px;color: #1F1F1F;font-weight: 400;font-size: 14px;line-height: 150%;font-family: 'Roboto';font-style: normal;">
         If you have questions or concerns, please email us at <span style="color:#3FAB94">cagefreehub@globalfoodpartners.com</span>
+      </p>
+      <div style="border: 1px solid #DFE3E9;margin-top:64px"></div>
+      <p style="color: #1F1F1F;font-weight: 400;font-size: 14px;line-height: 150%;font-family: 'Roboto';font-style: normal;margin-top:64px;text-align:center">
+        © 2023 Global Food Partners</br>
+        1629 K Street NW, Suite 300 · Washington, DC 20006</br>
+        <a href="https://globalfoodpartners.com/" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color: #3FAB94">Unsubscribe</a>
       </p>
     </html>
     `;
@@ -101,7 +106,7 @@ exports.sendVerificationEmail = functions.runWith({
   .then((link) => {
     const emailData = {
       emailTo: context.auth.token.email,
-      emailSubject: "You’re almost ready to join the Cage-Free Hub!",
+      emailSubject: "Verify your email to access Cage-Free Hub",
       intro: "",
       body: "Thank you for registering a profile on Global Food Partners’ Cage-Free Hub. To complete your registration, simply click on the button below to verify your email address, and get ready to connect with cage-free buyers and sellers around the globe!",
       link: link,
@@ -143,9 +148,9 @@ exports.adminActionOnStatus = functions.runWith({
 
     const website = websiteMap[functions.config().env.stage];
     if (data.isSeller && data.isApproved) { // SELLER APPROVED
-      emailData.emailSubject = "Your Cage-Free Hub Profile has been Accepted!";
-      emailData.intro = `Dear ${data.name}, Congratulations!`;
-      emailData.body = `You have successfully registered your business’s profile on the Cage-Free Hub, a database and resource centre that connects buyers and sellers of cage-free eggs from around the world. Your profile is now live to buyers to view. Log in to the Hub today to start making connections, improving your market visibility, and sharing resources and learning with others like you. Thank you for being a part of our global, cage-free community.`;
+      emailData.emailSubject = "Your Cage-Free Hub profile has been accepted";
+      emailData.intro = `Dear ${data.name},`;
+      emailData.body = `Congratulations! You have successfully registered your business’s profile on the Cage-Free Hub, a database and resource centre that connects buyers and sellers of cage-free eggs from around the world. Your profile is now to buyers to view. Log in to the Hub today to start making connections, improving your market visibility, and sharing resources and learning with others like you. Thank you for being a part of our global, cage-free community.`;
       emailData.link = `${website}/profile/${data.userUid}`;
       emailData.buttonText = "Access Cage Free Hub";
     }
@@ -153,23 +158,23 @@ exports.adminActionOnStatus = functions.runWith({
     if (data.isSeller && !data.isApproved) { // SELLER DENIED
       emailData.emailSubject = "Your Cage-Free Hub profile needs a few fixes";
       emailData.intro = `Dear ${data.name},`;
-      emailData.body = `We were unable to register your business’s profile on the Cage-Free Hub, a database and resource centre that connects buyers and sellers of cage-free eggs from around the world, because the information you provided was incomplete. ${data.rejectionReason}<br/><br/>Finalize your profile today so you can start making connections, improving your market visibility, and sharing resources and learning with others like you. To reaccess your profile submission, access the button below titled “Finalize profile”.`;
+      emailData.body = `We were unable to register your business’s profile on the Cage-Free Hub, a database and resource center that connects buyers and sellers of cage-free eggs from around the world, because the information you provided was incomplete. ${data.rejectionReason}<br/><br/> Finalize your profile today so you can start making connections, improving your market visibility, and sharing resources and learning with others like you. To re-access your profile submission, access the button below titled “Finalize profile”.`;
       emailData.link = `${website}/profile/welcome`;
       emailData.buttonText = "Finalize profile";
     }
 
     if (!data.isSeller && data.isApproved) { // BUYER APPROVED
-      emailData.emailSubject = "Your Organization has been Approved for Cage-Free Hub!";
-      emailData.intro = `Dear ${data.name}, Congratulations!`;
-      emailData.body = `You have successfully registered your organization on the Cage-Free Hub, a database and resource centre that connects buyers and sellers of cage-free eggs from around the world. You are now free to explore our directory of cage-free egg sellers. Thank you for being a part of our global, cage-free community.`;
+      emailData.emailSubject = "Your organization has been approved for Cage-Free Hub";
+      emailData.intro = `Dear ${data.name},`;
+      emailData.body = `You have successfully registered your organization on the Cage-Free Hub, a database and resource center that connects buyers and sellers of cage-free eggs from around the world. You are now free to explore our directory of cage-free egg sellers. Thank you for being a part of our global, cage-free community.`;
       emailData.link = `${website}/sellers`;
       emailData.buttonText = "Explore the directory";
     }
 
     if (!data.isSeller && !data.isApproved) { // BUYER DENIED
-      emailData.emailSubject = "Your Organization was Denied from Cage-Free Hub (But Please Try Again!)";
+      emailData.emailSubject = "Your Organization was Denied from Cage-Free Hub (But Please Try Again)";
       emailData.intro = `Dear ${data.name},`;
-      emailData.body = `We were unable to register your organization on the Cage-Free Hub, a database and resource centre that connects buyers and sellers of cage-free eggs from around the world. ${data.rejectionReason}<br/><br/>We’d still love to have you back! If this problem can be remedied, please sign up again through our organization sign up page.`;
+      emailData.body = `We were unable to register your organization on the Cage-Free Hub, a database and resource center that connects buyers and sellers of cage-free eggs from around the world. ${data.rejectionReason}<br/><br/>We’d still love to have you back! If this problem can be remedied, please sign up again through our organization sign up page.`;
       emailData.link = `${website}/buyer-signup`;
       emailData.buttonText = "Access organization sign up page";
     }
