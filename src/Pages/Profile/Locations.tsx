@@ -65,10 +65,10 @@ function Locations() {
   return (
     <Box sx={{ display:'flex', flexDirection:'column' }} component='form' onSubmit={handleSubmit(() => changePage("/profile/contact"))}>
       <Typography variant="h1_32" >Location(s)</Typography>
-      <Typography variant="label" sx={{ marginTop:4 }} >Farm Location</Typography>
+      <Typography variant="label" sx={{ marginTop:4 }} >Farm location</Typography>
       {locationsFields.map((location, i) => (
         <Box key={location.id}>
-          {i !== 0 && <Typography variant='label' sx={{ marginTop:3 }}>Additional Farm Location</Typography>}
+          {i !== 0 && <Typography variant='label' sx={{ marginTop:3 }}>Additional Farm location</Typography>}
           <Box sx={{ background:'#F5F7F8', padding:'16px', marginTop:1 }}>
             <Box sx={{ display:'flex', flexDirection:'row', justifyContent:'space-between' }}>
               <Typography variant="label" >City</Typography>

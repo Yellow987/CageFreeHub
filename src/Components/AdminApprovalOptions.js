@@ -85,7 +85,7 @@ function AdminApprovalOptions(props) {
       {isAdmin(currentUser.uid) && <Box sx={{ marginBottom:4 }}>
         <Button variant='contained' onClick={(e) => handleApprove(e)}>Approve Profile</Button>
         <Button color='megaDanger' sx={{ marginLeft:5 }} onClick={(e) => setRejectMessageBoxOpen(true)} variant='contained'>Reject Profile</Button>
-        {isSeller && <Button variant='outlined' sx={{ marginLeft:5 }} onClick={(e) => handleEdit(e)} >Edit Profile</Button>}
+        {isSeller && <Button variant='outlined' sx={{ marginLeft:5 }} onClick={(e) => handleEdit(e)} >Edit profile</Button>}
         {!data.claimed && isSeller && 
           <Box marginTop={2}>
             This profile is unclaimed. Send this link to someone to claim it:&nbsp;
