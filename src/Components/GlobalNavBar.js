@@ -144,15 +144,15 @@ function GlobalNavBar() {
         </AccordionSummary>
         <List>
           <ListItem button component={Link} to="/login" onClick={() => handleAccordion()} sx={{ display: currentUser ? 'none' : 'block' }}>
-            <Typography variant='p_large' sx={{ margin:'auto' }}>Login</Typography>
+            <Typography variant='p_large' sx={{ margin:'auto' }}>Log in</Typography>
           </ListItem>
           <Box sx={{ display: currentUser ? 'block' : 'none' }}>
             <ListItem button component={Link} to={editProfileLink} onClick={() => handleAccordion()}>
-              <Typography variant='p_large' sx={{ margin:'auto' }}>Edit Profile</Typography>
+              <Typography variant='p_large' sx={{ margin:'auto' }}>Edit profile</Typography>
             </ListItem>
             <Divider />
             <ListItem button onClick={() => {handleAccordion();setTimeout(() => {logout()}, 100)}} >
-              <Typography variant='p_large' sx={{ margin:'auto' }}>Logout</Typography>
+              <Typography variant='p_large' sx={{ margin:'auto' }}>Log out</Typography>
             </ListItem>
           </Box>
           <Divider />
