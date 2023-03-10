@@ -152,17 +152,17 @@ function Profile() {
           <Grid item md={3} xs={12} order={{xs:-1, md:3}} marginBottom='24px'>
             <Paper elevation={3} style={{ padding:'24px'}}>
               <Typography variant="label" sx={{marginBottom:'16px'}}>Contact {data.organizationName}</Typography>
-              {data.contactChannels.email && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>Message {data.name} through email</Typography>
+              {data.contactChannels.email && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>Message {data.name} through Email</Typography>
               <Link href={'mailto:' + data.contactChannels.email} sx={{display:'block'}}>{data.contactChannels.email}</Link></>)}
 
-              {data.contactChannels.phone && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>Message {data.name} through phone</Typography>
+              {data.contactChannels.phone && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>Message {data.name} through Phone</Typography>
               <Link href={'tel:' + data.contactChannels.phone} sx={{display:'block'}}>{formatPhoneNumberIntl('+' + data.contactChannels.phone)}</Link></>)}
 
               {data.contactChannels.wechat && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>Message {data.name} through WeChat</Typography>
-              <Link href={'tel:' + data.contactChannels.wechat} sx={{display:'block'}}>{formatPhoneNumberIntl('+' + data.contactChannels.wechat)}</Link></>)}
+              <Link href={'weixin://dl/chat?' + data.contactChannels.wechat} sx={{display:'block'}}>{data.contactChannels.wechat}</Link></>)}
 
               {data.contactChannels.whatsapp && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>Message {data.name} through WhatsApp</Typography>
-              <Link href={'tel:' + data.contactChannels.whatsapp} sx={{display:'block'}}>{formatPhoneNumberIntl('+' + data.contactChannels.whatsapp)}</Link></>)}
+              <Link href={'whatsapp://send?phone=' + data.contactChannels.whatsapp} sx={{display:'block'}}>{formatPhoneNumberIntl('+' + data.contactChannels.whatsapp)}</Link></>)}
             </Paper>
           </Grid>
 
