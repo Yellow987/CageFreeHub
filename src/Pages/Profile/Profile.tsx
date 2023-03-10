@@ -1,7 +1,7 @@
 import React from 'react';
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
-import { Box, Typography, Divider, Link, Grid, Paper, Button } from '@mui/material';
+import { Box, Typography, Divider, Link, Grid, Paper } from '@mui/material';
 import AdminApprovalOptions from '../../Components/AdminApprovalOptions';
 import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';                                                                                                               
 import Carousel from 'react-material-ui-carousel';
@@ -163,7 +163,6 @@ function Profile() {
 
               {data.contactChannels.whatsapp && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>Message {data.name} through WhatsApp</Typography>
               <Link href={'whatsapp://send?phone=' + data.contactChannels.whatsapp} sx={{display:'block'}}>{formatPhoneNumberIntl('+' + data.contactChannels.whatsapp)}</Link></>)}
-              <Button onClick={() => console.log(data)}>wrof</Button>
             </Paper>
           </Grid>
 
