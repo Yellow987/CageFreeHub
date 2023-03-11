@@ -9,7 +9,6 @@ import { AuthProvider } from './AuthContext'
 import Home from './Pages/Home';
 import Signup from './Pages/Signup';
 import { hotjar } from 'react-hotjar';
-import { withTranslation } from 'react-i18next';
 import Loading from './Components/Loading';
 const ConfirmEmail = lazy(() => import('./Pages/ConfirmEmail'));
 const Verified = lazy(() => import('./Pages/Verified'));
