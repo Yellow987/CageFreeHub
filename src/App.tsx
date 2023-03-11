@@ -9,6 +9,8 @@ import { AuthProvider } from './AuthContext'
 import Home from './Pages/Home';
 import Signup from './Pages/Signup';
 import { hotjar } from 'react-hotjar';
+import { withTranslation } from 'react-i18next';
+import Loading from './Components/Loading';
 const ConfirmEmail = lazy(() => import('./Pages/ConfirmEmail'));
 const Verified = lazy(() => import('./Pages/Verified'));
 const PrivateRoute = lazy(() => import('./Components/PrivateRoute'));
@@ -37,7 +39,7 @@ function App() {
       <AuthProvider> 
         <CssBaseline/>
         <GlobalNavBar />
-        <Suspense fallback={<div>loading...</div>}>
+        <Suspense fallback={<Loading />}>
           <Routes>
             <Route path="/" element={<PrivateRoute props={{ onPublicPage: true }}><Home/></PrivateRoute>} />
             <Route path="/admin" element={<PrivateRoute><Admin/></PrivateRoute>} />
@@ -69,4 +71,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
