@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react'
 import { auth } from './firestore'
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from 'firebase/auth'
 import { getFirestore, doc, setDoc, onSnapshot } from 'firebase/firestore'
+import LogRocket from 'logrocket'
 
 const AuthContext = React.createContext()
 
@@ -58,6 +59,9 @@ export function AuthProvider({ children }) {
                         setLoading(false)
                     }
                 })
+                LogRocket.identify(user.uid, {
+                    email: user.email
+                  });
             }
             if (!user) {
                 setCurrentUserInfo(null)
