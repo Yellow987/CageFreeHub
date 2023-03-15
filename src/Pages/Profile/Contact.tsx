@@ -52,10 +52,13 @@ function Contact() {
     const schema = yup.object().shape({
       fullName: yup.string().required(),
       jobTitle: yup.string(),
-      email: yup.string().when('contactMethods.email', {
-        is: true,
-        then: yup.string().required('Please enter a valid email address').email('Please enter a valid email address'),
-      }),
+      email: yup
+        .string()
+        .when('contactMethods.email', {
+          is: true,
+          then: yup.string().required('Please enter a valid email address').email('Please enter a valid email address'),
+        }
+      ),
       phone: yup
         .string()
         .test('phone', 'Please enter a valid number', function (value) {
@@ -68,9 +71,11 @@ function Contact() {
         }),
       wechat: yup
         .string()
-        .test('wechat', 'Please enter a valid number', function (value) {
-          return !this.parent.contactMethods.wechat || isPossiblePhoneNumber('+' + value)
-        }),
+        .when('contactMethods.wechat', {
+          is: true,
+          then: yup.string().required('Please enter a valid username'),
+        }
+      ),
       contactMethods: yup
         .object()
         .test('contactMethods', 'At least one contact method must be selected', (value) => {
@@ -89,7 +94,7 @@ function Contact() {
       defaultValues: defaultValues,
       resolver: yupResolver(schema),
     })
-    const phoneCommunicationChannels: (keyof ContactChannels)[] = ["phone", "whatsapp", "wechat"]
+    const phoneCommunicationChannels: (keyof ContactChannels)[] = ["phone", "whatsapp"]
     const communicationChannelNames = {email: "Email", phone: "Phone", whatsapp: "Whatsapp", wechat: "Wechat"}
     const watchContactMethods = watch('contactMethods')
 
@@ -128,29 +133,29 @@ function Contact() {
         <TextField {...register("jobTitle")}/>
         <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Contact methods</Typography>
         <FormGroup>
-        <Box>
-          <FormControlLabel 
-            control={
-              <Checkbox 
-                checked={!!watchContactMethods['email']}
-                onClick={() => {
-                  setValue( 'contactMethods.email', !getValues('contactMethods.email') )
-                }}
-              />
-            } 
-            label={communicationChannelNames['email']}
-          />
-          {!!watchContactMethods['email'] && 
-            <>
-              <TextField 
-                {...register("email")}
-                error={!!errors.email}
-                fullWidth
-              />
-              <FormHelperText sx={{ color: "error.main", marginLeft:1 }}>{errors.email?.message}</FormHelperText>
-            </>
-          }
-        </Box>
+          <Box>
+            <FormControlLabel 
+              control={
+                <Checkbox 
+                  checked={!!watchContactMethods['email']}
+                  onClick={() => {
+                    setValue( 'contactMethods.email', !getValues('contactMethods.email') )
+                  }}
+                />
+              } 
+              label={communicationChannelNames['email']}
+            />
+            {!!watchContactMethods['email'] && 
+              <>
+                <TextField 
+                  {...register("email")}
+                  error={!!errors.email}
+                  fullWidth
+                />
+                <FormHelperText sx={{ color: "error.main", marginLeft:1 }}>{errors.email?.message}</FormHelperText>
+              </>
+            }
+          </Box>
           {phoneCommunicationChannels.map((communicationChannel, index) => (
             <Box key={index}>
               <FormControlLabel 
@@ -185,6 +190,29 @@ function Contact() {
               }
             </Box>
           ))}
+          <Box>
+            <FormControlLabel 
+              control={
+                <Checkbox 
+                  checked={!!watchContactMethods['wechat']}
+                  onClick={() => {
+                    setValue( 'contactMethods.wechat', !getValues('contactMethods.wechat') )
+                  }}
+                />
+              } 
+              label={communicationChannelNames['wechat']}
+            />
+            {!!watchContactMethods['wechat'] && 
+              <>
+                <TextField 
+                  {...register("wechat")}
+                  error={!!errors.wechat}
+                  fullWidth
+                />
+                <FormHelperText sx={{ color: "error.main", marginLeft:1 }}>{errors.wechat?.message}</FormHelperText>
+              </>
+            }
+          </Box>
         </FormGroup>
         <FormHelperText sx={{ color: "error.main", marginLeft:1 }}>{errors?.contactMethods?.message}</FormHelperText>
         <NextBackPage props={{ doNextBack:changePage, backPage: "/profile/locations", nextPage:"/profile/product-details" }}/>
