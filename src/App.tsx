@@ -8,7 +8,6 @@ import theme from './Components/Theme';
 import { AuthProvider } from './AuthContext'
 import Home from './Pages/Home';
 import Signup from './Pages/Signup';
-import { hotjar } from 'react-hotjar';
 import Loading from './Components/Loading';
 const ConfirmEmail = lazy(() => import('./Pages/ConfirmEmail'));
 const Verified = lazy(() => import('./Pages/Verified'));
@@ -27,10 +26,6 @@ const Admin = lazy(() => import('./Pages/Admin'));
 const Sellers = lazy(() => import('./Pages/Sellers'));
 const BuyerProfile = lazy(() => import('./Pages/BuyerProfile'));
 const Verify = lazy(() => import('./Pages/Verify'));
-
-const hjid = process.env.REACT_APP_STAGE === 'prod' ? 3388268 : 3393197
-const hjsv = 6;
-hotjar.initialize(hjid, hjsv);
 
 function App() {
   return (
