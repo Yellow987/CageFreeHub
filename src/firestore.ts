@@ -8,8 +8,9 @@ import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 import { setDoc } from 'firebase/firestore';
 import { getAnalytics } from "firebase/analytics";
 import LogRocket from 'logrocket';
+import { logRocketEnvironment } from "./constants";
 
-LogRocket.init(process.env.REACT_APP_STAGE === "prod" ? "rufgqm/cagefreehub-prod" : 'rufgqm/cagefreehub-staging');
+LogRocket.init(logRocketEnvironment);
 
 // Initialize Firebase
 const app = initializeApp({
