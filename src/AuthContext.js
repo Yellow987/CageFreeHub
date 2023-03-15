@@ -58,6 +58,9 @@ export function AuthProvider({ children }) {
                         setLoading(false)
                     }
                 })
+                LogRocket.identify(user.uid, {
+                    email: user.email
+                  });
             }
             if (!user) {
                 setCurrentUserInfo(null)
