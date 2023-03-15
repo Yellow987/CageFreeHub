@@ -9,7 +9,7 @@ import { setDoc } from 'firebase/firestore';
 import { getAnalytics } from "firebase/analytics";
 import LogRocket from 'logrocket';
 
-LogRocket.init('rufgqm/cagefreehub-staging');
+LogRocket.init(process.env.REACT_APP_STAGE === "prod" ? "rufgqm/cagefreehub-prod" : 'rufgqm/cagefreehub-staging');
 
 // Initialize Firebase
 const app = initializeApp({
