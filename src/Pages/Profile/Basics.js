@@ -33,7 +33,7 @@ function Basics() {
         <Box sx={{ display:'flex', flexDirection:'column' }} component='form' onSubmit={handleSubmit(() => changePage("/profile/locations"))}>
             <Typography variant="h1_32" >Basics</Typography>
             <Typography variant="label" sx={{ marginTop:4, marginBottom:1}}>
-                Organization Name
+                Organization name
             </Typography>
             <TextField 
                 {...register("organizationName", { required: "This field is requiredired" })}

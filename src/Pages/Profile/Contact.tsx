@@ -123,7 +123,7 @@ function Contact() {
         <Alert sx={{ marginTop:5 }} iconMapping={{success: <WorkOutlineIcon sx={{ margin:'auto'}}/> }}>
           <Typography variant='p_default' color='#3FAB94' >All information provided is completely confidential. We do not share information with third parties, and buyers must be confirmed by us to access profiles</Typography>
         </Alert>
-        <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Full Name of Contact</Typography>
+        <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Full name of contact</Typography>
         <TextField 
           {...register("fullName", { required:"This field is required" })}
           error={!!errors.fullName}
@@ -131,7 +131,7 @@ function Contact() {
         />
         <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Job title of contact (optional)</Typography>
         <TextField {...register("jobTitle")}/>
-        <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Available contact channels</Typography>
+        <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Contact methods</Typography>
         <FormGroup>
           <Box>
             <FormControlLabel 

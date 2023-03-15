@@ -8,7 +8,7 @@ import theme from './Components/Theme';
 import { AuthProvider } from './AuthContext'
 import Home from './Pages/Home';
 import Signup from './Pages/Signup';
-import { hotjar } from 'react-hotjar';
+import Loading from './Components/Loading';
 const ConfirmEmail = lazy(() => import('./Pages/ConfirmEmail'));
 const Verified = lazy(() => import('./Pages/Verified'));
 const PrivateRoute = lazy(() => import('./Components/PrivateRoute'));
@@ -27,17 +27,13 @@ const Sellers = lazy(() => import('./Pages/Sellers'));
 const BuyerProfile = lazy(() => import('./Pages/BuyerProfile'));
 const Verify = lazy(() => import('./Pages/Verify'));
 
-const hjid = process.env.REACT_APP_STAGE === 'prod' ? 3388268 : 3393197
-const hjsv = 6;
-hotjar.initialize(hjid, hjsv);
-
 function App() {
   return (
     <ThemeProvider theme={createTheme(theme)}>
       <AuthProvider> 
         <CssBaseline/>
         <GlobalNavBar />
-        <Suspense fallback={<div>loading...</div>}>
+        <Suspense fallback={<Loading />}>
           <Routes>
             <Route path="/" element={<PrivateRoute props={{ onPublicPage: true }}><Home/></PrivateRoute>} />
             <Route path="/admin" element={<PrivateRoute><Admin/></PrivateRoute>} />
@@ -69,4 +65,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

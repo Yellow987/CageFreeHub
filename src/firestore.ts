@@ -6,7 +6,10 @@ import { getFunctions, httpsCallable } from 'firebase/functions';
 import { getPerformance } from "firebase/performance";
 import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 import { setDoc } from 'firebase/firestore';
+import { getAnalytics } from "firebase/analytics";
+import LogRocket from 'logrocket';
 
+LogRocket.init(process.env.REACT_APP_STAGE === "prod" ? "rufgqm/cagefreehub-prod" : 'rufgqm/cagefreehub-staging');
 
 // Initialize Firebase
 const app = initializeApp({
@@ -23,6 +26,7 @@ export const db = getFirestore();
 export const auth = getAuth(app);
 export const functions = getFunctions(app);
 export const perf = getPerformance(app);
+export const analytics = getAnalytics(app);
 
 declare global {
   // eslint-disable-next-line no-var
