@@ -22,14 +22,11 @@ i18n
   .init({
     //fallbackLng: 'en', Disabled temporarily for more visibility into missed translastions
     react: { 
-      fallbackLng: 'en',
+      useSuspense: false //   <---- this will do the magic
     },
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
-    },
-    backend: {
-      loadPath: 'locales/{{lng}}/{{ns}}.json', // specify the path to your translation files
-    },
+    }
   });
 
 
