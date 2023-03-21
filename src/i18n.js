@@ -20,7 +20,7 @@ i18n
   // init i18next
   // for all options read: https://www.i18next.com/overview/configuration-options
   .init({
-    //fallbackLng: 'en', Disabled temporarily for more visibility into missed translastions
+    fallbackLng: 'en',
     react: { 
       useSuspense: false //   <---- this will do the magic
     },
