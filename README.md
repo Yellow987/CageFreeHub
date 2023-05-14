@@ -48,7 +48,11 @@ dev, preprod, prod
 
 "freerangeeggfarm-26736" is preprod alias
 
+preprod url: https://freerangeeggfarm-26736.web.app/
+
 "chickens-are-my-friends" is prod alias
+
+prod url: https://cagefreehub.globalfoodpartners.com/
 
 # Contact:
 Contact the developer: Daryl D'Souza https://www.linkedin.com/in/daryl-d-souza-68048b16a/ 
