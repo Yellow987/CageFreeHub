@@ -13,8 +13,10 @@ import NextBackPage from '../../Components/NextBackPage';
 import { ContactChannels } from '../../firestore';
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useTranslation } from 'react-i18next';
 
 function Contact() {
+    const { t } = useTranslation(['sellerForm', 'validation'])
     const [setPage, saveData, data] = useOutletContext<Array<any>>();
     interface FormErrors {
       contactMethods?: {
@@ -56,29 +58,29 @@ function Contact() {
         .string()
         .when('contactMethods.email', {
           is: true,
-          then: yup.string().required('Please enter a valid email address').email('Please enter a valid email address'),
+          then: yup.string().required(t('validation:please-enter-a-valid-email-address')).email(t('validation:please-enter-a-valid-email-address')),
         }
       ),
       phone: yup
         .string()
-        .test('phone', 'Please enter a valid number', function (value) {
+        .test('phone', t('validation:please-enter-a-valid-number'), function (value) {
           return !this.parent.contactMethods.phone || isPossiblePhoneNumber('+' + value)
         }),
       whatsapp: yup
         .string()
-        .test('whatsapp', 'Please enter a valid number', function (value) {
+        .test('whatsapp', t('validation:please-enter-a-valid-number'), function (value) {
           return !this.parent.contactMethods.whatsapp || isPossiblePhoneNumber('+' + value)
         }),
       wechat: yup
         .string()
         .when('contactMethods.wechat', {
           is: true,
-          then: yup.string().required('Please enter a valid username'),
+          then: yup.string().required(t('validation:please-enter-a-valid-username')),
         }
       ),
       contactMethods: yup
         .object()
-        .test('contactMethods', 'At least one contact method must be selected', (value) => {
+        .test('contactMethods', t('validation:at-least-one-contact-method-must-be-selected'), (value) => {
           return Object.values(value).some((v) => v === true);
         }),
     });
@@ -95,13 +97,13 @@ function Contact() {
       resolver: yupResolver(schema),
     })
     const phoneCommunicationChannels: (keyof ContactChannels)[] = ["phone", "whatsapp"]
-    const communicationChannelNames = {email: "Email", phone: "Phone", whatsapp: "Whatsapp", wechat: "Wechat"}
+    const communicationChannelNames = {email: t('email'), phone: t('phone'), whatsapp: t('whatsapp'), wechat: t('wechat')}
     const watchContactMethods = watch('contactMethods')
 
     const navigate = useNavigate()
     useEffect(() => {
-        setPage('Contact')
-    }, [data, setPage])
+        setPage(t('contact'))
+    }, [t, setPage])
   
     function changePage(newPage: string) {
       saveData({
@@ -119,19 +121,19 @@ function Contact() {
 
     return(
       <Box sx={{ display:'flex', flexDirection:'column' }} component='form' onSubmit={handleSubmit(() => changePage("/profile/product-details"))}>
-        <Typography variant="h1_32" >Contact person for purchase inquiries</Typography>
+        <Typography variant="h1_32" >{t('contact-person-for-purchase-inquiries')}</Typography>
         <Alert sx={{ marginTop:5 }} iconMapping={{success: <WorkOutlineIcon sx={{ margin:'auto'}}/> }}>
-          <Typography variant='p_default' color='#3FAB94' >All information provided is completely confidential. We do not share information with third parties, and buyers must be confirmed by us to access profiles</Typography>
+          <Typography variant='p_default' color='#3FAB94' >{t('all-information-provided-is-completely-confidential-we-do-not-share-information-with-third-parties-and-buyers-must-be-confirmed-by-us-to-access-profiles')}</Typography>
         </Alert>
-        <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Full name of contact</Typography>
+        <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>{t('full-name-of-contact')}</Typography>
         <TextField 
-          {...register("fullName", { required:"This field is required" })}
+          {...register("fullName", { required:t('validation:this-field-is-required') })}
           error={!!errors.fullName}
           helperText={errors.fullName?.message}
         />
-        <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Job title of contact (optional)</Typography>
+        <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>{t('job-title-of-contact-optional')}</Typography>
         <TextField {...register("jobTitle")}/>
-        <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Contact methods</Typography>
+        <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>{t('contact-methods')}</Typography>
         <FormGroup>
           <Box>
             <FormControlLabel 
@@ -177,7 +179,6 @@ function Contact() {
                     <>
                       <PhoneInput 
                         country='us'
-                        placeholder={`Enter ${communicationChannelNames[communicationChannel]} number`} 
                         value={ getValues(communicationChannel) } 
                         onChange={(v) => { field.onChange(v) }} 
                         preferredCountries={['cn','in','id','jp','my','ph','th']} 

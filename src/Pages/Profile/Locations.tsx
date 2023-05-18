@@ -8,8 +8,10 @@ import NextBackPage from '../../Components/NextBackPage';
 import Select from 'react-select'
 import countryList from 'react-select-country-list'
 import { CSSObjectWithLabel, ControlProps, StylesConfig } from 'react-select';
+import { useTranslation } from 'react-i18next';
 
 function Locations() {
+  const { t } = useTranslation(['sellerForm', 'validation'])
   const [setPage, saveData, data] = useOutletContext<Array<any>>();
   const navigate = useNavigate()
   interface FormErrors {
@@ -45,8 +47,8 @@ function Locations() {
   const options = useMemo(() => countryList().getData(), [])
 
   useEffect(() => {
-    setPage("Location(s)")
-  }, [setPage])
+    setPage(t('locations'))
+  }, [t, setPage])
 
 
   function changePage(newPage: string) {
@@ -64,14 +66,14 @@ function Locations() {
   
   return (
     <Box sx={{ display:'flex', flexDirection:'column' }} component='form' onSubmit={handleSubmit(() => changePage("/profile/contact"))}>
-      <Typography variant="h1_32" >Location(s)</Typography>
-      <Typography variant="label" sx={{ marginTop:4 }} >Farm location</Typography>
+      <Typography variant="h1_32" >{t('locations')}</Typography>
+      <Typography variant="label" sx={{ marginTop:4 }} >{t('farm-location')}</Typography>
       {locationsFields.map((location, i) => (
         <Box key={location.id}>
-          {i !== 0 && <Typography variant='label' sx={{ marginTop:3 }}>Additional Farm location</Typography>}
+          {i !== 0 && <Typography variant='label' sx={{ marginTop:3 }}>{t('additional-farm-location')}</Typography>}
           <Box sx={{ background:'#F5F7F8', padding:'16px', marginTop:1 }}>
             <Box sx={{ display:'flex', flexDirection:'row', justifyContent:'space-between' }}>
-              <Typography variant="label" >City</Typography>
+              <Typography variant="label" >{t('city')}</Typography>
               {i !== 0 && 
                 <Button 
                   sx={{ height:'24px' }} 
@@ -80,24 +82,23 @@ function Locations() {
                   disableElevation 
                   onClick={() => {locationsRemove(i)} }
                 >
-                  Remove location
-                </Button>
+                  {t('remove-location')} </Button>
               }
             </Box>
             <TextField 
               fullWidth 
               sx={{ marginTop:1, marginBottom:2, background:'#FFFFFF' }}
-              {...register(`locations.${i}.city`, { required:"This field is required" })}
+              {...register(`locations.${i}.city`, { required: t('validation:this-field-is-required') })}
               error={!!errors.locations?.[i]?.city}
               helperText={errors.locations?.[i]?.city?.message}
             />
-            <Typography variant="label" style={{ marginBottom:'8px' }}>Country</Typography>
+            <Typography variant="label" style={{ marginBottom:'8px' }}>{t('country')}</Typography>
             <Controller 
               name={`locations.${i}.country`}
               control={control}
               rules={{ 
                 validate: (v) => {
-                  return (v.value !== '' && v.label !== '') || "This field is required"
+                  return (v.value !== '' && v.label !== '') || t('validation:this-field-is-required')
                 }
               }}
               render={({ field }) => (
@@ -116,16 +117,16 @@ function Locations() {
         </Box>
       ))}
       <Button sx={{ marginTop:3 }} onClick={() => { locationsAppend({ city: "", country: {label: '', value: '' } }) }}>
-        <Typography variant='p_small'>+ I have an additional farm location</Typography>
+        <Typography variant='p_small'>{t('i-have-an-additional-farm-location')}</Typography>
       </Button>
-      <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Distribution country (countries)</Typography>
+      <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>{t('distribution-country-countries')}</Typography>
       <Controller
         name="distributionCountries"
         control={control}
         rules={{ 
           validate: (v) => {
             if (!getValues("distributionCountries") || getValues("distributionCountries").length === 0) {
-              return "This field is required"
+              return t('validation:this-field-is-required')
             }
             return true
           }

@@ -7,8 +7,10 @@ import ImageOutlinedIcon from '@mui/icons-material/ImageOutlined';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useForm, Controller } from "react-hook-form";
 import NextBackPage from '../../Components/NextBackPage'
+import { useTranslation } from 'react-i18next'
 
 function ProductionDetails() {
+  const { t } = useTranslation(['sellerForm', 'validation'])
   const [setPage, saveData, data, uid] = useOutletContext()
   const fileInputRef = useRef();
   const [certificationFile, setCertificationFile] = useState(data.productionDetails.certificationFile)
@@ -25,13 +27,13 @@ function ProductionDetails() {
   })
 
   useEffect(() => {
-    setPage('Production details')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+    setPage(t('production-details'))
+
+  }, [t, setPage])
 
   function validateChangePage(newPage) {
-    if (!certificationFile && getValues('certification') === 'Yes, we are certified') {
-      setError("certificationFile", { message: "This field is required" })
+    if (!certificationFile && getValues('certification') === t('yes-we-are-certified')) {
+      setError("certificationFile", { message: t('validation:this-field-is-required') })
     }
     changePage(newPage)
   }
@@ -49,16 +51,16 @@ function ProductionDetails() {
   }
 
   const certificationOpts = [
-    'Yes, we are certified',
-    'We are in the process of certification',
-    'No, we are not (in the process of becoming) certified'
+    t('yes-we-are-certified'),
+    t('we-are-in-the-process-of-certification'),
+    t('no-we-are-not-certified-or-in-the-process-of-becoming-certified')
   ];
   const productionSystemOpts = [
-    'Aviary: multi-level cage-free system',
-    'Barn: single-level cage-free system',
-    'Fixed housing: structure does not move',
-    'Free-range: cage-free system that provides outdoor access',
-    'Mobile unit: house or structure on wheels',
+    t('aviary')  + ': ' + t('multi-level-cage-free-system'),
+    t('barn') + ': ' + t('single-level-cage-free-system'),
+    t('fixed-housing') + ': ' + t('structure-does-not-move'),
+    t('freerange') + ': ' + t('cage-free-system-that-provides-outdoor-access'),
+    t('mobile-unit') + ': ' + t('house-or-structure-on-wheels'),
   ]
 
   function handleFileUpload(e) {
@@ -84,15 +86,15 @@ function ProductionDetails() {
       component='form' 
       onSubmit={handleSubmit(() => validateChangePage("/profile/imagery"))}
     >
-      <Typography variant="h1_32">Production details</Typography>
-      <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>Production system of farm(s)</Typography>
+      <Typography variant="h1_32">{t('production-details')}</Typography>
+      <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>{t('production-system-of-farm-s')}</Typography>
       <Controller
         name="productionSystem"
         control={control}
         rules={{ 
           validate: (v) => {
             if (getValues("productionSystem").length === 0) {
-              return "This field is required"
+              return t('validation:this-field-is-required')
             }
             return true
           }
@@ -118,12 +120,11 @@ function ProductionDetails() {
         )}
       />
       <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>
-        Do you have cage-free egg certification?
-      </Typography>
+        {t('do-you-have-cage-free-egg-certification')} </Typography>
       <Controller
         name="certification"
         control={control}
-        rules={{ required: "This field is required" }}
+        rules={{ required: t('validation:this-field-is-required') }}
         render={({ field }) => (
           <>
             <Select 
@@ -136,7 +137,7 @@ function ProductionDetails() {
             </Select>
             <FormHelperText sx={{ color: "error.main", marginLeft:1 }}>{errors.productionSystem?.message}</FormHelperText>
             <Box sx={{ marginTop:4, display:(getValues("certification") === certificationOpts[0] || getValues("certification") === certificationOpts[1]) ? 'block' : 'none' }}>
-              <Typography variant="label">Title of certifying organization</Typography>
+              <Typography variant="label">{t('title-of-certifying-organization')}</Typography>
               <TextField 
                 fullWidth 
                 sx={{ marginTop:1 }}
@@ -144,7 +145,7 @@ function ProductionDetails() {
                   validate: (v) => { 
                     if (v === "" && (getValues("certification") === certificationOpts[0] || 
                       getValues("certification") === certificationOpts[1])) {
-                     return "This field is required" 
+                     return t('validation:this-field-is-required') 
                     }
                     return true
                   }
@@ -161,7 +162,7 @@ function ProductionDetails() {
                   variant='outlined' 
                   onClick={() => fileInputRef.current.click()}
                 >
-                  <ImageOutlinedIcon fontSize='small' sx={{ stroke: "#ffffff" }} />Upload certificate 
+                  <ImageOutlinedIcon fontSize='small' sx={{ stroke: "#ffffff" }} />{t('upload-certificate')} 
                 </Button>
                 <FormHelperText sx={{ color: "error.main", marginLeft:1 }}>{errors.certificationFile?.message}</FormHelperText>
                 <input 

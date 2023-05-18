@@ -7,11 +7,13 @@ import { Box } from '@mui/system'
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import { useForm } from "react-hook-form";
 import NextBackPage from '../../Components/NextBackPage'
+import { useTranslation } from 'react-i18next'
 
 function ProductDetails() {
+  const { t } = useTranslation(['sellerForm', 'validation'])
   const [setPage, saveData, data] = useOutletContext()
-  const types = ['Shell', 'Frozen', 'Liquid', 'Powder', 'Other']
-  const [inputStates, setInputStates] = useState(types.reduce((map, type) => { return {...map, [type]: {unit:'Tons'} }; }, {}))
+  const types = [t('shell'), t('frozen'), t('liquid'), t('powder'), t('other')]
+  const [inputStates, setInputStates] = useState(types.reduce((map, type) => { return {...map, [type]: {unit:t('tons')} }; }, {}))
   const navigate = useNavigate()
   const [isChecked, setIsChecked] = useState(types.reduce((map, type) => { return {...map, [type]: [type] in data.productDetails }; }, {}))
   const { handleSubmit, setError, getValues, formState: { errors }, register, clearErrors } = useForm({
@@ -26,14 +28,14 @@ function ProductDetails() {
   })
   
   useEffect(() => {
-    setPage('Product details')
+    setPage(t('product-details'))
     let temp = {}
     Object.entries(data.productDetails).forEach(([product, details]) => {
       temp = {...temp, [product]: { isChecked:true, unit:details.unit } }
     })
     setInputStates({...inputStates, ...temp})
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [t])
 
   function validateChangePage(newPage) {
     for (const checked of Object.values(isChecked)) {
@@ -43,7 +45,7 @@ function ProductDetails() {
       }
     }
 
-    setError("selectedOne", { message: "Please select at least one option"})
+    setError("selectedOne", { message: t('validation:please-select-at-least-one-option')})
   }
 
   function changePage(newPage) {
@@ -57,11 +59,11 @@ function ProductDetails() {
           unit : inputStates[type]['unit'],
         }
         let objectiveCapacity = 0
-        if (productDetails[type].unit === "Eggs") {
+        if (productDetails[type].unit === t('eggs')) {
           objectiveCapacity = productDetails[type].capacity
-        } else if (productDetails[type].unit === "Kilograms") { 
+        } else if (productDetails[type].unit === t('kilograms')) { 
           objectiveCapacity = productDetails[type].capacity * 22.7272682178 //Conversion factor for ordering on seller page
-        } else if (productDetails[type].unit === "Tons") {
+        } else if (productDetails[type].unit === t('tons')) {
           objectiveCapacity = productDetails[type].capacity * 20617.83 //Conversion factor for ordering on seller page
         }
         productDetails[type]['objectiveCapacity'] = objectiveCapacity
@@ -74,11 +76,11 @@ function ProductDetails() {
 
   return (
     <Box component='form' onSubmit={handleSubmit(() => validateChangePage("/profile/production-details"))}>
-      <Typography variant='h1_32' >Product details</Typography>
+      <Typography variant='h1_32' >{t('product-details')}</Typography>
       <Alert sx={{ marginTop:5 }} iconMapping={{success: <WorkOutlineIcon sx={{ margin:'auto'}}/> }}>
-        <Typography variant='p_default' color='#3FAB94' >All information provided is completely confidential. We do not share information with third parties, and buyers must be confirmed by us to access profiles</Typography>
+        <Typography variant='p_default' color='#3FAB94' >{t('all-information-provided-is-completely-confidential-we-do-not-share-information-with-third-parties-and-buyers-must-be-confirmed-by-us-to-access-profiles')}</Typography>
       </Alert>
-      <Typography variant='p_default_bold' sx={{ marginTop:4 }}>Cage-free egg types</Typography>
+      <Typography variant='p_default_bold' sx={{ marginTop:4 }}>{t('cage-free-egg-types')}</Typography>
       {types.map((type) => (
         <Box key={type}>
           <FormControlLabel sx={{ marginTop:2, display:'flex', flexDirection:'row' }} control={
@@ -90,14 +92,14 @@ function ProductDetails() {
           />
           <Box sx={{ display:isChecked[type] ? 'block' : 'none' }}>
             <Box >
-              <Typography variant='p_default_bold' color='#596676;' sx={{ marginTop:2 }}>Total production capacity (per year)</Typography>
+              <Typography variant='p_default_bold' color='#596676;' sx={{ marginTop:2 }}>{t('total-production-capacity-per-year')}</Typography>
               <Box sx={{ marginTop:1 }}>
                 <TextField 
                   {...register(`productionDetails.${type}.capacity`, { 
                     valueAsNumber: true,
                     validate: (v) => {
                       if (isChecked[type] && v === "") {
-                        return "This field is required"
+                        return t('validation:this-field-is-required')
                       }
                       return true
                     }
@@ -119,11 +121,11 @@ function ProductDetails() {
                   helperText={errors.productionDetails?.[type]?.capacity?.message}
                 />
                 <FormControl sx={{ width:'47.5%' }}>
-                  <InputLabel id='unit' >Unit</InputLabel>
+                  <InputLabel id='unit' >{t('unit')}</InputLabel>
                   <Select value={inputStates[type]['unit']} onChange={(e) => {setInputStates({...inputStates, [type]:{...inputStates[type], unit:e.target.value} })}} label='unit' labelId='unit'>
-                    <MenuItem value='Tons'>Tons</MenuItem>
-                    <MenuItem value='Eggs'>Eggs</MenuItem>
-                    <MenuItem value='Kilograms'>Kilograms</MenuItem>
+                    <MenuItem value={t('tons')}>{t('tons')}</MenuItem>
+                    <MenuItem value={t('eggs')}>{t('eggs')}</MenuItem>
+                    <MenuItem value={t('kilograms')}>{t('kilograms')}</MenuItem>
                   </Select>
                 </FormControl>
               </Box>
