@@ -6,10 +6,12 @@ import { useAuth } from '../AuthContext'
 import { getFirestore, doc, setDoc, onSnapshot, updateDoc } from 'firebase/firestore'
 import { isAdmin } from '../AdminAccountsConfig';
 import { SellerData } from './../firestore';
+import { useTranslation } from 'react-i18next';
 
 function ProfileProgressBar() {
+  const { t } = useTranslation(['sellerForm'])
   const [page, setPage] = useState('')
-  const pages = ["Basics", "Location(s)", "Contact", "Product details", "Production details", "Imagery"]
+  const pages = [t('basics'), t('locations'), t('contact'), t('product-details'), t('production-details'), t('imagery')]
   const db = getFirestore();
   const { currentUser } = useAuth();
   const uid = isAdmin(currentUser.uid) ? JSON.parse(localStorage.getItem('uidToEdit') ?? '') : currentUser.uid

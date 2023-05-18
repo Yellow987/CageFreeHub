@@ -12,8 +12,10 @@ import uuid from 'react-uuid';
 import NextBackPage from '../../Components/NextBackPage'
 import { useForm } from "react-hook-form";
 import { profilependingAdminNotification, updateUserInfo } from '../../firestore'
+import { useTranslation } from 'react-i18next'
 
 function Imagery() {
+  const { t } = useTranslation(['sellerForm', 'validation'])
   const [setPage, saveData, data, uid] = useOutletContext() // we use uid from outlet as this may be an admin editing a profile
   const [images, setImages] = useState(data.images)
   const [logo, setLogo] = useState(data.logos)
@@ -41,10 +43,9 @@ function Imagery() {
   }
 
   useEffect(() => {
-    setPage('Imagery')
+    setPage(t('imagery'))
     
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [t, setPage])
 
   async function getImagesUrl(storagePath, uuids) {
     return new Promise((resolve) => {
@@ -98,13 +99,13 @@ function Imagery() {
 
   return (
     <Box component='form' onSubmit={handleSubmit(() => changePage("/profile/" + uid, true))}>
-      <Typography variant="h1_32" >Imagery</Typography>
+      <Typography variant="h1_32" >{t('imagery')}</Typography>
       <Alert sx={{  marginTop:4 }} iconMapping={{ success: <AutoAwesomeIcon sx={{ margin:'auto' }}/> }}>
         <Typography variant='p_default' color='#3FAB94'>
-          <Box fontWeight='Bold' display="inline">Tip: </Box>To attract buyers, we recommend you upload at least 3 photos. Be sure to include at least one photo of the barn that showcases the condition of the animals.
+          <Box fontWeight='Bold' display="inline">Tip: </Box>{t('to-attract-buyers-we-recommend-you-upload-at-least-3-photos-be-sure-to-include-at-least-one-photo-of-the-barn-that-showcases-the-condition-of-the-animals')}
         </Typography>
       </Alert>
-      <Typography variant='p_default_bold' sx={{ marginTop:4 }}>Photos of farm</Typography>
+      <Typography variant='p_default_bold' sx={{ marginTop:4 }}>{t('photos-of-farm')}</Typography>
       <ImageUploading 
         multiple 
         maxNumber={6} 
@@ -121,7 +122,7 @@ function Imagery() {
               fullWidth 
               variant='outlined' 
               onClick={(onImageUpload)}>
-              <ImageOutlinedIcon fontSize='small' sx={{ stroke: "#ffffff" }} />Upload photos
+              <ImageOutlinedIcon fontSize='small' sx={{ stroke: "#ffffff" }} />{t('upload-photos')}
             </Button>
           </Paper>
           <FormHelperText sx={{ color: "error.main", marginLeft:1 }}>{imageErrors?.images?.message}</FormHelperText>
@@ -130,19 +131,19 @@ function Imagery() {
             {images.map((image, index) => (
               <Grid item key={index} width={{ xs:'50%', sm:'25%' }}>
                 <img src={image.data_url} alt="" width='100%'/>
-                <Button color='danger' fullWidth variant='contained' onClick={() => {handleImageRemove(index, imageFolder, setImages, images, 'images')}}>Remove</Button>
+                <Button color='danger' fullWidth variant='contained' onClick={() => {handleImageRemove(index, imageFolder, setImages, images, 'images')}}>{t('remove')}</Button>
               </Grid>
             ))}
           </Grid>
-          {errors && <Alert severity="error" sx={{ marginTop:2 }}><AlertTitle>Error</AlertTitle>
-            {errors.maxNumber && <Typography>You can only have 6 images</Typography>}
-            {errors.acceptType && <Typography>Unsupported file type. Please upload only .png and .jpg file types</Typography>}
-            {errors.maxFileSize && <Typography>File size must be under 8MB</Typography>}
+          {errors && <Alert severity="error" sx={{ marginTop:2 }}><AlertTitle>{t('validation:error')}</AlertTitle>
+            {errors.maxNumber && <Typography>{t('validation:you-can-only-have-6-images')}</Typography>}
+            {errors.acceptType && <Typography>{t('validation:unsupported-file-type-please-upload-only-png-and-jpg-file-types')}</Typography>}
+            {errors.maxFileSize && <Typography>{t('validation:file-size-must-be-under-8mb')}</Typography>}
           </Alert>}
         </Box>
       )}
       </ImageUploading>
-      <Typography variant='p_default_bold' sx={{ marginTop:4 }}>Logo (optional)</Typography>
+      <Typography variant='p_default_bold' sx={{ marginTop:4 }}>{t('logo-optional')}</Typography>
       <ImageUploading 
         maxNumber={1} 
         value={logo} 
@@ -154,16 +155,16 @@ function Imagery() {
       {({ imageList, onImageUpload, errors }) => (
         <Box>
           <Paper sx={{ marginTop:1 }} ><Button color='greyDefault' fullWidth variant='outlined' onClick={(onImageUpload)}>
-            <ImageOutlinedIcon fontSize='small' sx={{ stroke: "#ffffff" }} />Upload Logo
+            <ImageOutlinedIcon fontSize='small' sx={{ stroke: "#ffffff" }} />{t('upload-logo')}
           </Button></Paper>
           {logo.length === 1 && <Box sx={{ marginTop:2, width:'200px' }}>
             <img src={imageList[0].data_url} alt="" width='100%'/>
-            <Button color='danger' fullWidth variant='contained' onClick={() => handleImageRemove(0, logoFolder, setLogo, logo, 'logos')}>Remove</Button>
+            <Button color='danger' fullWidth variant='contained' onClick={() => handleImageRemove(0, logoFolder, setLogo, logo, 'logos')}>{t('remove')}</Button>
           </Box>}
-          {errors && <Alert severity="error" sx={{ marginTop:2 }}><AlertTitle>Error</AlertTitle>
-            {errors.maxNumber && <Typography>You can only have 6 images</Typography>}
-            {errors.acceptType && <Typography>Unsupported file type. Please upload only .png and .jpg file types</Typography>}
-            {errors.maxFileSize && <Typography>File size must be under 8MB</Typography>}
+          {errors && <Alert severity="error" sx={{ marginTop:2 }}><AlertTitle>{t('validation:error')}</AlertTitle>
+            {errors.maxNumber && <Typography>{t('validation:you-can-only-have-one-image')}</Typography>}
+            {errors.acceptType && <Typography>{t('validation:unsupported-file-type-please-upload-only-png-and-jpg-file-types')}</Typography>}
+            {errors.maxFileSize && <Typography>{t('validation:file-size-must-be-under-8mb')}</Typography>}
           </Alert>}
         </Box>
       )}

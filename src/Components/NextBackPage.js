@@ -2,15 +2,17 @@ import React from 'react'
 import { Typography, Box, Button } from '@mui/material';
 import { useAuth } from '../AuthContext';
 import adminUid from '../AdminAccountsConfig';
+import { useTranslation } from 'react-i18next';
 
 function NextBackPage( props ) {
+  const { t } = useTranslation(['sellerForm'])
   const { doNextBack, backPage, nextPage, submit = false, isUploading = false } = props.props
   const { currentUser } = useAuth()
 
   return (
     <Box align='right' sx={{ marginTop:6, marginBottom:2 }}>
       <Button onClick={() => { doNextBack(backPage) }}>
-        <Typography variant='p_default'>← Back</Typography>
+        <Typography variant='p_default'>{t('back')}</Typography>
       </Button>
       <Button 
         variant='contained' 
@@ -18,7 +20,7 @@ function NextBackPage( props ) {
         style={{ marginLeft:"8px" }}
         disabled={isUploading}
       >
-        {isUploading ? "Uploading" : (submit ? "Submit" : "Next →")}
+        {isUploading ? t('uploading') : (submit ? t('submit') : t('next'))}
       </Button>
       {currentUser.uid === adminUid && 
         <Button 
