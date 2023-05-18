@@ -1,0 +1,13 @@
+{
+  "this-field-is-required": "This field is required",
+  "please-enter-a-valid-email-address": "Please enter a valid email address",
+  "please-enter-a-valid-number": "Please enter a valid number",
+  "please-enter-a-valid-username": "Please enter a valid username",
+  "at-least-one-contact-method-must-be-selected": "At least one contact method must be selected",
+  "please-select-at-least-one-option": "Please select at least one option",
+  "error": "Error",
+  "you-can-only-have-6-images": "You can only have 6 images",
+  "unsupported-file-type-please-upload-only-png-and-jpg-file-types": "Unsupported file type. Please upload only .png and .jpg file types",
+  "file-size-must-be-under-8mb": "File size must be under 8MB",
+  "you-can-only-have-one-image": "You can only have one image"
+}
