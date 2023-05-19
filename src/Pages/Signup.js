@@ -33,7 +33,7 @@ function Signup(props) {
   const schema = yup.object().shape({
     email: yup.string().email().required(),
     password: yup.string().min(6).required(),
-    ...(hereTo !== 'Login' ? {tosCheckbox: yup.bool().required("Please accept the terms of service.").oneOf([true], "Please accept the terms of service.")} : {})
+    ...(hereTo !== 'Login' ? {tosCheckbox: yup.bool().required(t('please-accept-the-terms-of-service')).oneOf([true], t('please-accept-the-terms-of-service'))} : {})
   });
   const { 
     handleSubmit, 
@@ -58,7 +58,7 @@ function Signup(props) {
       })
       .catch((error) => {
         if (error.code === "auth/user-not-found") {
-          setAuthError({ isAuthError:true, errorDetails:"Invalid username or password."})
+          setAuthError({ isAuthError:true, errorDetails:t('invalid-username-or-password')})
         }
       })
     } else {
@@ -80,7 +80,7 @@ function Signup(props) {
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
-          setAuthError({ isAuthError:true, errorDetails:"This email is already taken"})
+          setAuthError({ isAuthError:true, errorDetails:t('this-email-is-already-taken')})
         }
       })
     }
@@ -121,7 +121,7 @@ function Signup(props) {
         label={t('email')} 
         variant="outlined" 
         sx={{ ...format }} 
-        {...register("email", { required:"Please enter a valid email" })}
+        {...register("email", { required:t('please-enter-a-valid-email') })}
       />
       <TextField 
         error={!!errors.password} 
@@ -132,7 +132,7 @@ function Signup(props) {
         autoComplete="on" 
         variant="outlined" 
         sx={{ ...format }} 
-        {...register("password", { required:"password must be at least 6 characters" })}
+        {...register("password", { required:t('password-must-be-at-least-6-characters') })}
       />
       <Controller
         name="tosCheckbox"
@@ -140,7 +140,7 @@ function Signup(props) {
         rules={{ 
           validate: (checked) => {
             if (!checked && hereTo !== "Login") {
-              return "Please accept the terms of service"
+              return t('please-accept-the-terms-of-service')
             }
             return true
           }

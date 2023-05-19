@@ -4,8 +4,10 @@ import { collection, getFirestore, query, orderBy, where, limit, getDocs, startA
 import ProductDetailsDisplay from '../Components/ProductDetailsDisplay';
 import { ViewportList } from 'react-viewport-list';
 import ClaimedPopup from '../Components/ClaimedPopup';
+import { useTranslation } from 'react-i18next';
 
 function Sellers(){
+  const { t } = useTranslation('buyer')
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
   const lastDocRef = useRef(null)
@@ -130,12 +132,12 @@ function Sellers(){
           onClick={() => {getMoreData(data.length)}}
           style={{ borderRadius:50, paddingLeft:'64px', paddingRight:'64px' }}
         >
-          More Results 
+          {t('more-results')}
         </Button>
       }
       {!isMoreData &&
         <Typography variant='h2'>
-          End of results
+          {t('end-of-results')}
         </Typography>
       }
     </Box>

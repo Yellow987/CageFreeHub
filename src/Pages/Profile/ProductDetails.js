@@ -12,8 +12,11 @@ import { useTranslation } from 'react-i18next'
 function ProductDetails() {
   const { t } = useTranslation(['sellerForm', 'validation'])
   const [setPage, saveData, data] = useOutletContext()
-  const types = [t('shell'), t('frozen'), t('liquid'), t('powder'), t('other')]
-  const [inputStates, setInputStates] = useState(types.reduce((map, type) => { return {...map, [type]: {unit:t('tons')} }; }, {}))
+  const types = ['Shell', 'Frozen', 'Liquid', 'Powder', 'Other']
+  const typesI18n = {
+    'Shell': t('shell'), 'Frozen': t('frozen'), 'Liquid': t('liquid'), 'Powder': t('powder'), 'Other': t('other')
+  }
+  const [inputStates, setInputStates] = useState(types.reduce((map, type) => { return {...map, [type]: {unit:'Tons'} }; }, {}))
   const navigate = useNavigate()
   const [isChecked, setIsChecked] = useState(types.reduce((map, type) => { return {...map, [type]: [type] in data.productDetails }; }, {}))
   const { handleSubmit, setError, getValues, formState: { errors }, register, clearErrors } = useForm({
@@ -88,7 +91,7 @@ function ProductDetails() {
               checked={isChecked[type]} 
               onClick={() => { setIsChecked({...isChecked, [type]:!isChecked[type]}); clearErrors()} } 
               />} 
-            label={type} 
+            label={typesI18n[type]}
           />
           <Box sx={{ display:isChecked[type] ? 'block' : 'none' }}>
             <Box >
@@ -123,9 +126,9 @@ function ProductDetails() {
                 <FormControl sx={{ width:'47.5%' }}>
                   <InputLabel id='unit' >{t('unit')}</InputLabel>
                   <Select value={inputStates[type]['unit']} onChange={(e) => {setInputStates({...inputStates, [type]:{...inputStates[type], unit:e.target.value} })}} label='unit' labelId='unit'>
-                    <MenuItem value={t('tons')}>{t('tons')}</MenuItem>
-                    <MenuItem value={t('eggs')}>{t('eggs')}</MenuItem>
-                    <MenuItem value={t('kilograms')}>{t('kilograms')}</MenuItem>
+                    <MenuItem value='Tons'>{t('tons')}</MenuItem>
+                    <MenuItem value='Eggs'>{t('eggs')}</MenuItem>
+                    <MenuItem value='Kilograms'>{t('kilograms')}</MenuItem>
                   </Select>
                 </FormControl>
               </Box>

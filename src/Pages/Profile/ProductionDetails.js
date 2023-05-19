@@ -32,7 +32,7 @@ function ProductionDetails() {
   }, [t, setPage])
 
   function validateChangePage(newPage) {
-    if (!certificationFile && getValues('certification') === t('yes-we-are-certified')) {
+    if (!certificationFile && getValues('certification') === 'Yes, we are certified') {
       setError("certificationFile", { message: t('validation:this-field-is-required') })
     }
     changePage(newPage)
@@ -51,17 +51,36 @@ function ProductionDetails() {
   }
 
   const certificationOpts = [
-    t('yes-we-are-certified'),
-    t('we-are-in-the-process-of-certification'),
-    t('no-we-are-not-certified-or-in-the-process-of-becoming-certified')
+    'Yes, we are certified',
+    'We are in the process of certification',
+    'No, we are not (in the process of becoming) certified'
   ];
+  const certificationOrganizationOptsI18n = {
+    'Yes, we are certified': t('yes-we-are-certified'),
+    'We are in the process of certification': t('we-are-in-the-process-of-certification'),
+    'No, we are not (in the process of becoming) certified': t('no-we-are-not-certified-or-in-the-process-of-becoming-certified')
+  }
   const productionSystemOpts = [
-    t('aviary')  + ': ' + t('multi-level-cage-free-system'),
-    t('barn') + ': ' + t('single-level-cage-free-system'),
-    t('fixed-housing') + ': ' + t('structure-does-not-move'),
-    t('freerange') + ': ' + t('cage-free-system-that-provides-outdoor-access'),
-    t('mobile-unit') + ': ' + t('house-or-structure-on-wheels'),
+    'Aviary: multi-level cage-free system',
+    'Barn: single-level cage-free system',
+    'Fixed housing: structure does not move',
+    'Free-range: cage-free system that provides outdoor access',
+    'Mobile unit: house or structure on wheels',
   ]
+  const productionSystemOptsI18n = {
+    'Aviary: multi-level cage-free system': t('aviary')  + ': ' + t('multi-level-cage-free-system'),
+    'Barn: single-level cage-free system': t('barn') + ': ' + t('single-level-cage-free-system'),
+    'Fixed housing: structure does not move': t('fixed-housing') + ': ' + t('structure-does-not-move'),
+    'Free-range: cage-free system that provides outdoor access': t('freerange') + ': ' + t('cage-free-system-that-provides-outdoor-access'),
+    'Mobile unit: house or structure on wheels': t('mobile-unit') + ': ' + t('house-or-structure-on-wheels')
+  }
+  const productionSystemOptsI18nShort = {
+    'Aviary: multi-level cage-free system': t('aviary'),
+    'Barn: single-level cage-free system': t('barn'),
+    'Fixed housing: structure does not move': t('fixed-housing'),
+    'Free-range: cage-free system that provides outdoor access': t('freerange'),
+    'Mobile unit: house or structure on wheels': t('mobile-unit')
+  }
 
   function handleFileUpload(e) {
     e.preventDefault()
@@ -103,7 +122,7 @@ function ProductionDetails() {
           <>
             <Select 
               multiple 
-              renderValue={Opts => Opts.map((opt) => opt = opt.split(':')[0]).join('; ') }
+              renderValue={Opts => Opts.map((opt) => opt = productionSystemOptsI18nShort[opt]).join('; ') }
               {...field}
               onChange={(e) => { field.onChange(e.target.value); console.log(field.value.join("").includes('Aviary'))}}
               error={!!errors.productionSystem}
@@ -111,7 +130,7 @@ function ProductionDetails() {
               {productionSystemOpts.map((productionSystem, i) => (
                 <MenuItem key={i} value={productionSystem}>
                   <Checkbox checked={field.value.join("").includes(productionSystem)}/>
-                  {productionSystem}
+                  {productionSystemOptsI18n[productionSystem]}
                 </MenuItem>
               ))}
             </Select>
@@ -132,7 +151,7 @@ function ProductionDetails() {
               error={!!errors.certification}
               onChange={(e) => { field.onChange(e.target.value); clearErrors() }}>
               {certificationOpts.map((certificationOpt, i) => (
-                <MenuItem key={i} value={certificationOpt}>{certificationOpt}</MenuItem>
+                <MenuItem key={i} value={certificationOpt}>{certificationOrganizationOptsI18n[certificationOpt]}</MenuItem>
               ))}
             </Select>
             <FormHelperText sx={{ color: "error.main", marginLeft:1 }}>{errors.productionSystem?.message}</FormHelperText>

@@ -14,17 +14,19 @@ import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { formatPhoneNumberIntl } from 'react-phone-number-input'
 import { getFarm } from '../../firestore';
 import { SellerData } from './../../firestore';
+import { useTranslation } from 'react-i18next';
 
 function Profile() {
+  const { t } = useTranslation(['sellerForm'])
   const { id } = useParams()
   const [data, setData] = useState<SellerData>()
   const [IsImagePreloaded, setIsImagePreloaded] = useState(false)
   const { currentUser } = useAuth();
   const colorMap = { approved:'primary.main', pending:'#CDA957', rejected:'red.main' }
   const approvalStatusTextMap: Record<string, string> = {
-    approved: "Your profile is now live for buyers to view!",
-    pending: "You will receive an email when your profile is approved (this will take 48 business hours at most)",
-    rejected: "Please check your email for details about how to fix your profile in order for the profile to be visible to buyers!"
+    approved: t('your-profile-is-now-live-for-buyers-to-view'),
+    pending: t('you-will-receive-an-email-when-your-profile-is-approved-this-will-take-48-business-hours-at-most'),
+    rejected: t('please-check-your-email-for-details-about-how-to-fix-your-profile-in-order-for-the-profile-to-be-visible-to-buyers')
   }
 
   useEffect(() => {
@@ -61,7 +63,7 @@ function Profile() {
         <Grid container justifyContent='center'>
           <Grid item xs={12} md={6}>
             {currentUser && (currentUser.uid === id || currentUser.uid === adminUid) && <Box>
-              <Typography variant='label'>Approval status</Typography>
+              <Typography variant='label'>{t('approval-status')}</Typography>
               <Typography 
                 variant='h2' 
                 color={colorMap[data.status as keyof typeof colorMap]}
@@ -94,11 +96,11 @@ function Profile() {
         
         <Grid container justifyContent='center'>
           <Grid item xs={12} md={6}>
-            <Typography variant="label" sx={{marginBottom:'16px'}}>Distribution country (countries)</Typography>
+            <Typography variant="label" sx={{marginBottom:'16px'}}>{t('distribution-country-countries')}</Typography>
             {data.distributionCountries.map((country, index)=>{
               return( <Typography variant='p_large_dark' sx={{marginTop:'16px'}} key={index}>{country.label}</Typography> )
             })}
-            <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>Farm location(s)</Typography>
+            <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>{t('farm-location-s')}</Typography>
             {data.locations.map((location, index)=>{
               return( <Typography variant='p_large_dark' sx={{marginTop:'16px'}} key={index}>{location.city + ', ' + location.country.label}</Typography> )
             })}
@@ -110,16 +112,16 @@ function Profile() {
             <Divider light style={{ marginTop:'48px' }}/>
 
             <Box>
-              <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>Website</Typography>
+              <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>{t('website')}</Typography>
               <Link href={data.website} sx={{display:'block'}}>{data.website}</Link>
                 
               <Divider light style={{ marginTop:'48px' }}/>
               
-              <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>Production system of farm(s)</Typography>
+              <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>{t('production-system-of-farm-s')}</Typography>
               {data.productionDetails.productionSystem.map((system, index)=>{
                 return( <Typography variant='p_large_dark' sx={{marginTop:'16px'}} key={index}>{system}</Typography> )
               })}
-              <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>Certification </Typography>
+              <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>{t('certification')}</Typography>
               <Box sx={{ marginTop:'16px', marginBottom:'48px', display:'flex', alignItems:'center' }}>
                 <Typography variant='p_large_dark' sx={{ marginRight:'8px' }}>{data.productionDetails.certifyingOrganization}</Typography>
                 {<Link href={data.productionDetails.certificationFile.url} target='_blank' rel='noopener noreferrer' sx={{ display:'flex', alignItems:'center' }}>
@@ -151,17 +153,17 @@ function Profile() {
 
           <Grid item md={3} xs={12} order={{xs:-1, md:3}} marginBottom='24px'>
             <Paper elevation={3} style={{ padding:'24px'}}>
-              <Typography variant="label" sx={{marginBottom:'16px'}}>Contact {data.organizationName}</Typography>
-              {data.contactChannels.email && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>Message {data.name} through Email</Typography>
+              <Typography variant="label" sx={{marginBottom:'16px'}}>{t('contact-org', { organizationName: data.organizationName})}</Typography>
+              {data.contactChannels.email && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>{t('message-through-email')}</Typography>
               <Link href={'mailto:' + data.contactChannels.email} sx={{display:'block'}}>{data.contactChannels.email}</Link></>)}
 
-              {data.contactChannels.phone && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>Message {data.name} through Phone</Typography>
+              {data.contactChannels.phone && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>{t('message-through-phone')}</Typography>
               <Link href={'tel:' + data.contactChannels.phone} sx={{display:'block'}}>{formatPhoneNumberIntl('+' + data.contactChannels.phone)}</Link></>)}
 
-              {data.contactChannels.wechat && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>Message {data.name} through WeChat</Typography>
+              {data.contactChannels.wechat && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>{t('message-through-wechat')}</Typography>
               <Link href={'weixin://dl/chat?' + data.contactChannels.wechat} sx={{display:'block'}}>{data.contactChannels.wechat}</Link></>)}
 
-              {data.contactChannels.whatsapp && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>Message {data.name} through WhatsApp</Typography>
+              {data.contactChannels.whatsapp && (<><Typography variant="p_large_dark" sx={{marginTop:'16px'}}>{t('message-through-whatsapp')}</Typography>
               <Link href={'whatsapp://send?phone=' + data.contactChannels.whatsapp} sx={{display:'block'}}>{formatPhoneNumberIntl('+' + data.contactChannels.whatsapp)}</Link></>)}
             </Paper>
           </Grid>

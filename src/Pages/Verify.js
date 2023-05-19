@@ -4,8 +4,10 @@ import { getAuth } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
 import { Box, Typography } from "@mui/material";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import { useTranslation } from "react-i18next";
 
 function Verify() {
+  const { t } = useTranslation(['verification'])
   const [text, setText] = useState('')
   const { currentUser } = getAuth()
   const navigate = useNavigate()
@@ -29,7 +31,7 @@ function Verify() {
     verifyEmailViaActionCode(actionCode)
     .then(() => {
       if (currentUser) {
-        setText('You will be redirected shortly')
+        setText(t('you-will-be-redirected-shortly'))
         const checkVerified = setInterval(function() {
           currentUser.reload();
           if (currentUser.emailVerified) {
@@ -38,16 +40,16 @@ function Verify() {
           }
         }, 2000);
       } else {
-        setText('You may now close this tab or login.')
+        setText(t('you-may-now-close-this-tab-or-login'))
       }
     })
-  }, [currentUser, navigate])
+  }, [currentUser, navigate, t])
 
   return (
     <Box mx={{ sm:'auto', xs:'24px' }} sx={{ maxWidth:'400px', mt:{ sm:'128px', xs:'24px'} }}>
       {text !== '' && <Box display="flex" alignItems='center' color='#3FAB94' marginBottom={1}>
         <Typography variant='h2'>
-          Email verified
+          {t('email-verified')}
         </Typography>
         <CheckCircleOutlineIcon sx={{ marginLeft:1 }} />
       </Box>}

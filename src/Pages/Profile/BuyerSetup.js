@@ -9,12 +9,20 @@ import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { useNavigate } from "react-router";
 import { useForm, Controller } from "react-hook-form";
 import { profilependingAdminNotification, updateUserInfo } from "../../firestore";
+import { useTranslation } from "react-i18next";
 
 function BuyerSetup() {
+  const { t } = useTranslation(['buyer', 'validation'])
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const roles = ['Procurement officer', 'Purchasing officer', 'Sustainability officer', 'Other']
+  const rolesI18n = {
+    'Procurement officer': t('procurement-officer'), 
+    'Purchasing officer': t('purchasing-officer'), 
+    'Sustainability officer': t('sustainability-officer'),
+    'Other': t('other')
+  }
   const { currentUser } = useAuth();
   const db = getFirestore();
   const docRef = useCallback(() => { return doc(db, "buyers", currentUser.uid) }, [db, currentUser.uid])
@@ -93,56 +101,56 @@ function BuyerSetup() {
       component='form' 
       onSubmit={handleSubmit(() => submitBuyerProfile("/profile/imagery"))}
     >
-      <Typography variant='h1'>Basic info</Typography>
+      <Typography variant='h1'>{t('basic-info')}</Typography>
       <Alert sx={{ marginTop:'32px' }} iconMapping={{ success: <InfoOutlinedIcon sx={{ margin:'auto' }} /> }}>
         <Typography variant='p_default' color='#3FAB94' >
-          Please provide us this basic information about you and your organization so that we can assure seller information remains private and respected
+          {t('please-provide-us-this-basic-information-about-you-and-your-organization-so-that-we-can-assure-seller-information-remains-private-and-respected')}
         </Typography>
       </Alert>
-      <Typography variant="label" marginTop='32px'>Full name</Typography>
+      <Typography variant="label" marginTop='32px'>{t('full-name')}</Typography>
       <TextField 
         fullWidth 
         style={{ marginTop:'8px' }} 
-        {...register("name", { required:"This field is required" })}
+        {...register("name", { required:t('validation:this-field-is-required') })}
         error={!!errors.name}
         helperText={errors.name?.message}
       />
-      <Typography variant="label" marginTop='32px'>Organization</Typography>
+      <Typography variant="label" marginTop='32px'>{t('organization')}</Typography>
       <TextField 
         fullWidth 
         style={{ marginTop:'8px' }} 
-        {...register("organization", { required:"This field is required" })}
+        {...register("organization", { required:t('validation:this-field-is-required') })}
         error={!!errors.organization}
         helperText={errors.organization?.message}
       />
-      <Typography variant="label" marginTop='32px'>Role at Organization</Typography>
+      <Typography variant="label" marginTop='32px'>{t('role-at-organization')}</Typography>
         <FormControl fullWidth style={{ marginTop:'8px' }}>
-        <InputLabel id='selectRole' >Select role</InputLabel>
+        <InputLabel id='selectRole' >{t('select-role')}</InputLabel>
         <Controller
           name="role"
           control={control}
-          rules={{ required:"This field is required" }}
+          rules={{ required:t('validation:this-field-is-required') }}
           render={({ field }) => (
             <Select 
               value={field.value} 
               onChange={(e) => field.onChange(e.target.value)} 
-              label='Select role' 
+              label={t('buyer:select-role')} 
               labelId='selectRole'
               error={!!errors.role}
             >
               {roles.map((role) => (
-                <MenuItem key={role} value={role}>{role}</MenuItem>
+                <MenuItem key={role} value={role}>{rolesI18n[role]}</MenuItem>
               ))}
             </Select>
           )}
         />
         <FormHelperText sx={{ color: "error.main", marginLeft:1 }}>{errors.role?.message}</FormHelperText>
       </FormControl>
-      <Typography variant="label" marginTop='32px'>Work email</Typography>
+      <Typography variant="label" marginTop='32px'>{t('work-email')}</Typography>
       <TextField 
         fullWidth 
         style={{ marginTop:'8px' }} 
-        {...register("email", { required:"This field is required" })}
+        {...register("email", { required:t('validation:this-field-is-required') })}
         error={!!errors.email}
         helperText={errors.email?.message}
       />
@@ -153,7 +161,7 @@ function BuyerSetup() {
         style={{ marginTop:'48px', marginBottom:'32px' }} 
         type='form'
       >
-        Submit <ArrowRightAltIcon fontSize="inherit" style={{ fontSize: "20px" }}/>
+        {t('submit')}<ArrowRightAltIcon fontSize="inherit" style={{ fontSize: "20px" }}/>
       </Button>
     </Box>
   );
