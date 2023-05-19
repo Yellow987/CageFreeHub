@@ -35,7 +35,7 @@ function App() {
         <GlobalNavBar />
         <Suspense fallback={<Loading />}>
           <Routes>
-            <Route path="/" element={<PrivateRoute props={{ onPublicPage: true }}><Home/></PrivateRoute>} />
+            <Route path="/" element={<PrivateRoute props={{ onPublicPage: true }}><Home/></PrivateRoute>} /> 
             <Route path="/admin" element={<PrivateRoute><Admin/></PrivateRoute>} />
             <Route path="/buyer-signup" element={<PrivateRoute props={{ onPublicPage: true }}><Signup props={{ hereTo: 'BuyerSignup' }}/></PrivateRoute>} />
             <Route path="/seller-signup" element={<PrivateRoute props={{ onPublicPage: true }}><Signup props={{ hereTo: 'SellerSignup' }}/></PrivateRoute>} />

@@ -7,8 +7,10 @@ import { Button } from "@mui/material";
 import { useAuth } from '../AuthContext'
 import { sendVerificationEmail } from './../firestore';
 import { useNavigate } from 'react-router';
+import { useTranslation } from "react-i18next";
 
 function ConfirmEmail() {
+  const { t } = useTranslation(['verification'])
   const { currentUser } = useAuth();
   const [ hasSentEmail, setHasSentEmail ] = useState(false)
   const navigate = useNavigate()
@@ -35,18 +37,15 @@ function ConfirmEmail() {
   return (
     <Box mx={{ sm:'auto', xs:'24px' }} sx={{ maxWidth:'620px', mt:{ sm:'128px', xs:'24px'} }} align='center'>
       <Alert icon={<EmailOutlinedIcon sx={{ margin: "auto" }}/>} severity="success" align='left'>
-        <AlertTitle color="primary.main" style={{ fontWeight:'bold' }}>Confirm your email</AlertTitle>
+        <AlertTitle color="primary.main" style={{ fontWeight:'bold' }}>{t('confirm-your-email')}</AlertTitle>
         <Typography color="primary.main">
-          An email with a confirmation link has been sent to the provided
-          email address. Please confirm this link for the opportunity to view
-          our directory of cage-free egg sellers.
-        </Typography>
+          {t('an-email-with-a-confirmation-link-has-been-sent-to-the-provided-email-address-please-confirm-this-link-for-the-opportunity-to-view-our-directory-of-cage-free-egg-sellers')} </Typography>
       </Alert>
       <Button variant="outlined" style={{ marginTop:'60px', align:'center'}} onClick={(e) => { sendEmail(e);} }>
-        Resend Confirmation Email
+        {t('resend-confirmation-email')}
       </Button>
       {hasSentEmail && <Alert sx={{ marginTop:'16px' }}>
-        <Typography color='primary.main'>Email verification sent!</Typography>
+        <Typography color='primary.main'>{t('email-verification-sent')}</Typography>
       </Alert>}
     </Box>
   );

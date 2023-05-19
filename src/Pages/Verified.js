@@ -6,8 +6,10 @@ import { getBuyer } from "../firestore";
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { updateBuyer } from "../firestore";
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from "react-i18next";
 
 function Verified() {
+  const { t } = useTranslation(['verification'])
   const { currentUser } = useAuth()
   const [noErrors, setNoErrors] = useState(null)
   const navigate = useNavigate()
@@ -34,11 +36,11 @@ function Verified() {
       {noErrors && <div>
         <Box display="flex" alignItems='center' color='#3FAB94'>
           <Typography variant='h2'>
-            Email verified
+            {t('email-verified')}
           </Typography>
           <CheckCircleOutlineIcon sx={{ marginLeft:1 }} />
         </Box>
-        <Typography variant='label' marginTop='48px'>Approval status</Typography>
+        <Typography variant='label' marginTop='48px'>{t('approval-status')}</Typography>
         <Typography 
           variant='h2' 
           color='#CDA957'
@@ -47,10 +49,10 @@ function Verified() {
           display="flex"
           alignContent='center'
         >
-          Pending
+          {t('pending')}
         </Typography>
         <Typography variant='p_default'>
-        Out of respect for our sellers, we need to do a quick check to make sure you are a legitimate buyer! You will receive an email when your profile is approved (this will take 48 business hours at most). Then you’ll be able to access the directory!
+          {t('out-of-respect-for-our-sellers-we-need-to-do-a-quick-check-to-make-sure-you-are-a-legitimate-buyer-you-will-receive-an-email-when-your-profile-is-approved-this-will-take-48-business-hours-at-most-then-youll-be-able-to-access-the-directory')}
         </Typography>
       </div>}
     </Box>
