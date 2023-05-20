@@ -64,5 +64,22 @@
   "uploading": "Uploading",
   "submit": "Submit",
   "next": "Next →",
-  "contact": "Contact"
+  "contact": "Contact",
+  "your-profile-is-now-live-for-buyers-to-view": "Your profile is now live for buyers to view!",
+  "you-will-receive-an-email-when-your-profile-is-approved-this-will-take-48-business-hours-at-most": "You will receive an email when your profile is approved (this will take 48 business hours at most)",
+  "please-check-your-email-for-details-about-how-to-fix-your-profile-in-order-for-the-profile-to-be-visible-to-buyers": "Please check your email for details about how to fix your profile in order for the profile to be visible to buyers!",
+  "approval-status": "Approval status",
+  "farm-location-s": "Farm location(s)",
+  "website": "Website",
+  "certification": "Certification",
+  "message-through-email": "Message through Email",
+  "message-through-phone": "Message through Phone",
+  "message-through-wechat": "Message through WeChat",
+  "message-through-whatsapp": "Message through WhatsApp",
+  "contact-org": "Contact {{organizationName}}",
+  "cage-free-egg-type": "Cage-free egg type",
+  "production-capacity-year": "Production capacity (year)",
+  "number-kilograms": "{{number}} Kilograms",
+  "number-tons": "{{number}} Tons",
+  "number-eggs": "{{number}} Eggs"
 }
