@@ -1,9 +1,9 @@
 {
-    "title": "Worldwide trusted directory of cage-free egg sellers",
-    "isSeller": "<0>Do you sell cage-free eggs?</0> Sign up to create a profile of your company, and get discovered by purchasers",
-    "isBuyer": "<0>Are you looking to buy cage-free eggs?</0> Sign up to view a list of cage-free egg sellers near you",
-    "sellerSignup": "Sign up as a seller",
-    "buyerSignup": "Sign up as a buyer",
-    "free": "Always free",
-    "by": "A project by Global Food Partners"
+    "title": "世界中のケージフリー卵販売者から信頼を得ているプラットフォーム",
+    "isSeller": "<0>ケージフリー卵の販売者の方ですか？</0> 調達担当者が見つけられるように登録して貴社のプロファイルを作成してください。",
+    "isBuyer": "<0>ケージフリー卵を購入しようとされていますか？</0> 登録して、あなたの近くにいるケージフリー卵販売者のリストをご覧ください。",
+    "sellerSignup": "販売者として登録",
+    "buyerSignup": "購入者として登録",
+    "free": "常に無料です",
+    "by": "グローバルフードパートナーズによるプロジェクト"
 }
