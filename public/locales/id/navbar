@@ -1,8 +1,8 @@
 {
     "login": "Masuk",
     "support": "Bantuan",
-    "questions": "Questions? In need of help?",
-    "pleaseEmail": "Please email us at ",
-    "editProfile": "Edit profile",
-    "logout": "Log out"
+    "questions": "Pertanyaan? Anda membutuhkan bantuan?",
+    "pleaseEmail": "Silakan email kami di ",
+    "editProfile": "Sunting profil",
+    "logout": "Keluar"
 }
