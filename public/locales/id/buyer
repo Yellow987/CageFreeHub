@@ -1,6 +1,6 @@
 {
-  "procurement-officer": "Staff pengadaan",
-  "purchasing-officer": "Purchasing officer",
+  "procurement-officer": "Staff procurement",
+  "purchasing-officer": "Staff Purchasing",
   "sustainability-officer": "Staff Keberlanjutan (Sustainability)",
   "other": "Lainya",
   "basic-info": "Info Dasar",
@@ -12,7 +12,7 @@
   "work-email": "Email kantor",
   "submit": "Kirim",
   "end-of-results": "Hasil akhir",
-  "more-results": "Lebih banyak hasil",
+  "more-results": "Lihat lebih banyak",
   "distribution-countries": "Negara Distribusi",
   "cage-free-egg-seller-directory": "Direktori penjual telur bebas sangkar"
 }
