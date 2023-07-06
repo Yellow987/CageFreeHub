@@ -1,9 +1,9 @@
 {
-    "title": "Worldwide trusted directory of cage-free egg sellers",
-    "isSeller": "<0>Do you sell cage-free eggs?</0> Sign up to create a profile of your company, and get discovered by purchasers",
-    "isBuyer": "<0>Are you looking to buy cage-free eggs?</0> Sign up to view a list of cage-free egg sellers near you",
-    "sellerSignup": "Sign up as a seller",
-    "buyerSignup": "Sign up as a buyer",
-    "free": "Always free",
-    "by": "A project by Global Food Partners"
+    "title": "รายนามของผู้ขายไข่ไร้กรงที่เชื่อถือได้ทั่วโลก",
+    "isSeller": "<0>คุณขายไข่ไร้กรงหรือไม่?<0> ลงทะเบียนเพื่อสร้างโปรไฟล์ของบริษัท และให้ผู้ซื้อค้นพบคุณได้",
+    "isBuyer": "<0> คุณกำลังมองหาแหล่งซื้อไข่ไร้กรงใช่หรือไม่?<0> ลงทะเบียนเพื่อดูรายชื่อผู้ขายไข่ไร้กรงใกล้คุณ",
+    "sellerSignup": "ลงทะเบียนในนามผู้ขาย",
+    "buyerSignup": "ลงทะเบียนในนามผู้ซื้อ",
+    "free": "ฟรีเสมอ",
+    "by": "โปรเจคท์โดย โกลบอล ฟู้ด พาร์ทเนอร์"
 }
