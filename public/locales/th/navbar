@@ -1,8 +1,8 @@
 {
-    "login": "Log in",
-    "support": "Support",
-    "questions": "Questions? In need of help?",
-    "pleaseEmail": "Please email us at ",
-    "editProfile": "Edit profile",
-    "logout": "Log out"
+    "login": "ลงชื่อเข้าใช้",
+    "support": "ช่วยเหลือ",
+    "questions": "มีคำถาม? ต้องการความช่วยเหลือ?",
+    "pleaseEmail": "กรุณาส่งอีเมลหาเราที่ ",
+    "editProfile": "แก้ไขข้อมูลส่วนตัว",
+    "logout": "ออกจากระบบ"
 }
