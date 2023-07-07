@@ -1,13 +1,13 @@
 {
-  "this-field-is-required": "This field is required",
-  "please-enter-a-valid-email-address": "Please enter a valid email address",
-  "please-enter-a-valid-number": "Please enter a valid number",
-  "please-enter-a-valid-username": "Please enter a valid username",
-  "at-least-one-contact-method-must-be-selected": "At least one contact method must be selected",
-  "please-select-at-least-one-option": "Please select at least one option",
-  "error": "Error",
-  "you-can-only-have-6-images": "You can only have 6 images",
-  "unsupported-file-type-please-upload-only-png-and-jpg-file-types": "Unsupported file type. Please upload only .png and .jpg file types",
-  "file-size-must-be-under-8mb": "File size must be under 8MB",
-  "you-can-only-have-one-image": "You can only have one image"
+  "this-field-is-required": "จำเป็นต้องกรอกข้อมูลนี้",
+  "please-enter-a-valid-email-address": "กรุณากรอกอีเมลที่ถูกต้อง",
+  "please-enter-a-valid-number": "กรุณากรอกหมายเลขโทรศัพท์ที่ถูกต้อง",
+  "please-enter-a-valid-username": "กรุณากรอกชื่อผู้ใช้ที่ถูกต้อง",
+  "at-least-one-contact-method-must-be-selected": "อย่างน้อยต้องเลือกช่องทางการติดต่อ 1 ช่องทาง",
+  "please-select-at-least-one-option": "กรุณาเลือกอย่างน้อยหนึ่งตัวเลือก",
+  "error": "เกิดข้อผิดพลาด",
+  "you-can-only-have-6-images": "คุณสามารถมีได้เพียง 6 รูปเท่านั้น",
+  "unsupported-file-type-please-upload-only-png-and-jpg-file-types": "ไฟล์ประเภทนี้ไม่ถูกรับรอง กรุณาอัพโหลดไฟล์ .png และ .jpg เท่านั้น",
+  "file-size-must-be-under-8mb": "ขนาดไฟล์ต้องต่ำกว่า 8MB",
+  "you-can-only-have-one-image": "คุณสามารถมีได้เพียงรูปเดียวเท่านั้น"
 }
