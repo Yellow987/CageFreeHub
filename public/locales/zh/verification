@@ -1,12 +1,12 @@
 {
-  "email-verified": "Email verified",
-  "approval-status": "Approval status",
-  "pending": "Pending",
-  "out-of-respect-for-our-sellers-we-need-to-do-a-quick-check-to-make-sure-you-are-a-legitimate-buyer-you-will-receive-an-email-when-your-profile-is-approved-this-will-take-48-business-hours-at-most-then-youll-be-able-to-access-the-directory": "Out of respect for our sellers, we need to do a quick check to make sure you are a legitimate buyer! You will receive an email when your profile is approved (this will take 48 business hours at most). Then you’ll be able to access the directory!",
-  "you-will-be-redirected-shortly": "You will be redirected shortly",
-  "you-may-now-close-this-tab-or-login": "You may now close this tab or login.",
-  "confirm-your-email": "Confirm your email",
-  "an-email-with-a-confirmation-link-has-been-sent-to-the-provided-email-address-please-confirm-this-link-for-the-opportunity-to-view-our-directory-of-cage-free-egg-sellers": "An email with a confirmation link has been sent to the provided email address. Please confirm this link for the opportunity to view our directory of cage-free egg sellers.",
-  "resend-confirmation-email": "Resend Confirmation Email",
-  "email-verification-sent": "Email verification sent!"
+  "email-verified": "邮箱已验证",
+  "approval-status": "审核状态",
+  "pending": "待处理",
+  "out-of-respect-for-our-sellers-we-need-to-do-a-quick-check-to-make-sure-you-are-a-legitimate-buyer-you-will-receive-an-email-when-your-profile-is-approved-this-will-take-48-business-hours-at-most-then-youll-be-able-to-access-the-directory": "出于对卖家的尊重，我们需要快速检查以确保您是合法买家！ 您的资料通过审核后，您将收到一封邮件(最多需要48个小时)。 然后您将能够访问卖家目录！",
+  "you-will-be-redirected-shortly": "即将为您跳转",
+  "you-may-now-close-this-tab-or-login": "您可以关闭本页或登录",
+  "confirm-your-email": "确认您的邮箱",
+  "an-email-with-a-confirmation-link-has-been-sent-to-the-provided-email-address-please-confirm-this-link-for-the-opportunity-to-view-our-directory-of-cage-free-egg-sellers": "一封包含确认链接的电子邮件已发送到您提供的邮箱。 请点击确认此链接，查看非笼养鸡蛋供应商目录。",
+  "resend-confirmation-email": "再次发送确认邮件",
+  "email-verification-sent": "确认邮件已发送！"
 }
