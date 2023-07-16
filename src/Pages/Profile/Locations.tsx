@@ -24,13 +24,7 @@ function Locations() {
       label: string;
       value: string;
     }[],
-    locations: {
-      city: string;
-      country: {
-        label: string;
-        value: string;
-      }
-    }[];
+    locations: Location[];
   }
 
   const { handleSubmit, control, getValues, formState: { errors }, register } = useForm<FormValues, FormErrors>({
@@ -44,7 +38,21 @@ function Locations() {
     append: locationsAppend,
     remove: locationsRemove
   } = useFieldArray({ control, name: "locations" });
-  const options = useMemo(() => countryList().getData(), [])
+
+  function loadCountries() {
+    const countries = require("i18n-iso-countries");
+    const enLocale = require("i18n-iso-countries/langs/en.json");
+    countries.registerLocale(enLocale)
+    return countries.getNames("en", {select: "official"})
+  }
+  console.log(Object.entries(loadCountries()))
+  const countryOptions: Country[] = Object.entries(loadCountries()).map(([countryCode, countryName]): Country => {
+    return {
+      label: countryName,
+      value: countryCode
+    } as Country
+  })
+  //const countryOptions = useMemo(() => countryList().getData(), [])
 
   useEffect(() => {
     setPage(t('locations'))
@@ -105,7 +113,7 @@ function Locations() {
                 <Select 
                   {...field}
                   value={field.value}
-                  options={options}
+                  options={countryOptions}
                   onChange={(selectedOption) => field.onChange(selectedOption)}
                   styles={customSelectStyle}
                   //error={!!errors.locations?.[i]?.country}
@@ -116,7 +124,7 @@ function Locations() {
           </Box>
         </Box>
       ))}
-      <Button sx={{ marginTop:3 }} onClick={() => { locationsAppend({ city: "", country: {label: '', value: '' } }) }}>
+      <Button sx={{ marginTop:3 }} onClick={() => { locationsAppend( { city: "", country: {label: '', value: '' } } as Location) }}>
         <Typography variant='p_small'>{t('i-have-an-additional-farm-location')}</Typography>
       </Button>
       <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>{t('distribution-country-countries')}</Typography>
@@ -138,7 +146,7 @@ function Locations() {
             isMulti
             styles={customSelectStyle}
             value={field.value}
-            options={options}
+            options={countryOptions}
             onChange={(selectedOption) => field.onChange(selectedOption)}
             //error={!!errors.distributionCountries}
           />

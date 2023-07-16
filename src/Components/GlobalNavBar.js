@@ -40,8 +40,14 @@ function GlobalNavBar() {
 
   const languages = [
     {name:"English", symbol:"en"}, 
-    {name:"Spanish", symbol:"ESP"}, 
-    {name:"Indonesian", symbol:"indo"}
+    {name:"Chinese", symbol:"zh"}, 
+    {name:"Filipino", symbol:"fil"},
+    {name:"Hindi", symbol:"hi"},
+    {name:"Indonesian", symbol:"id"},
+    {name:"Japanese", symbol:"ja"},
+    {name:"Malay", symbol:"ms"},
+    {name:"Thai", symbol:"th"},
+    {name:"Vietnamese", symbol:"vi"}
   ]
   const [currentLanguage, setCurrentLanguage] = React.useState("")
 
@@ -202,7 +208,7 @@ function GlobalNavBar() {
             <Button variant='contained' sx={{ display:currentUser?.uid === adminUid ? 'block' : 'none' }} onClick={() => {navigate('/admin')}} >ADMIN PORTAL</Button>
           </Box>
           {/* //NO TRANSLATIONS YET */}
-          <Box sx={{ display:'none' }} >
+          <Box sx={{ display:'block' }} >
             <Button
               size="large"
               aria-controls="menu-language"
@@ -222,7 +228,7 @@ function GlobalNavBar() {
               transformOrigin={{ vertical: 'top', horizontal: 'right' }}
               open={Boolean(anchorElLanguage)}
               onClose={handleCloseLanguageMenu}>
-                {(languages.filter((language) => language.name !== currentLanguage)).map((language) => (
+                {languages.map((language) => (
                   <MenuItem key={language.name} onClick={() => handleChangeLanguage(language)}>
                     {language.name}
                   </MenuItem>

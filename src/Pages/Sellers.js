@@ -80,7 +80,7 @@ function Sellers(){
 
   return(
   <Box sx={{ maxWidth:"920px", margin:{xs:"0px", md:"auto"} }}>
-    <Typography variant='h1' sx={{ marginTop:"48px", marginBottom:"48px", display:{xs: 'none', md:'block'} }}>Cage-free egg seller directory</Typography>
+    <Typography variant='h1' sx={{ marginTop:"48px", marginBottom:"48px", display:{xs: 'none', md:'block'} }}>{t('cage-free-egg-seller-directory')}</Typography>
     {data && 
       <div ref={viewRef}>
         <ViewportList
@@ -104,7 +104,7 @@ function Sellers(){
                 <Box sx={{height:"20px", width:'80px'}}></Box>
                 <Box sx={{display:'flex', flexDirection: {xs: 'column', md: 'row'}}}>
                   <Box>
-                    <Typography variant='label'>Distribution Country (countries)</Typography>
+                    <Typography variant='label'>{t('distribution-countries')}</Typography>
                     {farm.distributionCountries.map((country, index)=>{
                       return( <Typography variant='p_large' sx={{ marginTop:'16px', color:"#1B2B3E" }} key={index}>{country.label}</Typography> )
                     })}
