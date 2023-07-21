@@ -1,0 +1,13 @@
+{
+  "this-field-is-required": "この項目は必須です",
+  "please-enter-a-valid-email-address": "有効なメールアドレスを入力してください",
+  "please-enter-a-valid-number": "有効な電話番号を入力してください",
+  "please-enter-a-valid-username": "有効なユーザー名を入力してください",
+  "at-least-one-contact-method-must-be-selected": "少なくとも一つの連絡方法を選択する必要があります",
+  "please-select-at-least-one-option": "少なくともひとつは選択してください",
+  "error": "エラー",
+  "you-can-only-have-6-images": "6枚の画像しか選べません",
+  "unsupported-file-type-please-upload-only-png-and-jpg-file-types": "サポートされていない種類のファイルです。.png と .jpg ファイルのみアップロード可能です。",
+  "file-size-must-be-under-8mb": "ファイルサイズは 8MB 未満である必要があります",
+  "you-can-only-have-one-image": "1枚の画像しか選べません"
+}
