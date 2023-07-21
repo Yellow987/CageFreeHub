@@ -1,0 +1,13 @@
+{
+  "this-field-is-required": "此字段为必填项",
+  "please-enter-a-valid-email-address": "请输入有效的邮箱地址",
+  "please-enter-a-valid-number": "请输入有效的数字",
+  "please-enter-a-valid-username": "请输入有效的用户名",
+  "at-least-one-contact-method-must-be-selected": "请选择至少一种联系方式",
+  "please-select-at-least-one-option": "请选择至少一个选项",
+  "error": "错误",
+  "you-can-only-have-6-images": "只能上传六张图片",
+  "unsupported-file-type-please-upload-only-png-and-jpg-file-types": "不支持的文件类型。 请仅上传 .png 和 .jpg 文件类型",
+  "file-size-must-be-under-8mb": "文件必须小于8MB",
+  "you-can-only-have-one-image": "只能上传一张图片"
+}
