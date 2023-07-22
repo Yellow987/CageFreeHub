@@ -51,12 +51,7 @@ function GlobalNavBar() {
   }
 
 
-  const [currentLanguage, setCurrentLanguage] = useState("")
-
-  useEffect(() => { 
-    //TODO change to users current language
-    setCurrentLanguage(languages[i18n.language])
-  }, [])
+  const [currentLanguage, setCurrentLanguage] = useState(languages[i18n.language])
 
   useEffect(() => {
     if (currentUserInfo) {
