@@ -38,15 +38,24 @@ function GlobalNavBar() {
   const [supportPopupAnchorEl, setSupportPopupAnchorEl] = useState(null);
   const navigate = useNavigate()
 
-  const languages = [
-    {name:"English", symbol:"en"}, 
-    {name:"Spanish", symbol:"ESP"}, 
-    {name:"Indonesian", symbol:"indo"}
-  ]
-  const [currentLanguage, setCurrentLanguage] = React.useState("")
+  const languages = {
+    en: "English",
+    zh: "Chinese",
+    fil: "Filipino",
+    hi: "Hindi",
+    id: "Indonesian",
+    ja: "Japanese",
+    ms: "Malay",
+    th: "Thai",
+    vi: "Vietnamese"
+  }
+
+
+  const [currentLanguage, setCurrentLanguage] = useState("")
 
   useEffect(() => { 
-    setCurrentLanguage("English")
+    //TODO change to users current language
+    setCurrentLanguage(languages[i18n.language])
   }, [])
 
   useEffect(() => {
@@ -77,9 +86,9 @@ function GlobalNavBar() {
     setAnchorElLanguage(null);
   };
 
-  const handleChangeLanguage = (language) => {
-    i18n.changeLanguage(language.symbol);
-    setCurrentLanguage(language.name)
+  const handleChangeLanguage = (event, languageSymbol) => {
+    i18n.changeLanguage(languageSymbol);
+    setCurrentLanguage(languages[languageSymbol])
   }
 
   const handleLoggedInMenu = (event) => {
@@ -202,7 +211,7 @@ function GlobalNavBar() {
             <Button variant='contained' sx={{ display:currentUser?.uid === adminUid ? 'block' : 'none' }} onClick={() => {navigate('/admin')}} >ADMIN PORTAL</Button>
           </Box>
           {/* //NO TRANSLATIONS YET */}
-          <Box sx={{ display:'none' }} >
+          <Box sx={{ display:'block' }} >
             <Button
               size="large"
               aria-controls="menu-language"
@@ -222,9 +231,9 @@ function GlobalNavBar() {
               transformOrigin={{ vertical: 'top', horizontal: 'right' }}
               open={Boolean(anchorElLanguage)}
               onClose={handleCloseLanguageMenu}>
-                {(languages.filter((language) => language.name !== currentLanguage)).map((language) => (
-                  <MenuItem key={language.name} onClick={() => handleChangeLanguage(language)}>
-                    {language.name}
+                {Object.keys(languages).map((languageSymbol) => (
+                  <MenuItem key={languageSymbol} onClick={(event) => handleChangeLanguage(event, languageSymbol)}>
+                    {languages[languageSymbol]}
                   </MenuItem>
                 ))}
             </Menu>

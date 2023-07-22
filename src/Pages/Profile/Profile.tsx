@@ -15,6 +15,7 @@ import { formatPhoneNumberIntl } from 'react-phone-number-input'
 import { getFarm } from '../../firestore';
 import { SellerData } from './../../firestore';
 import { useTranslation } from 'react-i18next';
+import { useProductionSystemOptsI18n } from '../../Constants/i18nHelper';
 
 function Profile() {
   const { t } = useTranslation(['sellerForm'])
@@ -23,6 +24,7 @@ function Profile() {
   const [IsImagePreloaded, setIsImagePreloaded] = useState(false)
   const { currentUser } = useAuth();
   const colorMap = { approved:'primary.main', pending:'#CDA957', rejected:'red.main' }
+  const productionSystemOptsI18n = useProductionSystemOptsI18n();
   const approvalStatusTextMap: Record<string, string> = {
     approved: t('your-profile-is-now-live-for-buyers-to-view'),
     pending: t('you-will-receive-an-email-when-your-profile-is-approved-this-will-take-48-business-hours-at-most'),
@@ -72,7 +74,7 @@ function Profile() {
                 display="flex"
                 alignItems='center' 
               >
-                {data.status.charAt(0).toUpperCase() + data.status.slice(1)}
+                {data.status}
                 <CheckCircleOutlineIcon sx={{ marginLeft:1, display:data.status === 'approved' ? 'block' : 'none' }} fontSize='large'/>
               </Typography>
               <Typography variant='p_default'>{approvalStatusTextMap[data.status]}</Typography>
@@ -119,7 +121,7 @@ function Profile() {
               
               <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>{t('production-system-of-farm-s')}</Typography>
               {data.productionDetails.productionSystem.map((system, index)=>{
-                return( <Typography variant='p_large_dark' sx={{marginTop:'16px'}} key={index}>{system}</Typography> )
+                return( <Typography variant='p_large_dark' sx={{marginTop:'16px'}} key={index}>{productionSystemOptsI18n[system]}</Typography> )
               })}
               <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>{t('certification')}</Typography>
               <Box sx={{ marginTop:'16px', marginBottom:'48px', display:'flex', alignItems:'center' }}>

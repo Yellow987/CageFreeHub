@@ -1,4 +1,4 @@
-enum Stage {
+export enum Stage {
   PROD,
   PREPROD,
   DEV

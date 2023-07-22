@@ -13,7 +13,7 @@ function Basics() {
     const websiteRef = useRef('')
     const { handleSubmit, getValues, formState: { errors }, register } = useForm({
         defaultValues: {
-          organizationName: data.organizationName
+            organizationName: data.organizationName
         }
     })
 

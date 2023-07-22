@@ -6,7 +6,8 @@
     "module": "commonjs",
     "strict": true,
     "allowJs": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "sourceMap": true
   },
   "exclude": [
       "node_modules",

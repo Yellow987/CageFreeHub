@@ -1,18 +1,19 @@
-import React from 'react';
-import { useEffect, useMemo } from 'react'
+import React, { useCallback } from 'react';
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { useOutletContext } from 'react-router'
 import { Typography, TextField, Box, Button, FormHelperText } from '@mui/material';
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import NextBackPage from '../../Components/NextBackPage';
 import Select from 'react-select'
-import countryList from 'react-select-country-list'
 import { CSSObjectWithLabel, ControlProps, StylesConfig } from 'react-select';
 import { useTranslation } from 'react-i18next';
 
 function Locations() {
   const { t } = useTranslation(['sellerForm', 'validation'])
+  const { i18n } = useTranslation();
   const [setPage, saveData, data] = useOutletContext<Array<any>>();
+  const [countryOptions, setCountryOptions] = useState<Country[]>([])
   const navigate = useNavigate()
   interface FormErrors {
     contactMethods?: {
@@ -24,13 +25,7 @@ function Locations() {
       label: string;
       value: string;
     }[],
-    locations: {
-      city: string;
-      country: {
-        label: string;
-        value: string;
-      }
-    }[];
+    locations: Location[];
   }
 
   const { handleSubmit, control, getValues, formState: { errors }, register } = useForm<FormValues, FormErrors>({
@@ -44,11 +39,30 @@ function Locations() {
     append: locationsAppend,
     remove: locationsRemove
   } = useFieldArray({ control, name: "locations" });
-  const options = useMemo(() => countryList().getData(), [])
+
+  const loadCountryOptions = useCallback(() => {
+    const countries = require("i18n-iso-countries");
+    const enLocale = require("i18n-iso-countries/langs/" + i18n.language + ".json");
+    countries.registerLocale(enLocale)
+    const countryNames = countries.getNames(i18n.language, {select: "official"})
+
+    const countryOptions: Country[] = Object.entries(countryNames).map(([countryCode, countryName]): Country => {
+      return {
+        label: countryName,
+        value: countryCode
+      } as Country
+    })
+    setCountryOptions(countryOptions)
+  }, [i18n.language])
 
   useEffect(() => {
     setPage(t('locations'))
-  }, [t, setPage])
+    loadCountryOptions()
+  }, [t, setPage, loadCountryOptions])
+
+  useEffect(() => {
+    loadCountryOptions()
+  }, [loadCountryOptions])
 
 
   function changePage(newPage: string) {
@@ -105,7 +119,7 @@ function Locations() {
                 <Select 
                   {...field}
                   value={field.value}
-                  options={options}
+                  options={countryOptions}
                   onChange={(selectedOption) => field.onChange(selectedOption)}
                   styles={customSelectStyle}
                   //error={!!errors.locations?.[i]?.country}
@@ -116,7 +130,7 @@ function Locations() {
           </Box>
         </Box>
       ))}
-      <Button sx={{ marginTop:3 }} onClick={() => { locationsAppend({ city: "", country: {label: '', value: '' } }) }}>
+      <Button sx={{ marginTop:3 }} onClick={() => { locationsAppend( { city: "", country: {label: '', value: '' } } as Location) }}>
         <Typography variant='p_small'>{t('i-have-an-additional-farm-location')}</Typography>
       </Button>
       <Typography variant="label" sx={{ marginTop:4, marginBottom:1 }}>{t('distribution-country-countries')}</Typography>
@@ -138,7 +152,7 @@ function Locations() {
             isMulti
             styles={customSelectStyle}
             value={field.value}
-            options={options}
+            options={countryOptions}
             onChange={(selectedOption) => field.onChange(selectedOption)}
             //error={!!errors.distributionCountries}
           />

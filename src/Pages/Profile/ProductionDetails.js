@@ -8,6 +8,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { useForm, Controller } from "react-hook-form";
 import NextBackPage from '../../Components/NextBackPage'
 import { useTranslation } from 'react-i18next'
+import { useProductionSystemOptsI18n } from './../../Constants/i18nHelper';
 
 function ProductionDetails() {
   const { t } = useTranslation(['sellerForm', 'validation'])
@@ -67,13 +68,7 @@ function ProductionDetails() {
     'Free-range: cage-free system that provides outdoor access',
     'Mobile unit: house or structure on wheels',
   ]
-  const productionSystemOptsI18n = {
-    'Aviary: multi-level cage-free system': t('aviary')  + ': ' + t('multi-level-cage-free-system'),
-    'Barn: single-level cage-free system': t('barn') + ': ' + t('single-level-cage-free-system'),
-    'Fixed housing: structure does not move': t('fixed-housing') + ': ' + t('structure-does-not-move'),
-    'Free-range: cage-free system that provides outdoor access': t('freerange') + ': ' + t('cage-free-system-that-provides-outdoor-access'),
-    'Mobile unit: house or structure on wheels': t('mobile-unit') + ': ' + t('house-or-structure-on-wheels')
-  }
+  const productionSystemOptsI18n = useProductionSystemOptsI18n()
   const productionSystemOptsI18nShort = {
     'Aviary: multi-level cage-free system': t('aviary'),
     'Barn: single-level cage-free system': t('barn'),

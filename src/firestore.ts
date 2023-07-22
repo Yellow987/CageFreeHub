@@ -8,7 +8,7 @@ import { initializeAppCheck, ReCaptchaV3Provider } from "firebase/app-check";
 import { setDoc } from 'firebase/firestore';
 import { getAnalytics } from "firebase/analytics";
 import LogRocket from 'logrocket';
-import { logRocketEnvironment } from "./constants";
+import { logRocketEnvironment } from "./Constants/constants";
 
 LogRocket.init(logRocketEnvironment);
 
