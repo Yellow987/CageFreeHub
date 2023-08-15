@@ -81,5 +81,12 @@
   "production-capacity-year": "Kapasitas produksi (pertahun)",
   "number-kilograms": "{{Angka}} Kilogram",
   "number-tons": "{{angka}} Ton",
-  "number-eggs": "{{angka}} Telur"
+  "number-eggs": "{{angka}} Telur",
+  "approved": "Approved",
+  "pending": "Pending",
+  "rejected": "Rejected",
+  "claimed": "Claimed",
+  "unclaimed": "Unclaimed",
+  "claimed-means-that-the-owner-of-this-farm-has-either-filled-out-or-authenticated-all-the-information-shown-and-keeps-it-up-to-date": "\"Claimed\" means that the owner of this farm has either filled out or authenticated all the information shown, and keeps it up to date",
+  "unclaimed-means-that-the-owner-of-this-farm-has-not-filled-out-or-authenticated-the-information-shown-and-may-not-be-up-to-date": "\"Unclaimed\" means that the owner of this farm has not filled out or authenticated the information shown, and may not be up to date"
 }
