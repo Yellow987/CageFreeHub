@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { Box, Typography, Divider, Link, Grid, Paper } from '@mui/material';
@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { useProductionSystemOptsI18n } from '../../Constants/i18nHelper';
 
 function Profile() {
-  const { t } = useTranslation(['sellerForm'])
+  const { t, i18n } = useTranslation(['sellerForm'])
   const { id } = useParams()
   const [data, setData] = useState<SellerData>()
   const [IsImagePreloaded, setIsImagePreloaded] = useState(false)
@@ -30,6 +30,19 @@ function Profile() {
     pending: t('you-will-receive-an-email-when-your-profile-is-approved-this-will-take-48-business-hours-at-most'),
     rejected: t('please-check-your-email-for-details-about-how-to-fix-your-profile-in-order-for-the-profile-to-be-visible-to-buyers')
   }
+  const countries = require("i18n-iso-countries");
+  const getDistributionCountryList = useCallback(() => {
+    return data?.distributionCountries.map(
+      country =>  countries.getName(country.value, i18n.language)) || []
+  }, [data, i18n.language, countries])
+  const [distributionCountryList, setDistributionCountryList] = useState<string[]>(getDistributionCountryList())
+
+  useEffect(() => {
+    const locale = require("i18n-iso-countries/langs/" + i18n.language + ".json");
+    countries.registerLocale(locale)
+    setDistributionCountryList(getDistributionCountryList())
+  }, [i18n.language, getDistributionCountryList, countries])
+
 
   useEffect(() => {
     if (!id) return
@@ -74,7 +87,20 @@ function Profile() {
                 display="flex"
                 alignItems='center' 
               >
-                {data.status}
+                {
+                  (() => {
+                    switch(data.status) {
+                      case 'approved':
+                        return t('approved');
+                      case 'pending':
+                        return t('pending');
+                      case 'rejected':
+                        return t('rejected');
+                      default:
+                        return ''; 
+                    }
+                  })()
+                }
                 <CheckCircleOutlineIcon sx={{ marginLeft:1, display:data.status === 'approved' ? 'block' : 'none' }} fontSize='large'/>
               </Typography>
               <Typography variant='p_default'>{approvalStatusTextMap[data.status]}</Typography>
@@ -99,8 +125,8 @@ function Profile() {
         <Grid container justifyContent='center'>
           <Grid item xs={12} md={6}>
             <Typography variant="label" sx={{marginBottom:'16px'}}>{t('distribution-country-countries')}</Typography>
-            {data.distributionCountries.map((country, index)=>{
-              return( <Typography variant='p_large_dark' sx={{marginTop:'16px'}} key={index}>{country.label}</Typography> )
+            {distributionCountryList.map((country, index)=>{
+              return( <Typography variant='p_large_dark' sx={{marginTop:'16px'}} key={index}>{country}</Typography> )
             })}
             <Typography variant="label" sx={{marginBottom:'16px', marginTop:'48px'}}>{t('farm-location-s')}</Typography>
             {data.locations.map((location, index)=>{

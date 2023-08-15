@@ -9,7 +9,7 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    ...(stage === Stage.DEV ? {fallbackLng: 'en'} : {}),
+    ...(stage === Stage.DEV ? {} : {fallbackLng: 'en'}),
     //lng: 'th', // Set the default language here
     react: { 
       useSuspense: false //   <---- this will do the magic
