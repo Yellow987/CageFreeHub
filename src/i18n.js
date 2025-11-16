@@ -11,8 +11,8 @@ i18n
   .init({
     ...(stage === Stage.DEV ? {} : {fallbackLng: 'en'}),
     //lng: 'th', // Set the default language here
-    react: { 
-      useSuspense: false //   <---- this will do the magic
+    react: {
+      useSuspense: true // Wait for translations to load before rendering
     },
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
